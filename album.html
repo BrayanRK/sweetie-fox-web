@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Álbum 3D Holográfico — Sweetie Fox</title>
+  <meta name="description" content="Explorador y Álbum 3D de cartas de colección anime de Sweetie Fox. Visualiza tus cartas holográficas, estadísticas y rarezas en tiempo real." />
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="theme-color" content="#09080d" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Estilos Globales -->
+  <link rel="stylesheet" href="assets/css/sweetie-fox.css" />
+
+  <style>
+    /* Estilos específicos para el Álbum Holográfico 3D */
+    .album-header-banner {
+      background: var(--surface-card);
+      border: 1px solid var(--border-ruby);
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+      margin-bottom: 30px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+    }
+    .album-header-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 50% 50%, rgba(225, 29, 72, 0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .user-profile-flex {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: relative;
+      z-index: 1;
+    }
+    @media (min-width: 768px) {
+      .user-profile-flex {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .user-info-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .user-avatar-badge {
+      width: 64px;
+      height: 64px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--ruby-primary) 0%, #701a75 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      box-shadow: 0 6px 18px var(--ruby-glow);
+      flex-shrink: 0;
+    }
+    .user-name-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .user-bio-text {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+      max-width: 450px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .user-stats-badges {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+    .badge-pill-stat {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-body);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .badge-pill-stat.gold {
+      background: rgba(251, 191, 36, 0.12);
+      border-color: rgba(251, 191, 36, 0.3);
+      color: var(--gold-vip);
+    }
+    .badge-pill-stat.ruby {
+      background: rgba(225, 29, 72, 0.12);
+      border-color: var(--border-ruby);
+      color: var(--ruby-light);
+    }
+
+    .user-actions-right {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-share-collection {
+      padding: 10px 18px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--ruby-primary), #9f1239);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition-fast);
+    }
+    .btn-share-collection:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px var(--ruby-glow);
+    }
+
+    /* Buscador y Controles */
+    .album-controls-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    @media (min-width: 768px) {
+      .album-controls-bar {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .search-dual-inputs {
+      display: flex;
+      gap: 10px;
+      flex: 1;
+      max-width: 600px;
+    }
+    .input-album-field {
+      width: 100%;
+      height: 46px;
+      background: rgba(19, 14, 26, 0.8);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0 16px;
+      color: #fff;
+      font-size: 0.9rem;
+      outline: none;
+      transition: var(--transition-fast);
+    }
+    .input-album-field:focus {
+      border-color: var(--border-ruby-focus);
+      box-shadow: 0 0 0 3px var(--ruby-glow);
+    }
+
+    .filter-pills-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .filter-pills-row::-webkit-scrollbar {
+      display: none;
+    }
+    .filter-pill {
+      padding: 7px 14px;
+      border-radius: var(--radius-full);
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: var(--transition-fast);
+    }
+    .filter-pill:hover,
+    .filter-pill.active {
+      color: #fff;
+      border-color: var(--ruby-primary);
+      background: rgba(225, 29, 72, 0.15);
+    }
+    .filter-pill.active.ssr {
+      border-color: var(--gold-vip);
+      background: rgba(251, 191, 36, 0.18);
+      color: var(--gold-vip);
+    }
+
+    /* Grid de Cartas 3D */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      perspective: 1200px;
+    }
+    @media (min-width: 640px) {
+      .cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+      }
+    }
+    @media (min-width: 900px) {
+      .cards-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 22px;
+      }
+    }
+    @media (min-width: 1200px) {
+      .cards-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 24px;
+      }
+    }
+
+    /* Carta 3D Holográfica */
+    .card-3d-wrap {
+      position: relative;
+      border-radius: 14px;
+      transform-style: preserve-3d;
+      transition: transform 0.15s ease-out, box-shadow 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+    .card-3d-wrap:hover {
+      z-index: 10;
+    }
+
+    .card-3d-inner {
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #110e19;
+      border: 1.5px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Rarity Glows */
+    .card-3d-wrap.rarity-SSR .card-3d-inner {
+      border-color: rgba(251, 191, 36, 0.6);
+      box-shadow: 0 8px 24px rgba(251, 191, 36, 0.25);
+    }
+    .card-3d-wrap.rarity-SR .card-3d-inner {
+      border-color: rgba(225, 29, 72, 0.6);
+      box-shadow: 0 8px 24px rgba(225, 29, 72, 0.25);
+    }
+    .card-3d-wrap.rarity-R .card-3d-inner {
+      border-color: rgba(56, 189, 248, 0.4);
+      box-shadow: 0 8px 24px rgba(56, 189, 248, 0.15);
+    }
+
+    /* Brillo Holográfico Foil */
+    .card-holo-foil {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 3;
+      border-radius: 14px;
+      opacity: 0;
+      mix-blend-mode: color-dodge;
+      transition: opacity 0.25s ease;
+      background: linear-gradient(
+        115deg,
+        transparent 20%,
+        rgba(255, 255, 255, 0.4) 40%,
+        rgba(251, 191, 36, 0.3) 50%,
+        rgba(225, 29, 72, 0.4) 60%,
+        transparent 80%
+      );
+      background-size: 200% 200%;
+    }
+    .card-3d-wrap:hover .card-holo-foil {
+      opacity: 0.8;
+    }
+
+    /* Imagen de la Carta */
+    .card-image-box {
+      width: 100%;
+      aspect-ratio: 3/4;
+      position: relative;
+      background: #181324;
+      overflow: hidden;
+    }
+    .card-image-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .card-3d-wrap:hover .card-image-box img {
+      transform: scale(1.05);
+    }
+
+    /* Badge de Rareza Flotante */
+    .card-rarity-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      padding: 3px 8px;
+      border-radius: 6px;
+      z-index: 4;
+      backdrop-filter: blur(10px);
+      text-transform: uppercase;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.6);
+    }
+    .badge-ssr {
+      background: linear-gradient(135deg, #d97706, #fbbf24);
+      color: #000;
+    }
+    .badge-sr {
+      background: linear-gradient(135deg, #be123c, #fb7185);
+      color: #fff;
+    }
+    .badge-r {
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      color: #fff;
+    }
+
+    /* Badge de Cantidad Poseída */
+    .card-qty-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.75);
+      color: #fbbf24;
+      border: 1px solid rgba(251, 191, 36, 0.4);
+      z-index: 4;
+    }
+
+    /* Pie de la Carta / Estadísticas */
+    .card-meta-foot {
+      padding: 10px 12px;
+      background: rgba(17, 14, 25, 0.95);
+      z-index: 2;
+    }
+    .card-char-name {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #fff;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 6px;
+    }
+    .card-stats-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+    }
+    .stat-atk { color: #f87171; }
+    .stat-def { color: #60a5fa; }
+    .stat-hp  { color: #4ade80; }
+
+    /* Estado Bloqueado/No obtenida */
+    .card-3d-wrap.locked {
+      filter: grayscale(0.85) opacity(0.45);
+    }
+    .card-3d-wrap.locked:hover {
+      filter: grayscale(0.4) opacity(0.8);
+    }
+
+    /* Modal de Inspección 3D */
+    .card-inspect-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .inspect-dialog {
+      background: #151020;
+      border: 1.5px solid var(--border-ruby);
+      border-radius: var(--radius-lg);
+      max-width: 420px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+    @keyframes modalPop {
+      0% { transform: scale(0.9) translateY(20px); opacity: 0; }
+      100% { transform: scale(1) translateY(0); opacity: 1; }
+    }
+    .inspect-close-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      z-index: 10;
+      transition: var(--transition-fast);
+    }
+    .inspect-close-btn:hover {
+      background: var(--ruby-primary);
+    }
+    .inspect-img-box {
+      width: 100%;
+      aspect-ratio: 3/4;
+      position: relative;
+      background: #000;
+    }
+    .inspect-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .inspect-info-pad {
+      padding: 20px;
+    }
+    .inspect-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .inspect-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 14px 0;
+    }
+    .inspect-stat-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 8px;
+      text-align: center;
+    }
+    .inspect-stat-val {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+    .inspect-stat-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Luces Ambientales -->
+  <div class="ambient-lighting">
+    <div class="ambient-light-1"></div>
+    <div class="ambient-light-2"></div>
+  </div>
+
+  <!-- Header Superior -->
+  <header class="top-header">
+    <div class="container header-content">
+      <a href="/" class="brand-link">
+        <div class="brand-fox-icon">🦊</div>
+        <div class="brand-text-wrap">
+          <div class="brand-title">SWEETIE <span>FOX</span></div>
+          <div class="brand-subtitle">Álbum 3D Holográfico</div>
+        </div>
+      </a>
+
+      <!-- Navegación para PC -->
+      <nav class="desktop-nav">
+        <a href="/" class="nav-item">Inicio</a>
+        <a href="/vincular.html" class="nav-item">Vincular Bot</a>
+        <a href="/comandos.html" class="nav-item">Comandos</a>
+        <a href="/ranking.html" class="nav-item">🏆 Salón de la Fama</a>
+        <a href="/album.html" class="nav-item active">🃏 Álbum</a>
+      </nav>
+
+      <!-- Enlaces WhatsApp -->
+      <div class="header-buttons">
+        <a href="https://whatsapp.com/channel/0029VbDLXzm9MF8zqYNZc03Y" target="_blank" rel="noopener" class="btn-wa-channel">
+          <span>📢 Canal</span>
+        </a>
+        <a href="https://chat.whatsapp.com/HfK6bI56z48AvLPr8aRlZx?s=cl&p=a&mlu=4&ilr=4" target="_blank" rel="noopener" class="btn-wa-group">
+          <span>💬 Grupo</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido Principal -->
+  <main class="container" style="padding-top: 26px;">
+
+    <!-- Banner de Perfil o Catálogo Global -->
+    <div class="album-header-banner" id="album-header-banner">
+      <div class="user-profile-flex">
+        <div class="user-info-left">
+          <div class="user-avatar-badge" id="u-avatar">🃏</div>
+          <div>
+            <div class="user-name-title" id="u-title">
+              Catálogo Global de Cartas
+              <span class="badge-pill-stat gold" id="u-badge-status">Oficial</span>
+            </div>
+            <div class="user-bio-text" id="u-desc">
+              Explora las 248 cartas anime coleccionables del bot con efectos 3D.
+            </div>
+            <div class="user-stats-badges" id="u-stats-badges">
+              <span class="badge-pill-stat ruby" id="stat-total-cards">248 Cartas Disponibles</span>
+              <span class="badge-pill-stat" id="stat-unique-cards">3 Rarezas (SSR, SR, R)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="user-actions-right">
+          <button type="button" class="btn-share-collection" id="btn-share-collection">
+            <span>🔗 Compartir Colección</span>
+          </button>
+          <a href="/ranking.html" class="btn-share-collection" style="background: rgba(255, 255, 255, 0.08);">
+            <span>🏆 Salón de la Fama</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Barra de Controles: Búsqueda y Filtros -->
+    <div class="album-controls-bar">
+      <!-- Buscadores -->
+      <div class="search-dual-inputs">
+        <input type="text" class="input-album-field" id="search-player-input" placeholder="🔍 Buscar jugador (ej: BrayanRK, Shadow...)" autocomplete="off" />
+        <input type="text" class="input-album-field" id="search-card-input" placeholder="🃏 Filtrar carta (ej: Luffy, Sakura...)" autocomplete="off" />
+      </div>
+
+      <!-- Filtros de Rareza -->
+      <div class="filter-pills-row" id="filter-pills">
+        <button type="button" class="filter-pill active" data-rarity="ALL">Todas</button>
+        <button type="button" class="filter-pill ssr" data-rarity="SSR">🌟 SSR</button>
+        <button type="button" class="filter-pill" data-rarity="SR">✨ SR</button>
+        <button type="button" class="filter-pill" data-rarity="R">🔷 R</button>
+      </div>
+    </div>
+
+    <!-- Grid de Cartas 3D -->
+    <div class="cards-grid" id="cards-grid">
+      <div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: var(--text-muted);">
+        <p style="font-size: 1.1rem;">⚡ Conectando con el inventario 3D holográfico...</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Modal de Inspección 3D de Carta -->
+  <div class="card-inspect-modal" id="card-inspect-modal">
+    <div class="inspect-dialog" id="inspect-dialog">
+      <button type="button" class="inspect-close-btn" id="inspect-close-btn">&times;</button>
+      <div class="inspect-img-box">
+        <img id="inspect-img" src="" alt="Carta" />
+      </div>
+      <div class="inspect-info-pad">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <span class="card-rarity-badge" id="inspect-badge">SSR</span>
+          <span class="badge-pill-stat gold" id="inspect-qty">x1 poseída</span>
+        </div>
+        <div class="inspect-title" id="inspect-name">Nombre de Carta</div>
+
+        <div class="inspect-stats-grid">
+          <div class="inspect-stat-card">
+            <div class="inspect-stat-val stat-atk" id="inspect-atk">0</div>
+            <div class="inspect-stat-label">Ataque</div>
+          </div>
+          <div class="inspect-stat-card">
+            <div class="inspect-stat-val stat-def" id="inspect-def">0</div>
+            <div class="inspect-stat-label">Defensa</div>
+          </div>
+          <div class="inspect-stat-card">
+            <div class="inspect-stat-val stat-hp" id="inspect-hp">0</div>
+            <div class="inspect-stat-label">Vida</div>
+          </div>
+        </div>
+
+        <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 10px;">
+          Toca o mueve el cursor para admirar el acabado holográfico en WhatsApp Bot.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barra de Navegación Inferior Móvil -->
+  <nav class="mobile-bottom-nav">
+    <a href="/" class="bottom-nav-link">
+      <span class="bottom-nav-icon">🏠</span>
+      <span>Inicio</span>
+    </a>
+    <a href="/vincular.html" class="bottom-nav-link">
+      <span class="bottom-nav-icon">📱</span>
+      <span>Vincular</span>
+    </a>
+    <a href="/comandos.html" class="bottom-nav-link">
+      <span class="bottom-nav-icon">⚡</span>
+      <span>Comandos</span>
+    </a>
+    <a href="/ranking.html" class="bottom-nav-link">
+      <span class="bottom-nav-icon">🏆</span>
+      <span>Ranking</span>
+    </a>
+    <a href="/album.html" class="bottom-nav-link active">
+      <span class="bottom-nav-icon">🃏</span>
+      <span>Álbum</span>
+    </a>
+  </nav>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <p><strong>SWEETIE FOX</strong> • Álbum 3D Holográfico de Cartas</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/album.js"></script>
+</body>
+</html>

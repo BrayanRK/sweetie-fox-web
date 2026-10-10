@@ -22,6 +22,14 @@ app.get(['/comandos', '/comandos.html'], (req, res) => {
     res.sendFile(path.join(__dirname, 'comandos.html'));
 });
 
+app.get(['/ranking', '/ranking.html'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'ranking.html'));
+});
+
+app.get(['/album', '/album.html'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'album.html'));
+});
+
 // Fallback por defecto a index.html
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));

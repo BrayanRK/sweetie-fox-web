@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Salón de la Fama — Sweetie Fox</title>
+  <meta name="description" content="Rankings globales en vivo de Sweetie Fox. Los jugadores más ricos, con mayor nivel y mejores coleccionistas de cartas." />
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="theme-color" content="#09080d" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Estilos Luxury -->
+  <link rel="stylesheet" href="assets/css/sweetie-fox.css" />
+  <style>
+    /* Estilos específicos para Podio y Ranking */
+    .podium-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 12px;
+      margin: 30px auto 40px;
+      max-width: 650px;
+      padding: 0 10px;
+    }
+    .podium-card {
+      flex: 1;
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px 12px;
+      text-align: center;
+      position: relative;
+      backdrop-filter: blur(16px);
+      transition: var(--transition-smooth);
+    }
+    .podium-card:hover {
+      transform: translateY(-4px);
+    }
+    .podium-first {
+      order: 2;
+      border-color: rgba(251, 191, 36, 0.5);
+      background: linear-gradient(180deg, rgba(251, 191, 36, 0.12) 0%, rgba(19, 14, 26, 0.8) 100%);
+      box-shadow: 0 10px 30px rgba(251, 191, 36, 0.2);
+      transform: scale(1.05);
+      z-index: 2;
+    }
+    .podium-second {
+      order: 1;
+      border-color: rgba(226, 232, 240, 0.35);
+      background: linear-gradient(180deg, rgba(226, 232, 240, 0.08) 0%, rgba(19, 14, 26, 0.8) 100%);
+    }
+    .podium-third {
+      order: 3;
+      border-color: rgba(217, 119, 6, 0.35);
+      background: linear-gradient(180deg, rgba(217, 119, 6, 0.08) 0%, rgba(19, 14, 26, 0.8) 100%);
+    }
+    .podium-medal {
+      font-size: 2rem;
+      margin-bottom: 6px;
+      display: inline-block;
+    }
+    .podium-name {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #fff;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 4px;
+    }
+    .podium-score {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--ruby-light);
+    }
+    .podium-first .podium-score {
+      color: var(--gold-vip);
+    }
+    .podium-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Tabla de posiciones */
+    .ranking-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .rank-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      backdrop-filter: blur(14px);
+      transition: var(--transition-fast);
+    }
+    .rank-row:hover {
+      border-color: var(--border-ruby);
+      transform: translateX(4px);
+    }
+    .rank-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      overflow: hidden;
+    }
+    .rank-num {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      min-width: 30px;
+    }
+    .rank-player-name {
+      font-weight: 700;
+      font-size: 0.98rem;
+      color: #fff;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .rank-badge-extra {
+      font-size: 0.72rem;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-muted);
+    }
+    .rank-right {
+      text-align: right;
+    }
+    .rank-value-main {
+      font-family: var(--font-mono);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--ruby-light);
+    }
+    .rank-value-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Luces Ambientales -->
+  <div class="ambient-lighting">
+    <div class="ambient-light-1"></div>
+    <div class="ambient-light-2"></div>
+  </div>
+
+  <!-- Header Superior -->
+  <header class="top-header">
+    <div class="container header-content">
+      <a href="/" class="brand-link">
+        <div class="brand-fox-icon">🦊</div>
+        <div class="brand-text-wrap">
+          <div class="brand-title">SWEETIE <span>FOX</span></div>
+          <div class="brand-subtitle">Salón de la Fama</div>
+        </div>
+      </a>
+
+      <!-- Navegación para PC -->
+      <nav class="desktop-nav">
+        <a href="/" class="nav-item">Inicio</a>
+        <a href="/vincular.html" class="nav-item">Vincular Bot</a>
+        <a href="/comandos.html" class="nav-item">Comandos</a>
+        <a href="/ranking.html" class="nav-item active">🏆 Salón de la Fama</a>
+        <a href="/album.html" class="nav-item">🃏 Álbum</a>
+      </nav>
+
+      <!-- Enlaces WhatsApp -->
+      <div class="header-buttons">
+        <a href="https://whatsapp.com/channel/0029VbDLXzm9MF8zqYNZc03Y" target="_blank" rel="noopener" class="btn-wa-channel">
+          <span>📢 Canal</span>
+        </a>
+        <a href="https://chat.whatsapp.com/HfK6bI56z48AvLPr8aRlZx?s=cl&p=a&mlu=4&ilr=4" target="_blank" rel="noopener" class="btn-wa-group">
+          <span>💬 Grupo</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido de Ranking -->
+  <main class="container" style="padding-top: 30px;">
+    <div style="text-align: center; margin-bottom: 24px;">
+      <div class="hero-chip">
+        <span>🏆 Temporada Oficial</span>
+      </div>
+      <h1 class="box-title" style="font-size: clamp(1.9rem, 4.5vw, 2.8rem);">Salón de la Fama</h1>
+      <p class="box-desc" style="max-width: 580px; margin: 6px auto 0;">
+        Los mejores jugadores de toda la red de Sweetie Fox. Actualizado en tiempo real desde la base de datos oficial.
+      </p>
+    </div>
+
+    <!-- Pestañas de Categoría de Ranking -->
+    <div class="horizontal-tabs-container" style="justify-content: center; margin-bottom: 20px;">
+      <button type="button" class="category-tab-btn active" id="tab-economia">
+        <span>💰 Top Millonarios</span>
+      </button>
+      <button type="button" class="category-tab-btn" id="tab-nivel">
+        <span>⚔️ Top Nivel & XP</span>
+      </button>
+      <button type="button" class="category-tab-btn" id="tab-coleccion">
+        <span>🃏 Top Coleccionistas</span>
+      </button>
+    </div>
+
+    <!-- Buscador de Jugador -->
+    <div class="commands-page-search" style="margin-bottom: 30px;">
+      <svg class="search-ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="text" class="search-input-field" id="search-player" placeholder="Buscar jugador por apodo (ej: BrayanRK, Shadow...)" autocomplete="off" />
+    </div>
+
+    <!-- Podio Top 3 -->
+    <div class="podium-container" id="podium-container">
+      <!-- Se genera dinámicamente -->
+    </div>
+
+    <!-- Lista de Posiciones (4 en adelante) -->
+    <div class="ranking-list" id="ranking-list">
+      <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+        <p>⚡ Cargando el Salón de la Fama en vivo...</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Barra de Navegación Inferior Móvil -->
+  <nav class="mobile-bottom-nav">
+    <a href="/" class="bottom-nav-link">
+      <span class="bottom-nav-icon">🏠</span>
+      <span>Inicio</span>
+    </a>
+    <a href="/vincular.html" class="bottom-nav-link">
+      <span class="bottom-nav-icon">📱</span>
+      <span>Vincular</span>
+    </a>
+    <a href="/comandos.html" class="bottom-nav-link">
+      <span class="bottom-nav-icon">⚡</span>
+      <span>Comandos</span>
+    </a>
+    <a href="/ranking.html" class="bottom-nav-link active">
+      <span class="bottom-nav-icon">🏆</span>
+      <span>Ranking</span>
+    </a>
+    <a href="/album.html" class="bottom-nav-link">
+      <span class="bottom-nav-icon">🃏</span>
+      <span>Álbum</span>
+    </a>
+  </nav>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <p><strong>SWEETIE FOX</strong> • Salón de la Fama Oficial</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/ranking.js"></script>
+</body>
+</html>
