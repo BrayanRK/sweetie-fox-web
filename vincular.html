@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Vincular WhatsApp — Sweetie Fox</title>
+  <meta name="description" content="Conecta tu WhatsApp y obtén tu propio Subbot de Sweetie Fox en segundos mediante código de emparejamiento." />
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="theme-color" content="#09080d" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Estilos Luxury -->
+  <link rel="stylesheet" href="assets/css/sweetie-fox.css" />
+</head>
+<body>
+
+  <!-- Luces Ambientales -->
+  <div class="ambient-lighting">
+    <div class="ambient-light-1"></div>
+    <div class="ambient-light-2"></div>
+  </div>
+
+  <!-- Header Superior -->
+  <header class="top-header">
+    <div class="container header-content">
+      <a href="/" class="brand-link">
+        <div class="brand-fox-icon">🦊</div>
+        <div class="brand-text-wrap">
+          <div class="brand-title">SWEETIE <span>FOX</span></div>
+          <div class="brand-subtitle">Vinculación</div>
+        </div>
+      </a>
+
+      <!-- Navegación para PC -->
+      <nav class="desktop-nav">
+        <a href="/" class="nav-item">Inicio</a>
+        <a href="/vincular.html" class="nav-item active">Vincular Bot</a>
+        <a href="/comandos.html" class="nav-item">Comandos (129)</a>
+      </nav>
+
+      <!-- Enlaces WhatsApp -->
+      <div class="header-buttons">
+        <a href="https://whatsapp.com/channel/0029VbDLXzm9MF8zqYNZc03Y" target="_blank" rel="noopener" class="btn-wa-channel">
+          <span>📢 Canal</span>
+        </a>
+        <a href="https://chat.whatsapp.com/HfK6bI56z48AvLPr8aRlZx?s=cl&p=a&mlu=4&ilr=4" target="_blank" rel="noopener" class="btn-wa-group">
+          <span>💬 Grupo</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido de Vinculación -->
+  <main class="container" style="padding-top: 30px;">
+    <div class="pairing-container">
+      <div class="glass-box">
+        <div style="text-align: center; margin-bottom: 22px;">
+          <div class="hero-chip">
+            <span>⚡ Emparejamiento Rápido</span>
+          </div>
+          <h1 class="box-title">Vincula tu WhatsApp</h1>
+          <p class="box-desc">
+            Ingresa tu número para recibir tu código de 8 dígitos y convertir tu cuenta en un subbot activo por 7 días.
+          </p>
+        </div>
+
+        <form id="form-vincular">
+          <div class="form-group-mobile">
+            <!-- Selector de País Buscable -->
+            <div class="country-selector">
+              <button type="button" class="country-trigger-btn" id="country-trigger" aria-haspopup="listbox">
+                <div class="country-info-left">
+                  <span id="flag-display">🇨🇴</span>
+                  <span id="country-display">Colombia</span>
+                </div>
+                <span class="country-prefix" id="prefix-display">+57</span>
+              </button>
+
+              <div class="country-menu" id="country-menu">
+                <input type="text" class="country-search-bar" id="country-search-input" placeholder="Buscar país..." autocomplete="off" />
+                <ul class="country-items-list" id="country-items-list"></ul>
+              </div>
+            </div>
+
+            <!-- Campo de Teléfono -->
+            <div class="input-phone-container">
+              <input type="tel" class="phone-field" id="user-phone" inputmode="numeric" placeholder="Ej: 312 345 6789" required autocomplete="off" />
+            </div>
+          </div>
+
+          <button type="submit" class="btn-generate-code" id="btn-generate">
+            <span>Generar Código de 8 Dígitos</span>
+          </button>
+        </form>
+
+        <!-- Alerta de Error o Éxito -->
+        <div class="ui-alert" id="ui-alert"></div>
+
+        <!-- Panel con el Código Recibido -->
+        <div class="code-result-panel" id="code-result-panel">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Tu Código de Vinculación</span>
+            <span class="badge-tag-vip">Válido 7 Días</span>
+          </div>
+
+          <div class="code-box-row">
+            <span class="code-text-big" id="code-text-big">--------</span>
+            <button type="button" class="btn-action-copy" id="btn-copy-code">
+              <span>Copiar</span>
+            </button>
+          </div>
+
+          <!-- Radar en Vivo -->
+          <div class="status-radar">
+            <span class="radar-ping" id="radar-ping"></span>
+            <span id="radar-status-text" style="font-weight: 600;">Esperando que ingreses el código en WhatsApp...</span>
+          </div>
+
+          <!-- Información del Endpoint -->
+          <div class="features-pills">
+            <span class="feat-tag feat-ruby">⏳ 7 Días de Duración</span>
+            <span class="feat-tag">📦 150 MB Límite de Descarga</span>
+            <span class="feat-tag">🤖 Subbot Normal</span>
+          </div>
+
+          <!-- Guía de Paso a Paso -->
+          <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-subtle); font-size: 0.82rem; color: var(--text-muted);">
+            <strong style="color: #fff;">¿Cómo ingresarlo en tu celular?</strong><br>
+            Abre WhatsApp &gt; Toca los 3 puntos &gt; <em>Dispositivos vinculados</em> &gt; <em>Vincular dispositivo</em> &gt; <em>Vincular con el número de teléfono</em> y pega este código.
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjeta de Soporte y Comunidad -->
+      <div style="margin-top: 24px; text-align: center;">
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px;">¿Tienes problemas al vincular tu bot?</p>
+        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+          <a href="https://chat.whatsapp.com/HfK6bI56z48AvLPr8aRlZx?s=cl&p=a&mlu=4&ilr=4" target="_blank" class="btn-wa-group" style="padding: 10px 18px;">
+            <span>💬 Ayuda en el Grupo Oficial</span>
+          </a>
+          <a href="https://whatsapp.com/channel/0029VbDLXzm9MF8zqYNZc03Y" target="_blank" class="btn-wa-channel" style="padding: 10px 18px;">
+            <span>📢 Canal Oficial</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Barra de Navegación Inferior Móvil -->
+  <nav class="mobile-bottom-nav">
+    <a href="/" class="bottom-nav-link">
+      <span class="bottom-nav-icon">🏠</span>
+      <span>Inicio</span>
+    </a>
+    <a href="/vincular.html" class="bottom-nav-link active">
+      <span class="bottom-nav-icon">📱</span>
+      <span>Vincular</span>
+    </a>
+    <a href="/comandos.html" class="bottom-nav-link">
+      <span class="bottom-nav-icon">⚡</span>
+      <span>Comandos</span>
+    </a>
+    <a href="https://chat.whatsapp.com/HfK6bI56z48AvLPr8aRlZx?s=cl&p=a&mlu=4&ilr=4" target="_blank" rel="noopener" class="bottom-nav-link">
+      <span class="bottom-nav-icon">💬</span>
+      <span>Comunidad</span>
+    </a>
+  </nav>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <p><strong>SWEETIE FOX</strong> • Infraestructura impulsada por Mitsuri-TS</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/countries.js"></script>
+  <script src="assets/js/vincular.js"></script>
+</body>
+</html>

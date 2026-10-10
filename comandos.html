@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Comandos Oficiales — Sweetie Fox</title>
+  <meta name="description" content="Lista completa y dinámica de todos los comandos disponibles en Sweetie Fox. Descargas, inteligencia artificial, juegos, economía y más." />
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="theme-color" content="#09080d" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Estilos Luxury -->
+  <link rel="stylesheet" href="assets/css/sweetie-fox.css" />
+</head>
+<body>
+
+  <!-- Luces Ambientales -->
+  <div class="ambient-lighting">
+    <div class="ambient-light-1"></div>
+    <div class="ambient-light-2"></div>
+  </div>
+
+  <!-- Header Superior -->
+  <header class="top-header">
+    <div class="container header-content">
+      <a href="/" class="brand-link">
+        <div class="brand-fox-icon">🦊</div>
+        <div class="brand-text-wrap">
+          <div class="brand-title">SWEETIE <span>FOX</span></div>
+          <div class="brand-subtitle">Comandos</div>
+        </div>
+      </a>
+
+      <!-- Navegación para PC -->
+      <nav class="desktop-nav">
+        <a href="/" class="nav-item">Inicio</a>
+        <a href="/vincular.html" class="nav-item">Vincular Bot</a>
+        <a href="/comandos.html" class="nav-item active">Comandos</a>
+      </nav>
+
+      <!-- Enlaces WhatsApp -->
+      <div class="header-buttons">
+        <a href="https://whatsapp.com/channel/0029VbDLXzm9MF8zqYNZc03Y" target="_blank" rel="noopener" class="btn-wa-channel">
+          <span>📢 Canal</span>
+        </a>
+        <a href="https://chat.whatsapp.com/HfK6bI56z48AvLPr8aRlZx?s=cl&p=a&mlu=4&ilr=4" target="_blank" rel="noopener" class="btn-wa-group">
+          <span>💬 Grupo</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido de Comandos -->
+  <main class="container" style="padding-top: 28px;">
+    <div style="text-align: center; margin-bottom: 24px;">
+      <div class="hero-chip">
+        <span id="chip-total-cmds">⚡ Sincronizados en Vivo</span>
+      </div>
+      <h1 class="box-title" style="font-size: clamp(1.8rem, 4vw, 2.6rem);">Catálogo de Comandos</h1>
+      <p class="box-desc" style="max-width: 580px; margin: 6px auto 0;">
+        Explora todos los comandos activos del bot. Los comandos se actualizan automáticamente en tiempo real.
+      </p>
+    </div>
+
+    <!-- Buscador Reactivo -->
+    <div class="commands-page-search">
+      <svg class="search-ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="text" class="search-input-field" id="search-input-field" placeholder="Buscar comando (ej: play, tiktok, ban, sticker, gpt...)" autocomplete="off" />
+    </div>
+
+    <!-- Pestañas Horizontales Deslizables para Móvil y PC -->
+    <div class="horizontal-tabs-container" id="horizontal-tabs-container"></div>
+
+    <!-- Grid de Tarjetas de Comandos -->
+    <div class="cards-layout-grid" id="cards-layout-grid">
+      <div style="text-align: center; padding: 40px; color: var(--text-muted); grid-column: 1 / -1;">
+        <p>Cargando comandos en tiempo real desde el bot...</p>
+      </div>
+    </div>
+
+    <!-- Banner Inferior de Comunidad -->
+    <div class="community-banner-grid" style="margin-top: 50px;">
+      <a href="https://chat.whatsapp.com/HfK6bI56z48AvLPr8aRlZx?s=cl&p=a&mlu=4&ilr=4" target="_blank" rel="noopener" class="community-card card-group">
+        <div class="card-left">
+          <div class="card-icon">💬</div>
+          <div class="card-text">
+            <h3>¿Quieres probar los comandos?</h3>
+            <p>Entra a nuestro Grupo Oficial de WhatsApp y pruébalos en vivo</p>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <a href="https://whatsapp.com/channel/0029VbDLXzm9MF8zqYNZc03Y" target="_blank" rel="noopener" class="community-card card-channel">
+        <div class="card-left">
+          <div class="card-icon">📢</div>
+          <div class="card-text">
+            <h3>Novedades y Actualizaciones</h3>
+            <p>Entérate primero en el Canal Oficial de WhatsApp</p>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+    </div>
+  </main>
+
+  <!-- Barra de Navegación Inferior Móvil -->
+  <nav class="mobile-bottom-nav">
+    <a href="/" class="bottom-nav-link">
+      <span class="bottom-nav-icon">🏠</span>
+      <span>Inicio</span>
+    </a>
+    <a href="/vincular.html" class="bottom-nav-link">
+      <span class="bottom-nav-icon">📱</span>
+      <span>Vincular</span>
+    </a>
+    <a href="/comandos.html" class="bottom-nav-link active">
+      <span class="bottom-nav-icon">⚡</span>
+      <span>Comandos</span>
+    </a>
+    <a href="https://chat.whatsapp.com/HfK6bI56z48AvLPr8aRlZx?s=cl&p=a&mlu=4&ilr=4" target="_blank" rel="noopener" class="bottom-nav-link">
+      <span class="bottom-nav-icon">💬</span>
+      <span>Comunidad</span>
+    </a>
+  </nav>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <p><strong>SWEETIE FOX</strong> • Todos los comandos son propiedad de la comunidad.</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/comandos.js"></script>
+</body>
+</html>
