@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sweetie Fox — Subbots de WhatsApp & Comandos en Vivo</title>
+  <meta name="description" content="Vincula tu propio Subbot de WhatsApp con Sweetie Fox en segundos. 120+ comandos de descarga, inteligencia artificial, juegos y panel de estado en vivo." />
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="theme-color" content="#07030b" />
+
+  <!-- OpenGraph / Social Media -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Sweetie Fox — Subbots de WhatsApp en Segundos" />
+  <meta property="og:description" content="Vincula tu número de WhatsApp y obtén tu propio bot con más de 120 comandos automáticos." />
+  <meta property="og:image" content="https://mitsuri-bot.brayanrk.info/og-image.png" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="assets/css/sweetie-fox.css" />
+</head>
+<body>
+
+  <!-- Ambient Glow Backgrounds -->
+  <div class="ambient-glow glow-pink"></div>
+  <div class="ambient-glow glow-purple"></div>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-wrap">
+      <a href="#" class="brand">
+        <div class="brand-badge">🦊</div>
+        <div class="brand-text">SWEETIE <span>FOX</span></div>
+      </a>
+
+      <div class="nav-links">
+        <a href="#vincular" class="nav-link">📱 Vincular</a>
+        <a href="#comandos" class="nav-link">📜 Comandos</a>
+        <a href="#stats" class="nav-link">📊 Métricas</a>
+        <div class="status-pill">
+          <span class="status-dot"></span>
+          <span>Online</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-pill">
+          <span>🌸 MITSURI-TS • SWEETIE FOX EDITION</span>
+        </div>
+        
+        <h1 class="hero-title">
+          Tu Subbot de WhatsApp,<br>
+          <span class="gradient-text">a otro nivel.</span>
+        </h1>
+        
+        <p class="hero-subtitle">
+          Crea tu propio clon de <strong>Sweetie Fox</strong> en segundos. Sin descargas, sin instalar nada, con más de 120 comandos automáticos para descargas, IA, juegos y música.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#vincular" class="btn-primary">
+            <span>Vincular mi número ahora →</span>
+          </a>
+          <a href="#comandos" class="btn-secondary">
+            <span>Explorar Comandos</span>
+          </a>
+        </div>
+
+        <!-- Live Server Counters Grid -->
+        <div class="stats-grid" id="stats">
+          <div class="stat-card">
+            <div class="stat-icon">⚡</div>
+            <div class="stat-val" id="stat-cupos">—</div>
+            <div class="stat-label">Cupos Normales Libres</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">🤖</div>
+            <div class="stat-val" id="stat-subbots">—</div>
+            <div class="stat-label">Subbots Activos en Vivo</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">👑</div>
+            <div class="stat-val" id="stat-vip">—</div>
+            <div class="stat-label">Slots VIP Ocupados</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-val" id="stat-users">—</div>
+            <div class="stat-label">Usuarios en el Sistema</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Vincular Section -->
+    <section class="section" id="vincular">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">Vinculación Automática</div>
+          <h2 class="section-title">Conecta tu WhatsApp</h2>
+          <p class="section-desc">Selecciona tu país, ingresa tu número y recibirás un código de 8 dígitos para emparejar tu dispositivo al instante.</p>
+        </div>
+
+        <div class="pairing-card">
+          <form id="form-pairing" class="pairing-form">
+            <div class="input-row">
+              <!-- Country Selector -->
+              <div class="country-select-wrap">
+                <button type="button" class="country-btn" id="country-btn" aria-haspopup="listbox">
+                  <div class="country-flag-name">
+                    <span id="country-flag">🇨🇴</span>
+                    <span id="country-name">Colombia</span>
+                  </div>
+                  <span class="country-dial" id="country-dial">+57</span>
+                </button>
+
+                <div class="country-dropdown" id="country-dropdown">
+                  <input type="text" class="country-search-input" id="country-search" placeholder="Buscar país..." autocomplete="off" />
+                  <ul class="country-list" id="country-list"></ul>
+                </div>
+              </div>
+
+              <!-- Phone Input -->
+              <div class="phone-input-wrap">
+                <input type="tel" class="phone-input" id="phone-number" placeholder="Ej: 312 345 6789" required autocomplete="off" />
+              </div>
+            </div>
+
+            <button type="submit" class="btn-submit" id="btn-submit">
+              <span>Generar Código de Vinculación</span>
+            </button>
+          </form>
+
+          <!-- Notification / Error Box -->
+          <div class="alert-msg" id="alert-msg"></div>
+
+          <!-- Pairing Result Box -->
+          <div class="pairing-result" id="pairing-result">
+            <div class="result-header">
+              <span class="result-title">TU CÓDIGO DE VINCULACIÓN</span>
+              <span class="badge-vip" style="font-size: 0.75rem; padding: 3px 8px;">Válido 7 Días</span>
+            </div>
+
+            <div class="code-display-box">
+              <span class="code-value" id="code-value">--------</span>
+              <button type="button" class="btn-copy" id="btn-copy">
+                <span>Copiar</span>
+              </button>
+            </div>
+
+            <!-- Radar en vivo -->
+            <div class="radar-box">
+              <span class="radar-dot" id="radar-dot"></span>
+              <span class="radar-text" id="radar-text">Esperando que ingreses el código en WhatsApp...</span>
+            </div>
+
+            <!-- Meta Badges del Endpoint -->
+            <div class="badges-row">
+              <div class="info-badge badge-highlight">⏳ 7 Días de Duración</div>
+              <div class="info-badge">📦 150 MB Límite de Descarga</div>
+              <div class="info-badge">🤖 Tipo: Subbot Normal</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comandos en Vivo Section -->
+    <section class="section" id="comandos">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">Directorio Oficial</div>
+          <h2 class="section-title">Comandos en Vivo</h2>
+          <p class="section-desc">Sincronizados en tiempo real con el bot. Se actualizan automáticamente cuando se añaden o modifican.</p>
+        </div>
+
+        <div class="commands-controls">
+          <!-- Live Search Bar -->
+          <div class="search-box">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" class="search-input" id="search-commands" placeholder="Buscar comando (ej: play, sticker, ban, gpt, perfil...)" autocomplete="off" />
+          </div>
+
+          <!-- Category Filter Pills -->
+          <div class="category-pills" id="category-pills"></div>
+        </div>
+
+        <!-- Commands Grid -->
+        <div class="commands-grid" id="commands-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p style="margin-bottom: 8px;">
+        <strong>SWEETIE FOX</strong> • Infraestructura impulsada por <strong>MITSURI-TS</strong>
+      </p>
+      <p style="font-size: 0.8rem; color: #64748b;">
+        Creado para la comunidad. API Oficial: <a href="https://mitsuri-bot.brayanrk.info/api/stats" target="_blank" rel="noopener">mitsuri-bot.brayanrk.info</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/countries.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
