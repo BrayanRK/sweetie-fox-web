@@ -1,6 +1,8 @@
 // Configuración global de la Web Sweetie Fox
 const CONFIG = {
-    API_URL: 'https://mitsuri-bot.brayanrk.info',
+    // Al usar '', las llamadas a /api/* van directamente al servidor web (api.brayanrk.info)
+    // el cual se encarga de comunicarse fluidamente con el VPS sin problemas de CORS ni SSL.
+    API_URL: '',
     BOT_NAME: 'Sweetie Fox',
     WHATSAPP_GROUP: 'https://chat.whatsapp.com/HfK6bI56z48AvLPr8aRlZx?s=cl&p=a&mlu=4&ilr=4',
     WHATSAPP_CHANNEL: 'https://whatsapp.com/channel/0029VbDLXzm9MF8zqYNZc03Y',

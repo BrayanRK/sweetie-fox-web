@@ -1,6 +1,6 @@
 // ranking.js — Lógica del Salón de la Fama
 document.addEventListener('DOMContentLoaded', () => {
-    const API_BASE = window.CONFIG?.API_URL || 'https://mitsuri-bot.brayanrk.info';
+    const API_BASE = (window.CONFIG?.API_URL !== undefined) ? window.CONFIG.API_URL : '';
 
     const tabEconomia = document.getElementById('tab-economia');
     const tabNivel = document.getElementById('tab-nivel');

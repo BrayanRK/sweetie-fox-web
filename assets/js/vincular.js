@@ -1,6 +1,6 @@
 // vincular.js — Lógica de generación de código y polling para vincular.html
 document.addEventListener('DOMContentLoaded', () => {
-    const API_BASE = window.CONFIG?.API_URL || 'https://mitsuri-bot.brayanrk.info';
+    const API_BASE = (window.CONFIG?.API_URL !== undefined) ? window.CONFIG.API_URL : '';
 
     // 1. Selector de País
     const countryTrigger = document.getElementById('country-trigger');

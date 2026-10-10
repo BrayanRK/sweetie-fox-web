@@ -1,6 +1,6 @@
 // comandos.js — Catálogo dinámico de comandos para comandos.html
 document.addEventListener('DOMContentLoaded', () => {
-    const API_BASE = window.CONFIG?.API_URL || 'https://mitsuri-bot.brayanrk.info';
+    const API_BASE = (window.CONFIG?.API_URL !== undefined) ? window.CONFIG.API_URL : '';
 
     const searchInput = document.getElementById('search-input-field');
     const tabsContainer = document.getElementById('horizontal-tabs-container');

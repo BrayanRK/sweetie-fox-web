@@ -1,6 +1,6 @@
 // album.js — Álbum 3D Holográfico de Cartas Sweetie Fox
 document.addEventListener('DOMContentLoaded', () => {
-    const API_BASE = window.CONFIG?.API_URL || 'https://mitsuri-bot.brayanrk.info';
+    const API_BASE = (window.CONFIG?.API_URL !== undefined) ? window.CONFIG.API_URL : '';
 
     const urlParams = new URLSearchParams(window.location.search);
     const initialUser = urlParams.get('user') || urlParams.get('u') || '';

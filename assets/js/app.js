@@ -1,7 +1,7 @@
 // app.js — Lógica de Sweetie Fox (Stats, Vinculación y Comandos Dinámicos)
 
 document.addEventListener('DOMContentLoaded', () => {
-    const API_BASE = window.CONFIG?.API_URL || 'https://mitsuri-bot.brayanrk.info';
+    const API_BASE = (window.CONFIG?.API_URL !== undefined) ? window.CONFIG.API_URL : '';
 
     // ──────────────────────────────────────────────────────────────────────────
     // 1. SELECTOR DE PAÍSES Y TELÉFONO
