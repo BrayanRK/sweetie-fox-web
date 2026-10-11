@@ -3,15 +3,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const API_BASE = (window.CONFIG?.API_URL !== undefined) ? window.CONFIG.API_URL : '';
 
     const tabEconomia = document.getElementById('tab-economia');
+    const tabDiamantes = document.getElementById('tab-diamantes');
     const tabNivel = document.getElementById('tab-nivel');
     const tabColeccion = document.getElementById('tab-coleccion');
     const searchInput = document.getElementById('search-player');
     const podiumContainer = document.getElementById('podium-container');
     const rankingList = document.getElementById('ranking-list');
 
-    let currentCategory = 'economia'; // economia | nivel | coleccion
+    let currentCategory = 'economia'; // economia | diamantes | nivel | coleccion
     let leaderboardData = {
         topEconomia: [],
+        topDiamantes: [],
         topNivel: [],
         topColeccionistas: []
     };
@@ -32,6 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
             items = leaderboardData.topEconomia || [];
             mainValFn = (item) => `$${formatNumber(item.total_dinero)}`;
             subLabelFn = (item) => `Nivel ${item.nivel} • 💎 ${item.diamantes || 0}`;
+        } else if (currentCategory === 'diamantes') {
+            items = leaderboardData.topDiamantes || [];
+            mainValFn = (item) => `💎 ${formatNumber(item.diamantes)}`;
+            subLabelFn = (item) => `Nivel ${item.nivel} • ${formatNumber(item.xp)} XP`;
         } else if (currentCategory === 'nivel') {
             items = leaderboardData.topNivel || [];
             mainValFn = (item) => `Nivel ${item.nivel}`;
@@ -126,12 +132,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function setActiveTab(cat, btn) {
         currentCategory = cat;
-        [tabEconomia, tabNivel, tabColeccion].forEach(b => b?.classList.remove('active'));
+        [tabEconomia, tabDiamantes, tabNivel, tabColeccion].forEach(b => b?.classList.remove('active'));
         btn.classList.add('active');
         renderLeaderboard();
     }
 
     tabEconomia?.addEventListener('click', () => setActiveTab('economia', tabEconomia));
+    tabDiamantes?.addEventListener('click', () => setActiveTab('diamantes', tabDiamantes));
     tabNivel?.addEventListener('click', () => setActiveTab('nivel', tabNivel));
     tabColeccion?.addEventListener('click', () => setActiveTab('coleccion', tabColeccion));
     searchInput?.addEventListener('input', () => renderLeaderboard());

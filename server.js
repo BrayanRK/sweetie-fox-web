@@ -1,13 +1,43 @@
 const express = require('express');
 const path = require('path');
 const https = require('https');
+const fs = require('fs');
 
 const app = express();
 
 // Pterodactyl usa SERVER_PORT o PORT asignado por el panel
 const PORT = Number(process.env.SERVER_PORT || process.env.PORT || 3000);
 
-// Proxy transparente para conectar la Web con el Bot VPS (brayanrk.info)
+// 1. SERVIR IMÁGENES DE CARTAS GACHA DIRECTAMENTE (Sin lag ni sobrecarga)
+app.get(['/api/gacha/image/:id', '/assets/gacha/:id'], (req, res) => {
+    const rawId = req.params.id || '';
+    const cardId = rawId.replace(/\.jpg$/i, '').replace(/^gacha-/i, '').trim().toLowerCase();
+    const localImg = path.join(__dirname, 'assets', 'gacha', `gacha-${cardId}.jpg`);
+
+    if (fs.existsSync(localImg)) {
+        res.setHeader('Content-Type', 'image/jpeg');
+        res.setHeader('Cache-Control', 'public, max-age=86400');
+        return res.sendFile(localImg);
+    }
+
+    // Fallback: Si por alguna razón no está en disco local, solicitar al VPS
+    const targetUrl = new URL(`https://brayanrk.info/api/gacha/image/${cardId}`);
+    https.get(targetUrl, (proxyRes) => {
+        if (proxyRes.statusCode === 200) {
+            res.writeHead(200, {
+                'Content-Type': 'image/jpeg',
+                'Cache-Control': 'public, max-age=86400'
+            });
+            proxyRes.pipe(res);
+        } else {
+            res.status(404).sendFile(path.join(__dirname, 'favicon-32.png'));
+        }
+    }).on('error', () => {
+        res.status(404).sendFile(path.join(__dirname, 'favicon-32.png'));
+    });
+});
+
+// 2. PROXY TRANSPARENTE PARA EL RESTO DE LA API DEL BOT
 app.use('/api', (req, res) => {
     const targetUrl = new URL(`https://brayanrk.info/api${req.url}`);
     const headers = { ...req.headers, host: targetUrl.host };
