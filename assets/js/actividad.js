@@ -33,6 +33,12 @@
       .replace(/'/g, '&#039;');
   }
 
+  // Censura parcial para números telefónicos (Subbots y usuarios)
+  function maskNumber(str) {
+    if (!str) return '';
+    return String(str).replace(/\b(\d{4,5})(\d{2,6})(\d{3})\b/g, '$1••••$3');
+  }
+
   // Renderizar una tarjeta de actividad
   function renderCard(item) {
     const isOwnerGlobal = item.user.role === 'owner_global';
@@ -52,7 +58,8 @@
     }
 
     const userNameClass = isOwnerGlobal ? 'user-name owner-gold' : 'user-name';
-    const userName = isOwnerGlobal ? (item.user.name || 'BrayanRK') : (item.user.name || item.user.pushName || 'Usuario');
+    const rawUserName = isOwnerGlobal ? (item.user.name || 'BrayanRK') : (item.user.name || item.user.pushName || 'Usuario');
+    const userName = maskNumber(rawUserName);
     const avatarUrl = item.user.avatarUrl || `/api/avatar/${encodeURIComponent(userName)}`;
 
     const isSuccess = item.status === 'success';
@@ -60,8 +67,10 @@
       ? `<span class="status-badge-ok">✅ Respondido bien (${item.durationMs || 40}ms)</span>`
       : `<span class="status-badge-err">❌ Falló comando</span>`;
 
-    const argsHtml = item.args ? `<span class="cmd-args" title="${escapeHtml(item.args)}">${escapeHtml(item.args)}</span>` : '';
+    const safeArgs = maskNumber(item.args);
+    const argsHtml = safeArgs ? `<span class="cmd-args" title="${escapeHtml(safeArgs)}">${escapeHtml(safeArgs)}</span>` : '';
     const chatIcon = item.chat.isGroup ? '👥' : '🔒';
+    const botDisplayName = maskNumber(item.bot.name || 'Bot');
 
     return `
       <div class="${cardClass}" data-id="${item.id}">
@@ -80,7 +89,7 @@
 
           <div class="activity-meta-row">
             <span class="meta-item">${chatIcon} ${escapeHtml(item.chat.name || 'Chat')}</span>
-            <span class="meta-item bot-chip">🤖 ${escapeHtml(item.bot.name || 'Bot')}</span>
+            <span class="meta-item bot-chip">🤖 ${escapeHtml(botDisplayName)}</span>
             <span class="meta-item">${statusBadge}</span>
           </div>
         </div>
