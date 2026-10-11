@@ -2,11 +2,75 @@ const express = require('express');
 const path = require('path');
 const https = require('https');
 const fs = require('fs');
+const { execSync } = require('child_process');
 
 const app = express();
 
 // Pterodactyl usa SERVER_PORT o PORT asignado por el panel
 const PORT = Number(process.env.SERVER_PORT || process.env.PORT || 3000);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AUTO-SINCRONIZACIÓN GIT (Pterodactyl / Docker)
+// ─────────────────────────────────────────────────────────────────────────────
+try {
+    // 1. Evitar error de ownership en Docker ("dubious ownership in repository")
+    execSync('git config --global --add safe.directory /home/container', { stdio: 'ignore' });
+    execSync('git config --global --add safe.directory *', { stdio: 'ignore' });
+
+    // 2. Si no existe la carpeta .git en Pterodactyl, vincularla automáticamente
+    if (!fs.existsSync(path.join(__dirname, '.git'))) {
+        console.log('📦 [.git no encontrado en Pterodactyl] Conectando automáticamente con GitHub...');
+        execSync('git init && git remote add origin https://github.com/BrayanRK/sweetie-fox-web.git && git fetch origin main && git reset --hard origin/main', { stdio: 'inherit' });
+        console.log('✅ Repositorio oficial vinculado con éxito.');
+    }
+} catch (e) {
+    console.error('⚠️ [Git Sync Note]:', e.message);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ENDPOINT: ACTUALIZAR EL SERVIDOR AL INSTANTE (Sin entrar al panel)
+// ─────────────────────────────────────────────────────────────────────────────
+app.get(['/api/actualizar', '/actualizar', '/update'], (req, res) => {
+    try {
+        console.log('🔄 Ejecutando actualización forzada desde GitHub...');
+        execSync('git config --global --add safe.directory /home/container', { stdio: 'ignore' });
+        execSync('git config --global --add safe.directory *', { stdio: 'ignore' });
+        const out = execSync('git fetch origin main && git reset --hard origin/main', { encoding: 'utf-8' });
+
+        res.send(`
+            <!DOCTYPE html>
+            <html lang="es">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Servidor Actualizado</title>
+                <style>
+                    body { background: #09080d; color: #fff; font-family: sans-serif; padding: 40px 20px; text-align: center; }
+                    .box { background: #181224; border: 1px solid rgba(225,29,72,0.3); border-radius: 16px; max-width: 600px; margin: 0 auto; padding: 30px; }
+                    h1 { color: #fb7185; margin-bottom: 10px; font-size: 1.5rem; }
+                    pre { background: #0e0a16; border: 1px solid rgba(255,255,255,0.08); padding: 15px; border-radius: 10px; text-align: left; color: #4ade80; font-size: 0.85rem; overflow-x: auto; }
+                    a { display: inline-block; margin-top: 20px; color: #fff; background: #e11d48; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; }
+                </style>
+            </head>
+            <body>
+                <div class="box">
+                    <h1>🦊 Sweetie Fox Actualizado</h1>
+                    <p>El servidor descargó la última versión de GitHub y se está reiniciando...</p>
+                    <pre>${out}</pre>
+                    <a href="/">← Volver al Inicio</a>
+                </div>
+            </body>
+            </html>
+        `);
+
+        // Reiniciar el proceso para que Pterodactyl recargue con los nuevos archivos
+        setTimeout(() => {
+            process.exit(0);
+        }, 1200);
+    } catch (err) {
+        res.status(500).send(`<h1>Error al actualizar</h1><pre>${err.message}</pre>`);
+    }
+});
 
 // 1. SERVIR IMÁGENES DE CARTAS GACHA DIRECTAMENTE (Sin lag ni sobrecarga)
 app.get(['/api/gacha/image/:id', '/assets/gacha/:id'], (req, res) => {
