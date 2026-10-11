@@ -147,6 +147,10 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+app.get(['/actividad', '/actividad.html', '/logs', '/logs.html'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'actividad.html'));
+});
+
 app.get(['/vincular', '/vincular.html'], (req, res) => {
     res.sendFile(path.join(__dirname, 'vincular.html'));
 });

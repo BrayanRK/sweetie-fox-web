@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Actividad en Vivo — Sweetie Fox</title>
+  <meta name="description" content="Monitor en tiempo real de Sweetie Fox. Observa los comandos ejecutados, usuarios registrados y actividad en vivo del bot en WhatsApp." />
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="theme-color" content="#09080d" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Estilos Luxury -->
+  <link rel="stylesheet" href="assets/css/sweetie-fox.css" />
+
+  <style>
+    /* Estilos Luxury para Monitor de Actividad */
+    .activity-container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 12px;
+    }
+
+    /* Tarjeta superior para vincular en grupo */
+    .link-group-notice {
+      background: linear-gradient(135deg, rgba(225, 29, 72, 0.15) 0%, rgba(30, 20, 40, 0.85) 100%);
+      border: 1px solid rgba(225, 29, 72, 0.35);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      box-shadow: 0 10px 30px rgba(225, 29, 72, 0.15);
+    }
+    .notice-text h3 {
+      font-size: 1.05rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .notice-text p {
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    .btn-notice-action {
+      background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition-fast);
+      box-shadow: 0 4px 14px rgba(225, 29, 72, 0.4);
+      white-space: nowrap;
+    }
+    .btn-notice-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(225, 29, 72, 0.6);
+    }
+
+    /* Live Header Radar */
+    .live-status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(19, 14, 26, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px 18px;
+      margin-bottom: 18px;
+      backdrop-filter: blur(12px);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .live-status-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .live-pulse-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulse-emerald 1.5s infinite;
+    }
+    @keyframes pulse-emerald {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+    .live-status-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: #fff;
+      text-transform: uppercase;
+    }
+    .live-status-count {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    /* Filtros y Buscador */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-body);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .filter-btn:hover {
+      background: rgba(225, 29, 72, 0.15);
+      border-color: rgba(225, 29, 72, 0.4);
+      color: #fff;
+    }
+    .filter-btn.active {
+      background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+      border-color: #fb7185;
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(225, 29, 72, 0.35);
+    }
+    .search-input-wrap {
+      flex: 1;
+      min-width: 220px;
+      position: relative;
+    }
+    .search-input {
+      width: 100%;
+      background: rgba(19, 14, 26, 0.9);
+      border: 1px solid var(--border-subtle);
+      border-radius: 9999px;
+      padding: 7px 16px 7px 34px;
+      color: #fff;
+      font-size: 0.82rem;
+      outline: none;
+      transition: var(--transition-fast);
+    }
+    .search-input:focus {
+      border-color: var(--ruby-light);
+      box-shadow: 0 0 10px rgba(225, 29, 72, 0.25);
+    }
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    /* Feed de Actividad */
+    .activity-feed-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .activity-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      backdrop-filter: blur(12px);
+      transition: var(--transition-fast);
+      position: relative;
+      overflow: hidden;
+      animation: slideDown 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .activity-card:hover {
+      border-color: rgba(225, 29, 72, 0.35);
+      background: rgba(28, 20, 36, 0.85);
+      transform: translateY(-2px);
+    }
+
+    /* Resaltado especial para OWNER GLOBAL */
+    .activity-card.is-owner-global {
+      border-color: rgba(251, 191, 36, 0.55);
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.08) 0%, rgba(25, 16, 32, 0.95) 100%);
+      box-shadow: 0 4px 20px rgba(251, 191, 36, 0.15);
+    }
+    .activity-card.is-owner-global::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: linear-gradient(180deg, #fbbf24 0%, #e11d48 100%);
+    }
+
+    /* Avatar */
+    .activity-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      background: #171120;
+    }
+    .is-owner-global .activity-avatar {
+      border-color: #fbbf24;
+      box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
+    }
+
+    /* Contenido central de la tarjeta */
+    .activity-body {
+      flex: 1;
+      min-width: 0;
+    }
+    .activity-top-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 5px;
+    }
+    .user-name {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .user-name.owner-gold {
+      color: #fbbf24;
+      text-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
+    }
+
+    /* Badges de Roles */
+    .role-badge {
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .role-owner-global {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.25) 0%, rgba(225, 29, 72, 0.25) 100%);
+      color: #fde047;
+      border: 1px solid rgba(251, 191, 36, 0.6);
+      box-shadow: 0 0 8px rgba(251, 191, 36, 0.25);
+    }
+    .role-sub-owner {
+      background: rgba(168, 85, 247, 0.2);
+      color: #c084fc;
+      border: 1px solid rgba(168, 85, 247, 0.4);
+    }
+    .role-admin {
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.4);
+    }
+    .role-registrado {
+      background: rgba(255, 255, 255, 0.08);
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .role-user {
+      background: rgba(255, 255, 255, 0.05);
+      color: #94a3b8;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* Comando ejecutado */
+    .activity-cmd-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+      font-size: 0.88rem;
+    }
+    .cmd-tag {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #fb7185;
+      background: rgba(225, 29, 72, 0.15);
+      border: 1px solid rgba(225, 29, 72, 0.3);
+      padding: 2px 8px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .is-owner-global .cmd-tag {
+      color: #fde047;
+      background: rgba(251, 191, 36, 0.15);
+      border-color: rgba(251, 191, 36, 0.35);
+    }
+    .cmd-args {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: #94a3b8;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
+      max-width: 250px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Meta fila: Chat, Estado, Tiempo */
+    .activity-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+    }
+    .meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .status-badge-ok {
+      color: #34d399;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      padding: 1px 7px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .status-badge-err {
+      color: #f87171;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      padding: 1px 7px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .bot-chip {
+      color: #a78bfa;
+      background: rgba(139, 92, 246, 0.1);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+    }
+
+    /* Estado vacío */
+    .empty-state-box {
+      text-align: center;
+      padding: 60px 20px;
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+    }
+    .empty-state-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Luces Ambientales -->
+  <div class="ambient-lighting">
+    <div class="ambient-light-1"></div>
+    <div class="ambient-light-2"></div>
+  </div>
+
+  <!-- Header Superior -->
+  <header class="top-header">
+    <div class="container header-content">
+      <a href="/" class="brand-link">
+        <div class="brand-fox-icon">🦊</div>
+        <div class="brand-text-wrap">
+          <div class="brand-title">SWEETIE <span>FOX</span></div>
+          <div class="brand-subtitle">Monitor en Vivo</div>
+        </div>
+      </a>
+
+      <!-- Navegación para PC -->
+      <nav class="desktop-nav">
+        <a href="/" class="nav-item">Inicio</a>
+        <a href="/actividad.html" class="nav-item active">📡 Actividad en Vivo</a>
+        <a href="/comandos.html" class="nav-item">Comandos</a>
+        <a href="/ranking.html" class="nav-item">🏆 Salón de la Fama</a>
+        <a href="/album.html" class="nav-item">🃏 Álbum</a>
+      </nav>
+
+      <!-- Enlaces WhatsApp -->
+      <div class="header-buttons">
+        <a href="https://whatsapp.com/channel/0029VbDLXzm9MF8zqYNZc03Y" target="_blank" rel="noopener" class="btn-wa-channel">
+          <span>📢 Canal</span>
+        </a>
+        <a href="https://chat.whatsapp.com/HfK6bI56z48AvLPr8aRlZx?s=cl&p=a&mlu=4&ilr=4" target="_blank" rel="noopener" class="btn-wa-group">
+          <span>💬 Grupo</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenedor Principal -->
+  <main class="container activity-container" style="padding-top: 30px;">
+
+    <!-- Aviso Destacado: Vincular desde el Grupo -->
+    <div class="link-group-notice">
+      <div class="notice-text">
+        <h3><span>🦊</span> ¿Quieres vincular tu propio Bot?</h3>
+        <p>
+          Para mayor rapidez y seguridad, la vinculación ahora se realiza directamente en nuestro <strong>Grupo Oficial de WhatsApp</strong> usando comandos.
+        </p>
+      </div>
+      <a href="https://chat.whatsapp.com/HfK6bI56z48AvLPr8aRlZx?s=cl&p=a&mlu=4&ilr=4" target="_blank" rel="noopener" class="btn-notice-action">
+        <span>💬 Vincular Bot en el Grupo →</span>
+      </a>
+    </div>
+
+    <!-- Título y Descripción -->
+    <div style="text-align: center; margin-bottom: 24px;">
+      <div class="hero-chip">
+        <span>⚡ Transmisión en Tiempo Real</span>
+      </div>
+      <h1 class="box-title" style="margin-top: 10px;">Monitor de Actividad del Bot</h1>
+      <p class="box-desc" style="max-width: 600px; margin: 0 auto;">
+        Observa en vivo cada comando ejecutado en WhatsApp, usuarios registrados y respuestas del servidor.
+      </p>
+    </div>
+
+    <!-- Barra de Estado en Vivo -->
+    <div class="live-status-bar">
+      <div class="live-status-left">
+        <div class="live-pulse-dot" id="live-indicator"></div>
+        <span class="live-status-title" id="live-text">En Vivo • Conectado</span>
+      </div>
+      <div class="live-status-count" id="stat-summary">
+        Cargando registros...
+      </div>
+    </div>
+
+    <!-- Barra de Filtros y Búsqueda -->
+    <div class="filter-bar">
+      <button type="button" class="filter-btn active" data-filter="all">Todos</button>
+      <button type="button" class="filter-btn" data-filter="owner_global">👑 Owner Global</button>
+      <button type="button" class="filter-btn" data-filter="admin">🛡️ Admins</button>
+      <button type="button" class="filter-btn" data-filter="user">👤 Usuarios</button>
+      <button type="button" class="filter-btn" data-filter="success">✅ Solo Éxito</button>
+
+      <div class="search-input-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="activity-search" class="search-input" placeholder="Buscar por usuario, comando o grupo..." autocomplete="off" />
+      </div>
+    </div>
+
+    <!-- Lista de Actividad en Vivo -->
+    <div class="activity-feed-list" id="activity-list">
+      <div class="empty-state-box">
+        <div class="empty-state-icon">📡</div>
+        <h3>Esperando actividad...</h3>
+        <p>Ejecuta cualquier comando en WhatsApp para verlo aparecer aquí en tiempo real.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Barra de Navegación Inferior Móvil -->
+  <nav class="mobile-bottom-nav">
+    <a href="/" class="bottom-nav-link">
+      <span class="bottom-nav-icon">🏠</span>
+      <span>Inicio</span>
+    </a>
+    <a href="/actividad.html" class="bottom-nav-link active">
+      <span class="bottom-nav-icon">📡</span>
+      <span>Actividad</span>
+    </a>
+    <a href="/comandos.html" class="bottom-nav-link">
+      <span class="bottom-nav-icon">⚡</span>
+      <span>Comandos</span>
+    </a>
+    <a href="/ranking.html" class="bottom-nav-link">
+      <span class="bottom-nav-icon">🏆</span>
+      <span>Ranking</span>
+    </a>
+    <a href="/album.html" class="bottom-nav-link">
+      <span class="bottom-nav-icon">🃏</span>
+      <span>Álbum</span>
+    </a>
+  </nav>
+
+  <!-- Scripts -->
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/actividad.js"></script>
+</body>
+</html>
