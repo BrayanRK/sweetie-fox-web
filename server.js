@@ -12,24 +12,32 @@ const PORT = Number(process.env.SERVER_PORT || process.env.PORT || 3000);
 // ─────────────────────────────────────────────────────────────────────────────
 // AUTO-SINCRONIZACIÓN GIT (Pterodactyl / Docker)
 // ─────────────────────────────────────────────────────────────────────────────
-try {
-    // 1. Evitar error de ownership en Docker ("dubious ownership in repository")
-    try { execSync('git config --global --add safe.directory /home/container', { stdio: 'ignore' }); } catch (_) {}
-    try { execSync('git config --global --add safe.directory "*"', { stdio: 'ignore' }); } catch (_) {}
+function gitCmd(cmd) {
+    try {
+        return execSync(cmd, { stdio: 'pipe', encoding: 'utf8' });
+    } catch (_) {
+        return null;
+    }
+}
 
-    // 2. Si no existe la carpeta .git en Pterodactyl, vincularla automáticamente
+try {
+    gitCmd('git config --global --add safe.directory /home/container');
+    gitCmd('git config --global --add safe.directory "*"');
+
+    const REPO = 'https://github.com/BrayanRK/sweetie-fox-web.git';
+
     if (!fs.existsSync(path.join(__dirname, '.git'))) {
-        console.log('📦 [.git no encontrado en Pterodactyl] Conectando automáticamente con GitHub...');
-        execSync('git init && git remote add origin https://github.com/BrayanRK/sweetie-fox-web.git && git fetch origin main && git reset --hard origin/main', { stdio: 'inherit' });
-        console.log('✅ Repositorio oficial vinculado con éxito.');
+        console.log('📦 Conectando con GitHub...');
+        gitCmd('git init');
+        gitCmd(`git remote add origin ${REPO}`);
+        gitCmd('git fetch origin main');
+        gitCmd('git reset --hard origin/main');
+        console.log('✅ Vinculado con éxito.');
     } else {
-        try {
-            console.log('🔄 Sincronizando con GitHub al iniciar...');
-            execSync('git fetch origin main && git reset --hard origin/main', { stdio: 'inherit' });
-            console.log('✅ Sincronizado con GitHub.');
-        } catch (pullErr) {
-            console.log('ℹ️ [Git Pull Note]:', pullErr.message);
-        }
+        console.log('🔄 Sincronizando con GitHub al iniciar...');
+        gitCmd('git fetch origin main');
+        gitCmd('git reset --hard origin/main');
+        console.log('✅ Sincronizado.');
     }
 } catch (e) {
     console.error('⚠️ [Git Sync Note]:', e.message);
@@ -41,11 +49,10 @@ try {
 app.get(['/api/actualizar', '/actualizar', '/update'], (req, res) => {
     try {
         console.log('🔄 Ejecutando actualización forzada desde GitHub...');
-        try {
-            execSync('git config --global --add safe.directory /home/container', { stdio: 'ignore' });
-            execSync('git config --global --add safe.directory "*"', { stdio: 'ignore' });
-        } catch (_) {}
-        const out = execSync('git fetch origin main && git reset --hard origin/main', { encoding: 'utf-8' });
+        gitCmd('git config --global --add safe.directory /home/container');
+        gitCmd('git config --global --add safe.directory "*"');
+        gitCmd('git fetch origin main');
+        const out = gitCmd('git reset --hard origin/main') || 'Actualizado exitosamente.';
 
         res.send(`
             <!DOCTYPE html>
