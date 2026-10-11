@@ -68,9 +68,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const second = filtered[1];
             const third = filtered[2];
 
+            const getAvatarUrl = (item) => {
+                if (item.avatarUrl) return item.avatarUrl;
+                return `/api/avatar/${encodeURIComponent(item.nombre)}`;
+            };
+
             podiumContainer.innerHTML = `
                 <div class="podium-card podium-second" onclick="window.location.href='/album.html?user=${encodeURIComponent(second.nombre)}'" style="cursor: pointer;" title="Toca para ver el álbum de ${second.nombre}">
-                    <span class="podium-medal">🥈</span>
+                    <div class="podium-avatar-wrap">
+                        <img src="${getAvatarUrl(second)}" 
+                             class="podium-avatar-img" 
+                             alt="${second.nombre}" 
+                             onerror="this.onerror=null; this.src='/assets/img/default-avatar.svg';" 
+                             loading="lazy" />
+                        <span class="podium-pos-badge pos-2">2</span>
+                    </div>
                     <div class="podium-name" title="${second.nombre}">${second.nombre}</div>
                     <div class="podium-score">${mainValFn(second)}</div>
                     <div class="podium-sub">${subLabelFn(second)}</div>
@@ -78,7 +90,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
 
                 <div class="podium-card podium-first" onclick="window.location.href='/album.html?user=${encodeURIComponent(first.nombre)}'" style="cursor: pointer;" title="Toca para ver el álbum de ${first.nombre}">
-                    <span class="podium-medal">👑</span>
+                    <div class="podium-avatar-wrap">
+                        <span class="podium-crown-badge">👑</span>
+                        <img src="${getAvatarUrl(first)}" 
+                             class="podium-avatar-img" 
+                             alt="${first.nombre}" 
+                             onerror="this.onerror=null; this.src='/assets/img/default-avatar.svg';" 
+                             loading="lazy" />
+                        <span class="podium-pos-badge pos-1">1</span>
+                    </div>
                     <div class="podium-name" title="${first.nombre}">${first.nombre}</div>
                     <div class="podium-score">${mainValFn(first)}</div>
                     <div class="podium-sub">${subLabelFn(first)}</div>
@@ -86,7 +106,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
 
                 <div class="podium-card podium-third" onclick="window.location.href='/album.html?user=${encodeURIComponent(third.nombre)}'" style="cursor: pointer;" title="Toca para ver el álbum de ${third.nombre}">
-                    <span class="podium-medal">🥉</span>
+                    <div class="podium-avatar-wrap">
+                        <img src="${getAvatarUrl(third)}" 
+                             class="podium-avatar-img" 
+                             alt="${third.nombre}" 
+                             onerror="this.onerror=null; this.src='/assets/img/default-avatar.svg';" 
+                             loading="lazy" />
+                        <span class="podium-pos-badge pos-3">3</span>
+                    </div>
                     <div class="podium-name" title="${third.nombre}">${third.nombre}</div>
                     <div class="podium-score">${mainValFn(third)}</div>
                     <div class="podium-sub">${subLabelFn(third)}</div>
@@ -111,10 +138,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = `/album.html?user=${encodeURIComponent(item.nombre)}`;
             };
 
+            const avatarSrc = item.avatarUrl || `/api/avatar/${encodeURIComponent(item.nombre)}`;
+
             row.innerHTML = `
                 <div class="rank-left">
                     <span class="rank-num">#${pos}</span>
-                    <div>
+                    <img src="${avatarSrc}" 
+                         class="rank-avatar-img" 
+                         alt="${item.nombre}" 
+                         onerror="this.onerror=null; this.src='/assets/img/default-avatar.svg';" 
+                         loading="lazy" />
+                    <div style="overflow: hidden; min-width: 0;">
                         <div class="rank-player-name">${item.nombre}</div>
                         <div class="rank-value-sub">${subLabelFn(item)}</div>
                     </div>

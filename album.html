@@ -21,109 +21,425 @@
   <link rel="stylesheet" href="assets/css/sweetie-fox.css" />
 
   <style>
-    /* Estilos específicos para el Álbum Holográfico 3D */
-    .album-header-banner {
-      background: var(--surface-card);
-      border: 1px solid var(--border-ruby);
+    /* ══════════════════════════════════════════════════════════════════════
+       DOCUMENTO DE IDENTIDAD / LICENCIA DE COLECCIONISTA VIP
+       ══════════════════════════════════════════════════════════════════════ */
+    .vip-id-card {
+      background: linear-gradient(135deg, rgba(24, 18, 36, 0.95) 0%, rgba(13, 9, 20, 0.98) 100%);
+      border: 1.5px solid rgba(251, 191, 36, 0.4);
       border-radius: var(--radius-lg);
-      padding: 24px 20px;
+      padding: 24px;
       margin-bottom: 30px;
       position: relative;
       overflow: hidden;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 30px rgba(225, 29, 72, 0.15);
       backdrop-filter: blur(20px);
-      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
     }
-    .album-header-banner::before {
+    .vip-id-card::before {
       content: '';
       position: absolute;
-      top: -50%;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #e11d48, #fbbf24, #a855f7, #e11d48);
+      background-size: 200% 100%;
+      animation: rainbowGlow 6s linear infinite;
+    }
+    @keyframes rainbowGlow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+    .vip-id-shimmer {
+      position: absolute;
+      top: -100%;
       left: -50%;
       width: 200%;
-      height: 200%;
-      background: radial-gradient(circle at 50% 50%, rgba(225, 29, 72, 0.12) 0%, transparent 60%);
+      height: 300%;
+      background: radial-gradient(circle at 75% 25%, rgba(251, 191, 36, 0.08) 0%, rgba(225, 29, 72, 0.06) 40%, transparent 70%);
       pointer-events: none;
     }
 
-    .user-profile-flex {
+    /* Topbar de la Licencia */
+    .vip-id-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 1;
+      gap: 12px;
+    }
+    .vip-id-top-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .vip-emv-chip {
+      width: 38px;
+      height: 28px;
+      background: linear-gradient(135deg, #fef08a 0%, #ca8a04 50%, #854d0e 100%);
+      border-radius: 5px;
+      position: relative;
+      box-shadow: inset 0 1px 2px rgba(255,255,255,0.6), 0 2px 6px rgba(0,0,0,0.4);
+      flex-shrink: 0;
+    }
+    .chip-line {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.35);
+    }
+    .chip-line.c1 {
+      top: 50%; left: 0; right: 0; height: 1px; transform: translateY(-50%);
+    }
+    .chip-line.c2 {
+      left: 50%; top: 0; bottom: 0; width: 1px; transform: translateX(-50%);
+    }
+    .chip-core {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 14px; height: 12px;
+      border: 1px solid rgba(0,0,0,0.35);
+      border-radius: 2px;
+    }
+    .vip-doc-type {
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 2px;
+    }
+    .vip-flag-badge {
+      font-size: 0.68rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--ruby-light);
+      letter-spacing: 1.5px;
+    }
+    .vip-doc-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      color: #fff;
+      text-transform: uppercase;
+    }
+    .vip-id-serial {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--gold-vip);
+      background: rgba(251, 191, 36, 0.1);
+      border: 1px solid rgba(251, 191, 36, 0.25);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+
+    /* Body 2 Columnas */
+    .vip-id-body {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
       position: relative;
       z-index: 1;
     }
-    @media (min-width: 768px) {
-      .user-profile-flex {
+    @media (min-width: 680px) {
+      .vip-id-body {
         flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
+        align-items: flex-start;
+        gap: 24px;
       }
     }
 
-    .user-info-left {
+    /* Foto Columna */
+    .vip-id-photo-col {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 16px;
+      flex-shrink: 0;
+      gap: 8px;
     }
-    .user-avatar-badge {
-      width: 64px;
-      height: 64px;
-      border-radius: var(--radius-md);
-      background: linear-gradient(135deg, var(--ruby-primary) 0%, #701a75 100%);
+    .vip-photo-frame {
+      width: 110px;
+      height: 125px;
+      border-radius: 12px;
+      border: 2px solid rgba(251, 191, 36, 0.6);
+      background: #151022;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(251, 191, 36, 0.2);
+    }
+    .vip-avatar-pic {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .vip-avatar-fallback-icon {
+      width: 100%;
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2rem;
-      box-shadow: 0 6px 18px var(--ruby-glow);
-      flex-shrink: 0;
+      font-size: 3rem;
+      background: linear-gradient(135deg, var(--ruby-primary), #4a044e);
     }
-    .user-name-title {
-      font-size: 1.4rem;
+    .vip-stamp-overlay {
+      position: absolute;
+      bottom: 6px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-4deg);
+      background: rgba(251, 191, 36, 0.88);
+      color: #000;
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 3px;
+      letter-spacing: 0.8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .vip-rank-pill {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, rgba(225, 29, 72, 0.2), rgba(251, 191, 36, 0.2));
+      border: 1px solid rgba(251, 191, 36, 0.35);
+      color: var(--gold-vip);
+      white-space: nowrap;
+      text-align: center;
+    }
+    .vip-status-indicator {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+      animation: pulseDot 2s infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* Columna de Datos */
+    .vip-id-info-col {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .vip-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .vip-field-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .vip-user-name {
+      font-size: 1.45rem;
       font-weight: 800;
       color: #fff;
       display: flex;
       align-items: center;
       gap: 8px;
-      flex-wrap: wrap;
-    }
-    .user-bio-text {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-top: 3px;
-      max-width: 450px;
+      line-height: 1.2;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    .user-stats-badges {
-      display: flex;
-      gap: 8px;
-      margin-top: 6px;
-      flex-wrap: wrap;
+    .vip-verified-badge {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #3b82f6;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
     }
-    .badge-pill-stat {
-      font-size: 0.75rem;
+
+    /* Barra Nivel & XP */
+    .vip-level-section {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+    }
+    .vip-level-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+    .vip-level-tag {
+      color: var(--gold-vip);
+    }
+    .vip-xp-tag {
+      color: var(--ruby-light);
+    }
+    .vip-progress-bar-bg {
+      height: 7px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+    .vip-progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--ruby-primary), var(--gold-vip));
+      border-radius: 999px;
+      box-shadow: 0 0 12px rgba(251, 191, 36, 0.6);
+      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Grid de Atributos */
+    .vip-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    @media (min-width: 900px) {
+      .vip-stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    .vip-stat-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: hidden;
+    }
+    .stat-icon {
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+    .stat-meta {
+      min-width: 0;
+      overflow: hidden;
+    }
+    .stat-title {
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .stat-value {
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #vip-val-diamonds { color: #67e8f9; }
+    #vip-val-money { color: #4ade80; }
+    #vip-val-cards { color: var(--gold-vip); }
+    #vip-val-completion { color: #f472b6; }
+
+    /* Bio / Quote */
+    .vip-bio-quote {
+      font-size: 0.85rem;
+      color: var(--text-body);
+      background: rgba(255, 255, 255, 0.02);
+      border-left: 2px solid var(--ruby-primary);
+      padding: 6px 12px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-style: italic;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Extra Tags (Pareja, etc) */
+    .vip-extra-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .vip-pill-tag {
+      font-size: 0.72rem;
       font-weight: 700;
-      padding: 3px 10px;
+      padding: 2px 8px;
       border-radius: var(--radius-full);
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--border-subtle);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       color: var(--text-body);
       display: inline-flex;
       align-items: center;
       gap: 4px;
     }
-    .badge-pill-stat.gold {
-      background: rgba(251, 191, 36, 0.12);
-      border-color: rgba(251, 191, 36, 0.3);
-      color: var(--gold-vip);
-    }
-    .badge-pill-stat.ruby {
-      background: rgba(225, 29, 72, 0.12);
-      border-color: var(--border-ruby);
-      color: var(--ruby-light);
-    }
 
-    .user-actions-right {
+    /* Footer / Barcode */
+    .vip-id-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 16px;
+      margin-top: 18px;
+      position: relative;
+      z-index: 1;
+    }
+    @media (min-width: 680px) {
+      .vip-id-footer {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+    .vip-barcode-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .vip-barcode-lines {
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      letter-spacing: 2.5px;
+      color: rgba(255, 255, 255, 0.6);
+      user-select: none;
+      line-height: 1;
+    }
+    .vip-barcode-num {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+    .vip-actions-btns {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
@@ -141,10 +457,51 @@
       align-items: center;
       gap: 6px;
       transition: var(--transition-fast);
+      text-decoration: none;
     }
     .btn-share-collection:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 16px var(--ruby-glow);
+    }
+    .btn-secondary-id {
+      background: rgba(255, 255, 255, 0.06) !important;
+      border-color: rgba(255, 255, 255, 0.12) !important;
+    }
+    .btn-secondary-id:hover {
+      background: rgba(255, 255, 255, 0.12) !important;
+    }
+
+    @media (max-width: 480px) {
+      .vip-id-card {
+        padding: 16px 14px;
+      }
+      .vip-photo-frame {
+        width: 90px;
+        height: 105px;
+      }
+      .vip-user-name {
+        font-size: 1.25rem;
+      }
+      .vip-stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+      }
+      .vip-stat-box {
+        padding: 6px 8px;
+      }
+      .stat-icon {
+        font-size: 1.1rem;
+      }
+      .stat-value {
+        font-size: 0.85rem;
+      }
+      .vip-actions-btns {
+        width: 100%;
+      }
+      .vip-actions-btns .btn-share-collection {
+        flex: 1;
+        justify-content: center;
+      }
     }
 
     /* Buscador y Controles */
@@ -548,31 +905,126 @@
   <!-- Contenido Principal -->
   <main class="container" style="padding-top: 26px;">
 
-    <!-- Banner de Perfil o Catálogo Global -->
-    <div class="album-header-banner" id="album-header-banner">
-      <div class="user-profile-flex">
-        <div class="user-info-left">
-          <div class="user-avatar-badge" id="u-avatar">🃏</div>
-          <div>
-            <div class="user-name-title" id="u-title">
-              Catálogo Global de Cartas
-              <span class="badge-pill-stat gold" id="u-badge-status">Oficial</span>
+    <!-- Documento de Identidad / Licencia VIP de Coleccionista -->
+    <div class="vip-id-card" id="album-header-banner">
+      <div class="vip-id-shimmer"></div>
+
+      <!-- Cabecera de la Licencia -->
+      <div class="vip-id-topbar">
+        <div class="vip-id-top-left">
+          <div class="vip-emv-chip" title="Chip de Seguridad EMV Holográfico">
+            <div class="chip-line c1"></div>
+            <div class="chip-line c2"></div>
+            <div class="chip-core"></div>
+          </div>
+          <div class="vip-doc-type">
+            <span class="vip-flag-badge">🦊 SWEETIE FOX OS</span>
+            <span class="vip-doc-title" id="vip-card-type-text">LICENCIA OFICIAL DE COLECCIONISTA</span>
+          </div>
+        </div>
+        <div class="vip-id-serial" id="vip-card-serial">
+          SF-ID • ARCHIVO-MAESTRO
+        </div>
+      </div>
+
+      <!-- Cuerpo de la Tarjeta: Foto y Datos -->
+      <div class="vip-id-body">
+        <!-- Columna Izquierda: Foto y Rango -->
+        <div class="vip-id-photo-col">
+          <div class="vip-photo-frame">
+            <img id="u-avatar-img" src="/assets/img/default-avatar.svg" alt="Avatar WhatsApp" onerror="this.onerror=null; this.src='/assets/img/default-avatar.svg';" class="vip-avatar-pic" />
+            <div class="vip-avatar-fallback-icon" id="u-avatar-icon" style="display: none;">🃏</div>
+            <div class="vip-stamp-overlay" id="u-stamp-overlay">
+              <span>OFICIAL</span>
             </div>
-            <div class="user-bio-text" id="u-desc">
-              Explora las 248 cartas anime coleccionables del bot con efectos 3D.
-            </div>
-            <div class="user-stats-badges" id="u-stats-badges">
-              <span class="badge-pill-stat ruby" id="stat-total-cards">248 Cartas Disponibles</span>
-              <span class="badge-pill-stat" id="stat-unique-cards">3 Rarezas (SSR, SR, R)</span>
-            </div>
+          </div>
+          <div class="vip-rank-pill" id="vip-rank-badge">
+            ★ SISTEMA CENTRAL
+          </div>
+          <div class="vip-status-indicator" id="vip-status-text">
+            <span class="status-dot"></span> <span id="vip-status-label">BASE DE DATOS ACTIVA</span>
           </div>
         </div>
 
-        <div class="user-actions-right">
+        <!-- Columna Derecha: Información del Titular -->
+        <div class="vip-id-info-col">
+          <div class="vip-field-group">
+            <div class="vip-field-label">TITULAR AUTORIZADO</div>
+            <div class="vip-user-name" id="u-title">
+              Catálogo Global de Cartas
+              <span class="vip-verified-badge" id="u-verified-badge" title="Verificado">✓</span>
+            </div>
+          </div>
+
+          <!-- Barra de Nivel & Experiencia XP -->
+          <div class="vip-level-section" id="vip-level-section">
+            <div class="vip-level-row">
+              <span class="vip-level-tag" id="u-level-tag">ARCHIVO MAESTRO</span>
+              <span class="vip-xp-tag" id="u-xp-text">248 Cartas 3D</span>
+            </div>
+            <div class="vip-progress-bar-bg">
+              <div class="vip-progress-bar-fill" id="u-xp-bar" style="width: 100%;"></div>
+            </div>
+          </div>
+
+          <!-- Grid de Atributos -->
+          <div class="vip-stats-grid" id="u-stats-grid">
+            <div class="vip-stat-box">
+              <span class="stat-icon">💎</span>
+              <div class="stat-meta">
+                <div class="stat-title">MONEDA VIP</div>
+                <div class="stat-value" id="vip-val-diamonds">Diamantes</div>
+              </div>
+            </div>
+            <div class="vip-stat-box">
+              <span class="stat-icon">🪙</span>
+              <div class="stat-meta">
+                <div class="stat-title">ECONOMÍA</div>
+                <div class="stat-value" id="vip-val-money">Monedas</div>
+              </div>
+            </div>
+            <div class="vip-stat-box">
+              <span class="stat-icon">🃏</span>
+              <div class="stat-meta">
+                <div class="stat-title">CARTAS DISPONIBLES</div>
+                <div class="stat-value" id="vip-val-cards">248 Cartas</div>
+              </div>
+            </div>
+            <div class="vip-stat-box">
+              <span class="stat-icon">🏆</span>
+              <div class="stat-meta">
+                <div class="stat-title">RAREZAS</div>
+                <div class="stat-value" id="vip-val-completion">SSR • SR • R</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bio / Frase -->
+          <div class="vip-bio-quote" id="u-desc">
+            "Explora la colección 3D holográfica de Sweetie Fox. Busca un jugador arriba para ver su documento oficial."
+          </div>
+
+          <!-- Metadatos Extras -->
+          <div class="vip-extra-tags" id="vip-extra-tags"></div>
+        </div>
+      </div>
+
+      <!-- Pie de la Tarjeta: Código de Barras y Acciones -->
+      <div class="vip-id-footer">
+        <div class="vip-barcode-wrap">
+          <div class="vip-barcode-lines">
+            |||| || ||||| | |||| ||| ||||||| ||| |||| | ||||| || ||||
+          </div>
+          <div class="vip-barcode-num" id="vip-barcode-text">
+            SF-2026-SECURE-DATABASE-VERIFIED
+          </div>
+        </div>
+
+        <div class="vip-actions-btns">
           <button type="button" class="btn-share-collection" id="btn-share-collection">
-            <span>🔗 Compartir Colección</span>
+            <span>🔗 Compartir Carnet</span>
           </button>
-          <a href="/ranking.html" class="btn-share-collection" style="background: rgba(255, 255, 255, 0.08);">
+          <a href="/ranking.html" class="btn-share-collection btn-secondary-id">
             <span>🏆 Salón de la Fama</span>
           </a>
         </div>

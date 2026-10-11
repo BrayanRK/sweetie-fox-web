@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         cardsGrid.innerHTML = `
             <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted);">
-                <p style="font-size: 1.2rem;">⚡ Cargando inventario de "${username}"...</p>
+                <p style="font-size: 1.2rem;">⚡ Consultando carnet oficial de "${username}"...</p>
             </div>
         `;
 
@@ -193,8 +193,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!data.ok || !data.usuario) {
                 cardsGrid.innerHTML = `
                     <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted);">
-                        <p style="font-size: 1.3rem; margin-bottom: 6px;">😿 Jugador no encontrado</p>
-                        <p style="font-size: 0.9rem;">El usuario "${username}" no existe o aún no ha jugado al Gacha.</p>
+                        <p style="font-size: 1.3rem; margin-bottom: 6px;">😿 Ciudadano no encontrado</p>
+                        <p style="font-size: 0.9rem;">El usuario "${username}" no existe o aún no ha registrado cartas en el bot.</p>
                         <button type="button" class="btn-share-collection" id="btn-back-catalog" style="margin-top: 16px;">
                             Ver Catálogo Completo
                         </button>
@@ -210,28 +210,110 @@ document.addEventListener('DOMContentLoaded', () => {
             currentUserData = data.usuario;
             currentCardsToDisplay = data.cards || [];
 
-            // Actualizar Banner de Usuario
-            if (userAvatar) userAvatar.textContent = (currentUserData.level >= 20) ? '👑' : '🦊';
+            // 1. Número de Serie y Código de Barras determinístico
+            let hashNum = 0;
+            for (let i = 0; i < currentUserData.name.length; i++) {
+                hashNum = ((hashNum << 5) - hashNum) + currentUserData.name.charCodeAt(i);
+                hashNum |= 0;
+            }
+            const hexSerial = Math.abs(hashNum).toString(16).toUpperCase().padStart(4, '0');
+            const cardSerialEl = document.getElementById('vip-card-serial');
+            if (cardSerialEl) cardSerialEl.textContent = `SF-ID • 2026-${hexSerial}`;
+
+            const barcodeEl = document.getElementById('vip-barcode-text');
+            if (barcodeEl) barcodeEl.textContent = `SF-${Math.abs(hashNum).toString().slice(0, 6)}-${currentUserData.name.toUpperCase()}-VERIFIED`;
+
+            // 2. Título de Tipo de Carnet
+            const cardTypeEl = document.getElementById('vip-card-type-text');
+            if (cardTypeEl) {
+                cardTypeEl.textContent = currentUserData.isVip ? 'LICENCIA OFICIAL DE COLECCIONISTA VIP 👑' : 'DOCUMENTO DE IDENTIDAD • COLECCIONISTA';
+            }
+
+            // 3. Foto de Identificación WhatsApp con fallback
+            const avatarImg = document.getElementById('u-avatar-img');
+            const avatarIcon = document.getElementById('u-avatar-icon');
+            if (avatarImg) {
+                avatarImg.style.display = 'block';
+                if (avatarIcon) avatarIcon.style.display = 'none';
+                avatarImg.src = currentUserData.avatarUrl || `/api/avatar/${encodeURIComponent(currentUserData.name)}`;
+                avatarImg.onerror = function() {
+                    this.onerror = null;
+                    this.src = '/assets/img/default-avatar.svg';
+                };
+            }
+
+            // 4. Rango del Titular
+            const rankBadge = document.getElementById('vip-rank-badge');
+            if (rankBadge) {
+                let rankTitle = '★ RANGO D • NOVATO';
+                if (currentUserData.level >= 35) rankTitle = '★ RANGO SSS • LEYENDA';
+                else if (currentUserData.level >= 25) rankTitle = '★ RANGO SS • MAESTRO';
+                else if (currentUserData.level >= 15) rankTitle = '★ RANGO S • VETERANO';
+                else if (currentUserData.level >= 5) rankTitle = '★ RANGO A • AVENTURERO';
+                rankBadge.textContent = rankTitle;
+            }
+
+            // 5. Estado del Ciudadano
+            const statusLabel = document.getElementById('vip-status-label');
+            if (statusLabel) {
+                statusLabel.textContent = currentUserData.isVip ? 'MIEMBRO VIP GOLD' : 'CIUDADANO ACTIVO';
+            }
+
+            // 6. Nombre del Titular
             if (userTitle) {
                 userTitle.innerHTML = `
                     ${currentUserData.name}
-                    <span class="badge-pill-stat gold">Nivel ${currentUserData.level}</span>
+                    <span class="vip-verified-badge" title="Titular Oficial Verificado">✓</span>
                 `;
             }
-            if (userDesc) {
-                userDesc.textContent = currentUserData.bio || '¡Coleccionista oficial de Sweetie Fox!';
-            }
-            if (userStatsBadges) {
-                const totalCards = currentUserData.totalCartas || 0;
-                const uniqueCards = currentUserData.cartasUnicas || 0;
-                const pct = Math.round((uniqueCards / 248) * 100);
 
-                userStatsBadges.innerHTML = `
-                    <span class="badge-pill-stat ruby">🃏 ${totalCards} Cartas (${uniqueCards} Únicas)</span>
-                    <span class="badge-pill-stat gold">🏆 ${pct}% Completado</span>
-                    <span class="badge-pill-stat">💎 ${currentUserData.diamonds || 0} Diamantes</span>
-                    <span class="badge-pill-stat">⚡ ${Number(currentUserData.xp || 0).toLocaleString()} XP</span>
-                `;
+            // 7. Nivel y Barra XP
+            const levelTag = document.getElementById('u-level-tag');
+            const xpText = document.getElementById('u-xp-text');
+            const xpBar = document.getElementById('u-xp-bar');
+            if (levelTag) levelTag.textContent = `NIVEL ${currentUserData.level}`;
+            if (xpText) xpText.textContent = `${Number(currentUserData.xp || 0).toLocaleString()} XP`;
+            if (xpBar) {
+                const xpProgress = Math.min(100, Math.max(12, ((currentUserData.xp % 3000) / 3000) * 100));
+                xpBar.style.width = `${Math.round(xpProgress)}%`;
+            }
+
+            // 8. Grid de Atributos
+            const valDiamonds = document.getElementById('vip-val-diamonds');
+            const valMoney = document.getElementById('vip-val-money');
+            const valCards = document.getElementById('vip-val-cards');
+            const valCompletion = document.getElementById('vip-val-completion');
+
+            const totalCards = currentUserData.totalCartas || 0;
+            const uniqueCards = currentUserData.cartasUnicas || 0;
+            const pct = Math.round((uniqueCards / 248) * 100);
+
+            if (valDiamonds) valDiamonds.textContent = Number(currentUserData.diamonds || 0).toLocaleString();
+            if (valMoney) valMoney.textContent = `$${Number(currentUserData.dinero || 0).toLocaleString()}`;
+            if (valCards) valCards.textContent = `${totalCards} (${uniqueCards} únicas)`;
+            if (valCompletion) valCompletion.textContent = `${pct}% del Álbum`;
+
+            // 9. Bio / Lema
+            if (userDesc) {
+                userDesc.textContent = currentUserData.bio ? `"${currentUserData.bio}"` : '"¡Coleccionista oficial de Sweetie Fox!"';
+            }
+
+            // 10. Tags Extras (Pareja, Género, Cumpleaños)
+            const extraTagsEl = document.getElementById('vip-extra-tags');
+            if (extraTagsEl) {
+                extraTagsEl.innerHTML = '';
+                if (currentUserData.marriedTo) {
+                    extraTagsEl.innerHTML += `<span class="vip-pill-tag">💍 Casado(a) con ${currentUserData.marriedTo}</span>`;
+                }
+                if (currentUserData.gender) {
+                    extraTagsEl.innerHTML += `<span class="vip-pill-tag">⚧️ ${currentUserData.gender}</span>`;
+                }
+                if (currentUserData.birthDate) {
+                    extraTagsEl.innerHTML += `<span class="vip-pill-tag">🎂 ${currentUserData.birthDate}</span>`;
+                }
+                if (currentUserData.isRegistered) {
+                    extraTagsEl.innerHTML += `<span class="vip-pill-tag" style="color: #4ade80;">📋 Registrado</span>`;
+                }
             }
 
             renderCards();
@@ -252,21 +334,65 @@ document.addEventListener('DOMContentLoaded', () => {
         currentUserData = null;
         currentCardsToDisplay = allMasterCards;
 
-        if (userAvatar) userAvatar.textContent = '🃏';
+        const cardSerialEl = document.getElementById('vip-card-serial');
+        if (cardSerialEl) cardSerialEl.textContent = 'SF-ID • ARCHIVO-MAESTRO';
+
+        const barcodeEl = document.getElementById('vip-barcode-text');
+        if (barcodeEl) barcodeEl.textContent = 'SF-2026-SECURE-DATABASE-VERIFIED';
+
+        const cardTypeEl = document.getElementById('vip-card-type-text');
+        if (cardTypeEl) cardTypeEl.textContent = 'LICENCIA OFICIAL • CATÁLOGO GENERAL';
+
+        const avatarImg = document.getElementById('u-avatar-img');
+        const avatarIcon = document.getElementById('u-avatar-icon');
+        if (avatarImg) {
+            avatarImg.style.display = 'none';
+        }
+        if (avatarIcon) {
+            avatarIcon.style.display = 'flex';
+            avatarIcon.textContent = '🦊';
+        }
+
+        const rankBadge = document.getElementById('vip-rank-badge');
+        if (rankBadge) rankBadge.textContent = '★ SISTEMA CENTRAL';
+
+        const statusLabel = document.getElementById('vip-status-label');
+        if (statusLabel) statusLabel.textContent = 'BASE DE DATOS ACTIVA';
+
         if (userTitle) {
             userTitle.innerHTML = `
                 Catálogo Global de Cartas
-                <span class="badge-pill-stat gold">Oficial</span>
+                <span class="vip-verified-badge" title="Verificado">✓</span>
             `;
         }
+
+        const levelTag = document.getElementById('u-level-tag');
+        const xpText = document.getElementById('u-xp-text');
+        const xpBar = document.getElementById('u-xp-bar');
+        if (levelTag) levelTag.textContent = 'ARCHIVO MAESTRO';
+        if (xpText) xpText.textContent = '248 Cartas 3D';
+        if (xpBar) xpBar.style.width = '100%';
+
+        const valDiamonds = document.getElementById('vip-val-diamonds');
+        const valMoney = document.getElementById('vip-val-money');
+        const valCards = document.getElementById('vip-val-cards');
+        const valCompletion = document.getElementById('vip-val-completion');
+        if (valDiamonds) valDiamonds.textContent = 'Diamantes';
+        if (valMoney) valMoney.textContent = 'Monedas';
+        if (valCards) valCards.textContent = '248 Cartas';
+        if (valCompletion) valCompletion.textContent = 'SSR • SR • R';
+
         if (userDesc) {
-            userDesc.textContent = 'Explora las 248 cartas anime coleccionables del bot con efectos 3D.';
+            userDesc.textContent = 'Explora la colección 3D holográfica de Sweetie Fox. Busca un jugador arriba para ver su documento oficial.';
         }
-        if (userStatsBadges) {
-            userStatsBadges.innerHTML = `
-                <span class="badge-pill-stat ruby">248 Cartas Disponibles</span>
-                <span class="badge-pill-stat">3 Rarezas (SSR, SR, R)</span>
-                <span class="badge-pill-stat gold">⚔️ Batallas RPG</span>
+
+        const extraTagsEl = document.getElementById('vip-extra-tags');
+        if (extraTagsEl) {
+            extraTagsEl.innerHTML = `
+                <span class="vip-pill-tag">🌟 SSR</span>
+                <span class="vip-pill-tag">✨ SR</span>
+                <span class="vip-pill-tag">🔷 R</span>
+                <span class="vip-pill-tag" style="color: var(--gold-vip);">⚔️ Batallas RPG</span>
             `;
         }
 
