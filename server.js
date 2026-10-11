@@ -14,14 +14,22 @@ const PORT = Number(process.env.SERVER_PORT || process.env.PORT || 3000);
 // ─────────────────────────────────────────────────────────────────────────────
 try {
     // 1. Evitar error de ownership en Docker ("dubious ownership in repository")
-    execSync('git config --global --add safe.directory /home/container', { stdio: 'ignore' });
-    execSync('git config --global --add safe.directory "*"', { stdio: 'ignore' });
+    try { execSync('git config --global --add safe.directory /home/container', { stdio: 'ignore' }); } catch (_) {}
+    try { execSync('git config --global --add safe.directory "*"', { stdio: 'ignore' }); } catch (_) {}
 
     // 2. Si no existe la carpeta .git en Pterodactyl, vincularla automáticamente
     if (!fs.existsSync(path.join(__dirname, '.git'))) {
         console.log('📦 [.git no encontrado en Pterodactyl] Conectando automáticamente con GitHub...');
         execSync('git init && git remote add origin https://github.com/BrayanRK/sweetie-fox-web.git && git fetch origin main && git reset --hard origin/main', { stdio: 'inherit' });
         console.log('✅ Repositorio oficial vinculado con éxito.');
+    } else {
+        try {
+            console.log('🔄 Sincronizando con GitHub al iniciar...');
+            execSync('git fetch origin main && git reset --hard origin/main', { stdio: 'inherit' });
+            console.log('✅ Sincronizado con GitHub.');
+        } catch (pullErr) {
+            console.log('ℹ️ [Git Pull Note]:', pullErr.message);
+        }
     }
 } catch (e) {
     console.error('⚠️ [Git Sync Note]:', e.message);
