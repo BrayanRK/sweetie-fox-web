@@ -44,7 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (elRegUsers) elRegUsers.textContent = data.usuariosRegistrados ? `${Number(data.usuariosRegistrados).toLocaleString()} registrados` : '—';
 
             const elGroups = document.getElementById('stat-groups');
-            if (elGroups) elGroups.textContent = data.totalGrupos !== undefined ? `${data.totalGrupos} activos` : '—';
+            if (elGroups) {
+                const grpCount = Number(data.totalGrupos);
+                elGroups.textContent = !isNaN(grpCount) ? `${grpCount.toLocaleString()} activos` : '—';
+            }
 
             const elUptime = document.getElementById('stat-uptime');
             if (elUptime) elUptime.textContent = formatUptime(data.uptimeSeconds);
