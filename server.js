@@ -62,11 +62,11 @@ app.get(['/api/actualizar', '/actualizar', '/update'], (req, res) => {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Servidor Actualizado</title>
                 <style>
-                    body { background: #09080d; color: #fff; font-family: sans-serif; padding: 40px 20px; text-align: center; }
-                    .box { background: #181224; border: 1px solid rgba(225,29,72,0.3); border-radius: 16px; max-width: 600px; margin: 0 auto; padding: 30px; }
-                    h1 { color: #fb7185; margin-bottom: 10px; font-size: 1.5rem; }
-                    pre { background: #0e0a16; border: 1px solid rgba(255,255,255,0.08); padding: 15px; border-radius: 10px; text-align: left; color: #4ade80; font-size: 0.85rem; overflow-x: auto; }
-                    a { display: inline-block; margin-top: 20px; color: #fff; background: #e11d48; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; }
+                    body { background: #0F0A14; color: #FFF1E0; font-family: sans-serif; padding: 40px 20px; text-align: center; }
+                    .box { background: #1B1222; border: 1px solid rgba(255,122,47,0.35); border-radius: 18px; max-width: 600px; margin: 0 auto; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+                    h1 { color: #FF9959; margin-bottom: 10px; font-size: 1.5rem; }
+                    pre { background: #0E0914; border: 1px solid rgba(255,241,224,0.08); padding: 15px; border-radius: 12px; text-align: left; color: #4ade80; font-size: 0.85rem; overflow-x: auto; }
+                    a { display: inline-block; margin-top: 20px; color: #FFF1E0; background: linear-gradient(135deg, #FF7A2F, #C65211); text-decoration: none; padding: 12px 24px; border-radius: 9999px; font-weight: bold; box-shadow: 0 4px 15px rgba(255,122,47,0.4); }
                 </style>
             </head>
             <body>

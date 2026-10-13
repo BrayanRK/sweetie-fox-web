@@ -28,9 +28,9 @@
     <div class="ambient-light-2"></div>
   </div>
 
-  <!-- Header Superior (Isla de Cristal) -->
+  <!-- Header Superior (Isla Flotante Desacoplada) -->
   <header class="top-header">
-    <div class="container header-content">
+    <div class="header-island">
       <a href="/" class="brand-link">
         <div class="brand-fox-icon">🦊</div>
         <div class="brand-text-wrap">
@@ -60,32 +60,60 @@
     </div>
   </header>
 
-  <!-- Contenido Principal -->
+  <!-- Contenedor Principal Multi-Sección -->
   <main class="container">
 
     <!-- 1. Hero Principal -->
     <section class="hero-section">
-      <div class="hero-chip">
-        <span>🦊 Sweetie Fox Edition</span>
-      </div>
+      <div class="hero-content-wrap">
+        <div class="hero-chip">
+          <span>🦊 Sweetie Fox Edition</span>
+        </div>
 
-      <h1 class="hero-main-title">
-        El Bot de WhatsApp más<br>
-        <span class="gradient-fox">exclusivo y potente.</span>
-      </h1>
+        <h1 class="hero-main-title">
+          El Bot de WhatsApp más<br>
+          <span class="gradient-fox">exclusivo y potente.</span>
+        </h1>
 
-      <p class="hero-description">
-        Disfruta de más de 120 comandos automáticos: descargas en alta calidad, inteligencia artificial, juegos, economía y herramientas para tus grupos. Sin descargas, directo en tu WhatsApp.
-      </p>
+        <p class="hero-description">
+          Disfruta de más de 120 comandos automáticos: descargas en alta calidad, inteligencia artificial, juegos, economía y herramientas para tus grupos. Sin descargas, directo en tu WhatsApp.
+        </p>
 
-      <div class="cta-group">
-        <a href="https://chat.whatsapp.com/HfK6bI56z48AvLPr8aRlZx?s=cl&p=a&mlu=4&ilr=4" target="_blank" rel="noopener" class="btn-primary-action">
-          <span>💬 Vincular Bot en el Grupo Oficial</span>
-          <div class="btn-icon-capsule">→</div>
-        </a>
-        <a href="/actividad.html" class="btn-secondary-action">
-          <span>📡 Ver Actividad en Vivo</span>
-        </a>
+        <div class="cta-group">
+          <a href="https://chat.whatsapp.com/HfK6bI56z48AvLPr8aRlZx?s=cl&p=a&mlu=4&ilr=4" target="_blank" rel="noopener" class="btn-primary-action">
+            <span>💬 Vincular Bot en el Grupo Oficial</span>
+            <div class="btn-icon-capsule">→</div>
+          </a>
+          <a href="/actividad.html" class="btn-secondary-action">
+            <span>📡 Ver Actividad en Vivo</span>
+          </a>
+        </div>
+
+        <!-- Terminal de Estado Interactivo del Bot -->
+        <div class="hero-preview-box">
+          <div class="terminal-frame">
+            <div class="terminal-bar">
+              <div class="terminal-dots">
+                <span class="t-dot r"></span>
+                <span class="t-dot y"></span>
+                <span class="t-dot g"></span>
+              </div>
+              <span class="terminal-title">SWEETIE FOX OS • WHATSAPP NODE RUNTIME</span>
+              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: #4ade80;">ONLINE</span>
+            </div>
+            <div class="terminal-content">
+              <div class="terminal-left">
+                <div class="t-pulse"></div>
+                <span class="t-code">sweetie-fox@whatsapp:~$ ready --subbots=active</span>
+              </div>
+              <div class="terminal-badges">
+                <span class="t-badge">⚡ 148 Comandos</span>
+                <span class="t-badge">📡 0 Delay</span>
+                <span class="t-badge">🔒 Sesión Cifrada</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -296,5 +324,6 @@
 
   <script src="assets/js/config.js"></script>
   <script src="assets/js/home.js"></script>
+  <script src="assets/js/motion.js"></script>
 </body>
 </html>

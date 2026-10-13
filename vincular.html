@@ -15,7 +15,7 @@
   <!-- Google Fonts: Outfit (Display) + Plus Jakarta Sans + JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <!-- Estilos Globales Sweetie Fox -->
   <link rel="stylesheet" href="assets/css/sweetie-fox.css" />
@@ -37,12 +37,17 @@
       background: rgba(255, 241, 224, 0.03);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
-      padding: 16px;
+      padding: 18px 16px;
       box-shadow: var(--inner-highlight);
+      transition: var(--transition-fast);
+    }
+    .step-card:hover {
+      border-color: var(--border-fox);
+      transform: translateY(-2px);
     }
     .step-num {
-      width: 28px;
-      height: 28px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       background: rgba(255, 122, 47, 0.15);
       border: 1px solid var(--border-fox);
@@ -51,19 +56,19 @@
       align-items: center;
       justify-content: center;
       font-family: var(--font-mono);
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       font-weight: 800;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
     .step-title {
       font-family: var(--font-display);
-      font-size: 0.95rem;
+      font-size: 0.98rem;
       font-weight: 700;
       color: var(--text-pure);
       margin-bottom: 4px;
     }
     .step-desc {
-      font-size: 0.82rem;
+      font-size: 0.84rem;
       color: var(--text-body);
       line-height: 1.45;
     }
@@ -77,9 +82,9 @@
     <div class="ambient-light-2"></div>
   </div>
 
-  <!-- Header Superior (Isla de Cristal) -->
+  <!-- Header Superior (Isla Flotante Desacoplada) -->
   <header class="top-header">
-    <div class="container header-content">
+    <div class="header-island">
       <a href="/" class="brand-link">
         <div class="brand-fox-icon">🦊</div>
         <div class="brand-text-wrap">
@@ -110,9 +115,9 @@
   </header>
 
   <!-- Contenido -->
-  <main class="container" style="padding-top: 40px;">
-    <div class="pairing-container">
-      <div class="glass-box" style="text-align: center; padding: 44px 28px;">
+  <main class="container" style="padding-top: 48px;">
+    <section class="pairing-container">
+      <div class="glass-box" style="text-align: center; padding: 46px 28px;">
         <div class="hero-chip" style="margin-bottom: 20px;">
           <span>💬 Vinculación Oficial por WhatsApp</span>
         </div>
@@ -159,7 +164,7 @@
           </p>
         </div>
       </div>
-    </div>
+    </section>
   </main>
 
   <!-- Barra de Navegación Inferior Móvil (Dock Flotante) -->
@@ -194,5 +199,6 @@
   </footer>
 
   <script src="assets/js/config.js"></script>
+  <script src="assets/js/motion.js"></script>
 </body>
 </html>

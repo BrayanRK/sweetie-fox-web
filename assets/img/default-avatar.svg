@@ -1,17 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
   <defs>
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#2a081e"/>
-      <stop offset="50%" stop-color="#140d1f"/>
-      <stop offset="100%" stop-color="#09080d"/>
+      <stop offset="0%" stop-color="#2A141A"/>
+      <stop offset="50%" stop-color="#160F1F"/>
+      <stop offset="100%" stop-color="#0F0A14"/>
     </linearGradient>
-    <linearGradient id="rubyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fb7185"/>
-      <stop offset="100%" stop-color="#e11d48"/>
+    <linearGradient id="foxGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF9959"/>
+      <stop offset="100%" stop-color="#FF7A2F"/>
     </linearGradient>
   </defs>
   <rect width="128" height="128" rx="64" fill="url(#bgGrad)"/>
-  <circle cx="64" cy="64" r="60" fill="none" stroke="url(#rubyGrad)" stroke-width="3" opacity="0.4"/>
-  <circle cx="64" cy="46" r="22" fill="url(#rubyGrad)" opacity="0.9"/>
-  <path d="M26 108 C26 80, 44 74, 64 74 C84 74, 102 80, 102 108 Z" fill="url(#rubyGrad)" opacity="0.9"/>
+  <circle cx="64" cy="64" r="60" fill="none" stroke="url(#foxGrad)" stroke-width="3" opacity="0.45"/>
+  <circle cx="64" cy="46" r="22" fill="url(#foxGrad)" opacity="0.95"/>
+  <path d="M26 108 C26 80, 44 74, 64 74 C84 74, 102 80, 102 108 Z" fill="url(#foxGrad)" opacity="0.95"/>
 </svg>

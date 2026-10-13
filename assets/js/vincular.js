@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
             li.className = 'country-item';
             li.innerHTML = `
                 <span>${p.bandera} ${p.nombre}</span>
-                <span style="font-family: var(--font-mono); font-weight: 700; color: var(--ruby-light);">+${p.dial}</span>
+                <span style="font-family: var(--font-mono); font-weight: 700; color: var(--fox-light);">+${p.dial}</span>
             `;
             li.addEventListener('click', () => {
                 currentSelectedCountry = p;

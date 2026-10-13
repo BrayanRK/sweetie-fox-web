@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="podium-name" title="${second.nombre}">${second.nombre}</div>
                     <div class="podium-score">${mainValFn(second)}</div>
                     <div class="podium-sub">${subLabelFn(second)}</div>
-                    <div style="font-size: 0.7rem; color: var(--ruby-light); margin-top: 6px;">Ver Álbum 🃏</div>
+                    <div style="font-size: 0.7rem; color: var(--fox-light); margin-top: 6px;">Ver Álbum 🃏</div>
                 </div>
 
                 <div class="podium-card podium-first" onclick="window.location.href='/album.html?user=${encodeURIComponent(first.nombre)}'" style="cursor: pointer;" title="Toca para ver el álbum de ${first.nombre}">
@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="podium-name" title="${third.nombre}">${third.nombre}</div>
                     <div class="podium-score">${mainValFn(third)}</div>
                     <div class="podium-sub">${subLabelFn(third)}</div>
-                    <div style="font-size: 0.7rem; color: var(--ruby-light); margin-top: 6px;">Ver Álbum 🃏</div>
+                    <div style="font-size: 0.7rem; color: var(--fox-light); margin-top: 6px;">Ver Álbum 🃏</div>
                 </div>
             `;
         } else {

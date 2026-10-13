@@ -906,9 +906,9 @@
     <div class="ambient-light-2"></div>
   </div>
 
-  <!-- Header Superior (Isla de Cristal) -->
+  <!-- Header Superior (Isla Flotante Desacoplada) -->
   <header class="top-header">
-    <div class="container header-content">
+    <div class="header-island">
       <a href="/" class="brand-link">
         <div class="brand-fox-icon">🦊</div>
         <div class="brand-text-wrap">
@@ -939,157 +939,163 @@
   </header>
 
   <!-- Contenido Principal -->
-  <main class="container" style="padding-top: 32px;">
+  <main class="container" style="padding-top: 40px;">
 
-    <!-- Documento de Identidad / Licencia VIP de Coleccionista -->
-    <div class="vip-id-card" id="album-header-banner">
-      <div class="vip-id-shimmer"></div>
+    <!-- 1. Documento de Identidad / Licencia VIP de Coleccionista -->
+    <section>
+      <div class="vip-id-card" id="album-header-banner">
+        <div class="vip-id-shimmer"></div>
 
-      <!-- Cabecera de la Licencia -->
-      <div class="vip-id-topbar">
-        <div class="vip-id-top-left">
-          <div class="vip-emv-chip" title="Chip de Seguridad EMV Holográfico">
-            <div class="chip-line c1"></div>
-            <div class="chip-line c2"></div>
-            <div class="chip-core"></div>
-          </div>
-          <div class="vip-doc-type">
-            <span class="vip-flag-badge">🦊 SWEETIE FOX OS</span>
-            <span class="vip-doc-title" id="vip-card-type-text">LICENCIA OFICIAL DE COLECCIONISTA</span>
-          </div>
-        </div>
-        <div class="vip-id-serial" id="vip-card-serial">
-          SF-ID • ARCHIVO-MAESTRO
-        </div>
-      </div>
-
-      <!-- Cuerpo de la Tarjeta: Foto y Datos -->
-      <div class="vip-id-body">
-        <!-- Columna Izquierda: Foto y Rango -->
-        <div class="vip-id-photo-col">
-          <div class="vip-photo-frame">
-            <img id="u-avatar-img" src="/assets/img/default-avatar.svg" alt="Avatar WhatsApp" onerror="this.onerror=null; this.src='/assets/img/default-avatar.svg';" class="vip-avatar-pic" />
-            <div class="vip-avatar-fallback-icon" id="u-avatar-icon" style="display: none;">🃏</div>
-            <div class="vip-stamp-overlay" id="u-stamp-overlay">
-              <span>OFICIAL</span>
+        <!-- Cabecera de la Licencia -->
+        <div class="vip-id-topbar">
+          <div class="vip-id-top-left">
+            <div class="vip-emv-chip" title="Chip de Seguridad EMV Holográfico">
+              <div class="chip-line c1"></div>
+              <div class="chip-line c2"></div>
+              <div class="chip-core"></div>
+            </div>
+            <div class="vip-doc-type">
+              <span class="vip-flag-badge">🦊 SWEETIE FOX OS</span>
+              <span class="vip-doc-title" id="vip-card-type-text">LICENCIA OFICIAL DE COLECCIONISTA</span>
             </div>
           </div>
-          <div class="vip-rank-pill" id="vip-rank-badge">
-            ★ SISTEMA CENTRAL
-          </div>
-          <div class="vip-status-indicator" id="vip-status-text">
-            <span class="status-dot"></span> <span id="vip-status-label">BASE DE DATOS ACTIVA</span>
+          <div class="vip-id-serial" id="vip-card-serial">
+            SF-ID • ARCHIVO-MAESTRO
           </div>
         </div>
 
-        <!-- Columna Derecha: Información del Titular -->
-        <div class="vip-id-info-col">
-          <div class="vip-field-group">
-            <div class="vip-field-label">TITULAR AUTORIZADO</div>
-            <div class="vip-user-name" id="u-title">
-              Catálogo Global de Cartas
-              <span class="vip-verified-badge" id="u-verified-badge" title="Verificado">✓</span>
-            </div>
-          </div>
-
-          <!-- Barra de Nivel & Experiencia XP -->
-          <div class="vip-level-section" id="vip-level-section">
-            <div class="vip-level-row">
-              <span class="vip-level-tag" id="u-level-tag">ARCHIVO MAESTRO</span>
-              <span class="vip-xp-tag" id="u-xp-text">248 Cartas 3D</span>
-            </div>
-            <div class="vip-progress-bar-bg">
-              <div class="vip-progress-bar-fill" id="u-xp-bar" style="width: 100%;"></div>
-            </div>
-          </div>
-
-          <!-- Grid de Atributos -->
-          <div class="vip-stats-grid" id="u-stats-grid">
-            <div class="vip-stat-box">
-              <span class="stat-icon">💎</span>
-              <div class="stat-meta">
-                <div class="stat-title">MONEDA VIP</div>
-                <div class="stat-value" id="vip-val-diamonds">Diamantes</div>
+        <!-- Cuerpo de la Tarjeta: Foto y Datos -->
+        <div class="vip-id-body">
+          <!-- Columna Izquierda: Foto y Rango -->
+          <div class="vip-id-photo-col">
+            <div class="vip-photo-frame">
+              <img id="u-avatar-img" src="/assets/img/default-avatar.svg" alt="Avatar WhatsApp" onerror="this.onerror=null; this.src='/assets/img/default-avatar.svg';" class="vip-avatar-pic" />
+              <div class="vip-avatar-fallback-icon" id="u-avatar-icon" style="display: none;">🃏</div>
+              <div class="vip-stamp-overlay" id="u-stamp-overlay">
+                <span>OFICIAL</span>
               </div>
             </div>
-            <div class="vip-stat-box">
-              <span class="stat-icon">🪙</span>
-              <div class="stat-meta">
-                <div class="stat-title">ECONOMÍA</div>
-                <div class="stat-value" id="vip-val-money">Monedas</div>
-              </div>
+            <div class="vip-rank-pill" id="vip-rank-badge">
+              ★ SISTEMA CENTRAL
             </div>
-            <div class="vip-stat-box">
-              <span class="stat-icon">🃏</span>
-              <div class="stat-meta">
-                <div class="stat-title">CARTAS DISPONIBLES</div>
-                <div class="stat-value" id="vip-val-cards">248 Cartas</div>
-              </div>
-            </div>
-            <div class="vip-stat-box">
-              <span class="stat-icon">🏆</span>
-              <div class="stat-meta">
-                <div class="stat-title">RAREZAS</div>
-                <div class="stat-value" id="vip-val-completion">SSR • SR • R</div>
-              </div>
+            <div class="vip-status-indicator" id="vip-status-text">
+              <span class="status-dot"></span> <span id="vip-status-label">BASE DE DATOS ACTIVA</span>
             </div>
           </div>
 
-          <!-- Bio / Frase -->
-          <div class="vip-bio-quote" id="u-desc">
-            "Explora la colección 3D holográfica de Sweetie Fox. Busca un jugador arriba para ver su documento oficial."
+          <!-- Columna Derecha: Información del Titular -->
+          <div class="vip-id-info-col">
+            <div class="vip-field-group">
+              <div class="vip-field-label">TITULAR AUTORIZADO</div>
+              <div class="vip-user-name" id="u-title">
+                Catálogo Global de Cartas
+                <span class="vip-verified-badge" id="u-verified-badge" title="Verificado">✓</span>
+              </div>
+            </div>
+
+            <!-- Barra de Nivel & Experiencia XP -->
+            <div class="vip-level-section" id="vip-level-section">
+              <div class="vip-level-row">
+                <span class="vip-level-tag" id="u-level-tag">ARCHIVO MAESTRO</span>
+                <span class="vip-xp-tag" id="u-xp-text">248 Cartas 3D</span>
+              </div>
+              <div class="vip-progress-bar-bg">
+                <div class="vip-progress-bar-fill" id="u-xp-bar" style="width: 100%;"></div>
+              </div>
+            </div>
+
+            <!-- Grid de Atributos -->
+            <div class="vip-stats-grid" id="u-stats-grid">
+              <div class="vip-stat-box">
+                <span class="stat-icon">💎</span>
+                <div class="stat-meta">
+                  <div class="stat-title">MONEDA VIP</div>
+                  <div class="stat-value" id="vip-val-diamonds">Diamantes</div>
+                </div>
+              </div>
+              <div class="vip-stat-box">
+                <span class="stat-icon">🪙</span>
+                <div class="stat-meta">
+                  <div class="stat-title">ECONOMÍA</div>
+                  <div class="stat-value" id="vip-val-money">Monedas</div>
+                </div>
+              </div>
+              <div class="vip-stat-box">
+                <span class="stat-icon">🃏</span>
+                <div class="stat-meta">
+                  <div class="stat-title">CARTAS DISPONIBLES</div>
+                  <div class="stat-value" id="vip-val-cards">248 Cartas</div>
+                </div>
+              </div>
+              <div class="vip-stat-box">
+                <span class="stat-icon">🏆</span>
+                <div class="stat-meta">
+                  <div class="stat-title">RAREZAS</div>
+                  <div class="stat-value" id="vip-val-completion">SSR • SR • R</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bio / Frase -->
+            <div class="vip-bio-quote" id="u-desc">
+              "Explora la colección 3D holográfica de Sweetie Fox. Busca un jugador arriba para ver su documento oficial."
+            </div>
+
+            <!-- Metadatos Extras -->
+            <div class="vip-extra-tags" id="vip-extra-tags"></div>
+          </div>
+        </div>
+
+        <!-- Pie de la Tarjeta: Código de Barras y Acciones -->
+        <div class="vip-id-footer">
+          <div class="vip-barcode-wrap">
+            <div class="vip-barcode-lines">
+              |||| || ||||| | |||| ||| ||||||| ||| |||| | ||||| || ||||
+            </div>
+            <div class="vip-barcode-num" id="vip-barcode-text">
+              SF-2026-SECURE-DATABASE-VERIFIED
+            </div>
           </div>
 
-          <!-- Metadatos Extras -->
-          <div class="vip-extra-tags" id="vip-extra-tags"></div>
-        </div>
-      </div>
-
-      <!-- Pie de la Tarjeta: Código de Barras y Acciones -->
-      <div class="vip-id-footer">
-        <div class="vip-barcode-wrap">
-          <div class="vip-barcode-lines">
-            |||| || ||||| | |||| ||| ||||||| ||| |||| | ||||| || ||||
-          </div>
-          <div class="vip-barcode-num" id="vip-barcode-text">
-            SF-2026-SECURE-DATABASE-VERIFIED
+          <div class="vip-actions-btns">
+            <button type="button" class="btn-share-collection" id="btn-share-collection">
+              <span>🔗 Compartir Carnet</span>
+            </button>
+            <a href="/ranking.html" class="btn-share-collection btn-secondary-id">
+              <span>🏆 Salón de la Fama</span>
+            </a>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div class="vip-actions-btns">
-          <button type="button" class="btn-share-collection" id="btn-share-collection">
-            <span>🔗 Compartir Carnet</span>
-          </button>
-          <a href="/ranking.html" class="btn-share-collection btn-secondary-id">
-            <span>🏆 Salón de la Fama</span>
-          </a>
+    <!-- 2. Barra de Controles: Búsqueda y Filtros -->
+    <section>
+      <div class="album-controls-bar">
+        <!-- Buscadores -->
+        <div class="search-dual-inputs">
+          <input type="text" class="input-album-field" id="search-player-input" placeholder="🔍 Buscar jugador (ej: BrayanRK, Alexander...)" autocomplete="off" />
+          <input type="text" class="input-album-field" id="search-card-input" placeholder="🃏 Filtrar carta (ej: Luffy, Sakura...)" autocomplete="off" />
+        </div>
+
+        <!-- Filtros de Rareza -->
+        <div class="filter-pills-row" id="filter-pills">
+          <button type="button" class="filter-pill active" data-rarity="ALL">Todas</button>
+          <button type="button" class="filter-pill ssr" data-rarity="SSR">🌟 SSR</button>
+          <button type="button" class="filter-pill" data-rarity="SR">✨ SR</button>
+          <button type="button" class="filter-pill" data-rarity="R">🔷 R</button>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- Barra de Controles: Búsqueda y Filtros -->
-    <div class="album-controls-bar">
-      <!-- Buscadores -->
-      <div class="search-dual-inputs">
-        <input type="text" class="input-album-field" id="search-player-input" placeholder="🔍 Buscar jugador (ej: BrayanRK, Alexander...)" autocomplete="off" />
-        <input type="text" class="input-album-field" id="search-card-input" placeholder="🃏 Filtrar carta (ej: Luffy, Sakura...)" autocomplete="off" />
+    <!-- 3. Grid de Cartas 3D -->
+    <section>
+      <div class="cards-grid" id="cards-grid">
+        <div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: var(--text-muted);">
+          <p style="font-size: 1.1rem;">⚡ Conectando con el inventario 3D holográfico...</p>
+        </div>
       </div>
-
-      <!-- Filtros de Rareza -->
-      <div class="filter-pills-row" id="filter-pills">
-        <button type="button" class="filter-pill active" data-rarity="ALL">Todas</button>
-        <button type="button" class="filter-pill ssr" data-rarity="SSR">🌟 SSR</button>
-        <button type="button" class="filter-pill" data-rarity="SR">✨ SR</button>
-        <button type="button" class="filter-pill" data-rarity="R">🔷 R</button>
-      </div>
-    </div>
-
-    <!-- Grid de Cartas 3D -->
-    <div class="cards-grid" id="cards-grid">
-      <div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: var(--text-muted);">
-        <p style="font-size: 1.1rem;">⚡ Conectando con el inventario 3D holográfico...</p>
-      </div>
-    </div>
+    </section>
 
   </main>
 
@@ -1162,5 +1168,6 @@
 
   <script src="assets/js/config.js"></script>
   <script src="assets/js/album.js"></script>
+  <script src="assets/js/motion.js"></script>
 </body>
 </html>

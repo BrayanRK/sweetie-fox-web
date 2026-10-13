@@ -28,9 +28,9 @@
     <div class="ambient-light-2"></div>
   </div>
 
-  <!-- Header Superior (Isla de Cristal) -->
+  <!-- Header Superior (Isla Flotante Desacoplada) -->
   <header class="top-header">
-    <div class="container header-content">
+    <div class="header-island">
       <a href="/" class="brand-link">
         <div class="brand-fox-icon">🦊</div>
         <div class="brand-text-wrap">
@@ -61,62 +61,69 @@
   </header>
 
   <!-- Contenido de Comandos -->
-  <main class="container" style="padding-top: 36px;">
-    <div style="text-align: center; margin-bottom: 28px;">
+  <main class="container" style="padding-top: 40px;">
+    <!-- Encabezado de la página -->
+    <section class="hero-content-wrap" style="margin-bottom: 30px;">
       <div class="hero-chip">
         <span id="chip-total-cmds">⚡ Sincronizados en Vivo</span>
       </div>
-      <h1 class="box-title" style="font-size: clamp(2rem, 4.5vw, 3rem); font-family: var(--font-display); letter-spacing: -0.025em;">
+      <h1 class="box-title" style="font-size: clamp(2.2rem, 5vw, 3.2rem); font-family: var(--font-display); letter-spacing: -0.03em;">
         Catálogo de <span class="gradient-fox">Comandos</span>
       </h1>
-      <p class="box-desc" style="max-width: 600px; margin: 8px auto 0; color: var(--text-body);">
-        Explora todos los comandos activos del bot. La lista y categorías se sincronizan en tiempo real con WhatsApp.
+      <p class="box-desc" style="max-width: 620px; margin: 8px auto 0; color: var(--text-body);">
+        Explora todos los comandos activos del bot. La lista y categorías se sincronizan en tiempo real directamente desde WhatsApp.
       </p>
-    </div>
+    </section>
 
     <!-- Buscador Reactivo con Icono -->
-    <div class="commands-page-search">
-      <svg class="search-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-      </svg>
-      <input type="text" class="search-input-field" id="search-input-field" placeholder="Buscar comando (ej: play, tiktok, ban, sticker, gpt...)" autocomplete="off" />
-    </div>
+    <section style="margin-bottom: 24px;">
+      <div class="commands-page-search">
+        <svg class="search-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" class="search-input-field" id="search-input-field" placeholder="Buscar comando (ej: play, tiktok, ban, sticker, gpt...)" autocomplete="off" />
+      </div>
 
-    <!-- Pestañas Horizontales Deslizables para Móvil y PC -->
-    <div class="horizontal-tabs-container" id="horizontal-tabs-container"></div>
+      <!-- Pestañas Horizontales Deslizables para Móvil y PC -->
+      <div class="horizontal-tabs-container" id="horizontal-tabs-container"></div>
+    </section>
 
     <!-- Grid de Tarjetas de Comandos -->
-    <div class="cards-layout-grid" id="cards-layout-grid">
-      <div style="text-align: center; padding: 48px; color: var(--text-muted); grid-column: 1 / -1;">
-        <p>Cargando catálogo oficial desde el bot en tiempo real...</p>
+    <section>
+      <div class="cards-layout-grid" id="cards-layout-grid">
+        <div style="text-align: center; padding: 50px 20px; color: var(--text-muted); grid-column: 1 / -1;">
+          <p>Cargando catálogo oficial desde el bot en tiempo real...</p>
+        </div>
       </div>
-    </div>
+    </section>
 
     <!-- Banner Inferior de Comunidad -->
-    <div class="community-banner-grid" style="margin-top: 60px;">
-      <a href="https://chat.whatsapp.com/HfK6bI56z48AvLPr8aRlZx?s=cl&p=a&mlu=4&ilr=4" target="_blank" rel="noopener" class="community-card card-group">
-        <div class="card-left">
-          <div class="card-icon">💬</div>
-          <div class="card-text">
-            <h3>¿Quieres probar los comandos?</h3>
-            <p>Entra a nuestro Grupo Oficial de WhatsApp y pruébalos en vivo</p>
+    <section class="community-section" style="margin-top: 60px;">
+      <div class="community-banner-grid">
+        <a href="https://chat.whatsapp.com/HfK6bI56z48AvLPr8aRlZx?s=cl&p=a&mlu=4&ilr=4" target="_blank" rel="noopener" class="community-card card-group">
+          <div class="card-left">
+            <div class="card-icon">💬</div>
+            <div class="card-text">
+              <h3>¿Quieres probar los comandos?</h3>
+              <p>Entra a nuestro Grupo Oficial de WhatsApp y pruébalos en vivo</p>
+            </div>
           </div>
-        </div>
-        <div class="card-arrow">→</div>
-      </a>
+          <div class="card-arrow">→</div>
+        </a>
 
-      <a href="https://whatsapp.com/channel/0029VbDLXzm9MF8zqYNZc03Y" target="_blank" rel="noopener" class="community-card card-channel">
-        <div class="card-left">
-          <div class="card-icon">📢</div>
-          <div class="card-text">
-            <h3>Novedades y Actualizaciones</h3>
-            <p>Entérate primero en el Canal Oficial de WhatsApp</p>
+        <a href="https://whatsapp.com/channel/0029VbDLXzm9MF8zqYNZc03Y" target="_blank" rel="noopener" class="community-card card-channel">
+          <div class="card-left">
+            <div class="card-icon">📢</div>
+            <div class="card-text">
+              <h3>Novedades y Actualizaciones</h3>
+              <p>Entérate primero en el Canal Oficial de WhatsApp</p>
+            </div>
           </div>
-        </div>
-        <div class="card-arrow">→</div>
-      </a>
-    </div>
+          <div class="card-arrow">→</div>
+        </a>
+      </div>
+    </section>
   </main>
 
   <!-- Barra de Navegación Inferior Móvil (Dock Flotante) -->
@@ -152,5 +159,6 @@
 
   <script src="assets/js/config.js"></script>
   <script src="assets/js/comandos.js"></script>
+  <script src="assets/js/motion.js"></script>
 </body>
 </html>

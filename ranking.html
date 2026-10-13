@@ -27,7 +27,7 @@
       justify-content: center;
       align-items: flex-end;
       gap: 12px;
-      margin: 30px auto 40px;
+      margin: 30px auto 44px;
       max-width: 720px;
       padding: 0 10px;
     }
@@ -37,7 +37,7 @@
       background: var(--surface-card);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      padding: 20px 10px;
+      padding: 22px 10px;
       text-align: center;
       position: relative;
       backdrop-filter: blur(20px);
@@ -61,8 +61,8 @@
       border-color: rgba(251, 191, 36, 0.65);
       background: linear-gradient(180deg, rgba(251, 191, 36, 0.18) 0%, rgba(26, 18, 34, 0.95) 100%);
       box-shadow: 0 16px 45px rgba(251, 191, 36, 0.25), var(--inner-highlight);
-      padding-top: 28px;
-      padding-bottom: 24px;
+      padding-top: 30px;
+      padding-bottom: 26px;
       transform: scale(1.05);
       z-index: 2;
     }
@@ -83,12 +83,12 @@
     /* Avatar circular con medalla y corona */
     .podium-avatar-wrap {
       position: relative;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       display: inline-block;
     }
     .podium-avatar-img {
-      width: 62px;
-      height: 62px;
+      width: 64px;
+      height: 64px;
       border-radius: 50%;
       object-fit: cover;
       display: block;
@@ -97,8 +97,8 @@
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
     }
     .podium-first .podium-avatar-img {
-      width: 76px;
-      height: 76px;
+      width: 78px;
+      height: 78px;
       border: 3px solid #FBBF24;
       box-shadow: 0 0 24px rgba(251, 191, 36, 0.45);
     }
@@ -142,7 +142,7 @@
 
     .podium-name {
       font-family: var(--font-display);
-      font-size: 0.98rem;
+      font-size: 1rem;
       font-weight: 700;
       color: var(--text-pure);
       overflow: hidden;
@@ -289,9 +289,9 @@
     <div class="ambient-light-2"></div>
   </div>
 
-  <!-- Header Superior (Isla de Cristal) -->
+  <!-- Header Superior (Isla Flotante Desacoplada) -->
   <header class="top-header">
-    <div class="container header-content">
+    <div class="header-island">
       <a href="/" class="brand-link">
         <div class="brand-fox-icon">🦊</div>
         <div class="brand-text-wrap">
@@ -322,55 +322,62 @@
   </header>
 
   <!-- Contenido de Ranking -->
-  <main class="container" style="padding-top: 36px;">
-    <div style="text-align: center; margin-bottom: 28px;">
+  <main class="container" style="padding-top: 40px;">
+    <!-- Encabezado de la página -->
+    <section class="hero-content-wrap" style="margin-bottom: 30px;">
       <div class="hero-chip">
         <span>🏆 Temporada Oficial</span>
       </div>
-      <h1 class="box-title" style="font-size: clamp(2rem, 4.5vw, 3rem); font-family: var(--font-display); letter-spacing: -0.025em;">
+      <h1 class="box-title" style="font-size: clamp(2.2rem, 5vw, 3.2rem); font-family: var(--font-display); letter-spacing: -0.03em;">
         Salón de la <span class="gradient-fox">Fama</span>
       </h1>
-      <p class="box-desc" style="max-width: 600px; margin: 8px auto 0; color: var(--text-body);">
-        Los mejores jugadores de toda la red de Sweetie Fox. Actualizado en tiempo real desde la base de datos oficial.
+      <p class="box-desc" style="max-width: 620px; margin: 8px auto 0; color: var(--text-body);">
+        Los mejores jugadores de toda la red de Sweetie Fox. Actualizado en tiempo real directamente desde la base de datos oficial.
       </p>
-    </div>
+    </section>
 
     <!-- Pestañas de Categoría de Ranking (Pill Switchers) -->
-    <div class="horizontal-tabs-container" style="justify-content: center; margin-bottom: 24px;">
-      <button type="button" class="category-tab-btn active" id="tab-economia">
-        <span>💰 Millonarios</span>
-      </button>
-      <button type="button" class="category-tab-btn" id="tab-diamantes">
-        <span>💎 Diamantes</span>
-      </button>
-      <button type="button" class="category-tab-btn" id="tab-nivel">
-        <span>⚔️ Nivel & XP</span>
-      </button>
-      <button type="button" class="category-tab-btn" id="tab-coleccion">
-        <span>🃏 Colección</span>
-      </button>
-    </div>
+    <section style="margin-bottom: 24px;">
+      <div class="horizontal-tabs-container" style="justify-content: center; margin-bottom: 24px;">
+        <button type="button" class="category-tab-btn active" id="tab-economia">
+          <span>💰 Millonarios</span>
+        </button>
+        <button type="button" class="category-tab-btn" id="tab-diamantes">
+          <span>💎 Diamantes</span>
+        </button>
+        <button type="button" class="category-tab-btn" id="tab-nivel">
+          <span>⚔️ Nivel & XP</span>
+        </button>
+        <button type="button" class="category-tab-btn" id="tab-coleccion">
+          <span>🃏 Colección</span>
+        </button>
+      </div>
 
-    <!-- Buscador de Jugador -->
-    <div class="commands-page-search" style="margin-bottom: 32px;">
-      <svg class="search-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-      </svg>
-      <input type="text" class="search-input-field" id="search-player" placeholder="Buscar jugador por apodo (ej: BrayanRK, Alexander...)" autocomplete="off" />
-    </div>
+      <!-- Buscador de Jugador -->
+      <div class="commands-page-search" style="margin-bottom: 32px;">
+        <svg class="search-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" class="search-input-field" id="search-player" placeholder="Buscar jugador por apodo (ej: BrayanRK, Alexander...)" autocomplete="off" />
+      </div>
+    </section>
 
     <!-- Podio Top 3 -->
-    <div class="podium-container" id="podium-container">
-      <!-- Se genera dinámicamente -->
-    </div>
+    <section>
+      <div class="podium-container" id="podium-container">
+        <!-- Se genera dinámicamente -->
+      </div>
+    </section>
 
     <!-- Lista de Posiciones (4 en adelante) -->
-    <div class="ranking-list" id="ranking-list">
-      <div style="text-align: center; padding: 48px; color: var(--text-muted);">
-        <p>⚡ Cargando el Salón de la Fama en vivo...</p>
+    <section>
+      <div class="ranking-list" id="ranking-list">
+        <div style="text-align: center; padding: 48px; color: var(--text-muted);">
+          <p>⚡ Cargando el Salón de la Fama en vivo...</p>
+        </div>
       </div>
-    </div>
+    </section>
   </main>
 
   <!-- Barra de Navegación Inferior Móvil (Dock Flotante) -->
@@ -406,5 +413,6 @@
 
   <script src="assets/js/config.js"></script>
   <script src="assets/js/ranking.js"></script>
+  <script src="assets/js/motion.js"></script>
 </body>
 </html>
