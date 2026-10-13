@@ -10,25 +10,74 @@
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-  <meta name="theme-color" content="#09080d" />
+  <meta name="theme-color" content="#0F0A14" />
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts: Outfit (Display) + Plus Jakarta Sans + JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-  <!-- Estilos Luxury -->
+  <!-- Estilos Globales Sweetie Fox -->
   <link rel="stylesheet" href="assets/css/sweetie-fox.css" />
+
+  <style>
+    .steps-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin: 26px 0;
+      text-align: left;
+    }
+    @media (min-width: 600px) {
+      .steps-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .step-card {
+      background: rgba(255, 241, 224, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      box-shadow: var(--inner-highlight);
+    }
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255, 122, 47, 0.15);
+      border: 1px solid var(--border-fox);
+      color: var(--fox-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .step-title {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-pure);
+      margin-bottom: 4px;
+    }
+    .step-desc {
+      font-size: 0.82rem;
+      color: var(--text-body);
+      line-height: 1.45;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Luces Ambientales -->
+  <!-- Luces Ambientales Fox & Obsidian -->
   <div class="ambient-lighting">
     <div class="ambient-light-1"></div>
     <div class="ambient-light-2"></div>
   </div>
 
-  <!-- Header Superior -->
+  <!-- Header Superior (Isla de Cristal) -->
   <header class="top-header">
     <div class="container header-content">
       <a href="/" class="brand-link">
@@ -39,7 +88,7 @@
         </div>
       </a>
 
-      <!-- Navegación para PC -->
+      <!-- Navegación Desktop -->
       <nav class="desktop-nav">
         <a href="/" class="nav-item">Inicio</a>
         <a href="/actividad.html" class="nav-item">📡 Actividad en Vivo</a>
@@ -48,7 +97,7 @@
         <a href="/album.html" class="nav-item">🃏 Álbum</a>
       </nav>
 
-      <!-- Enlaces WhatsApp -->
+      <!-- Enlaces WhatsApp Oficiales -->
       <div class="header-buttons">
         <a href="https://whatsapp.com/channel/0029VbDLXzm9MF8zqYNZc03Y" target="_blank" rel="noopener" class="btn-wa-channel">
           <span>📢 Canal</span>
@@ -63,18 +112,40 @@
   <!-- Contenido -->
   <main class="container" style="padding-top: 40px;">
     <div class="pairing-container">
-      <div class="glass-box" style="text-align: center; padding: 40px 24px;">
-        <div class="hero-chip" style="margin-bottom: 16px;">
+      <div class="glass-box" style="text-align: center; padding: 44px 28px;">
+        <div class="hero-chip" style="margin-bottom: 20px;">
           <span>💬 Vinculación Oficial por WhatsApp</span>
         </div>
-        <h1 class="box-title" style="margin-bottom: 12px;">Vincula tu Bot en el Grupo</h1>
-        <p class="box-desc" style="max-width: 540px; margin: 0 auto 28px;">
-          Para garantizar una conexión más rápida, segura y sin caídas, la vinculación de Subbots ahora se realiza exclusivamente dentro de nuestro <strong>Grupo Oficial de WhatsApp</strong> mediante comandos interactivos.
+        <h1 class="box-title" style="margin-bottom: 14px; font-family: var(--font-display); font-size: clamp(2rem, 4.5vw, 2.7rem);">
+          Vincula tu Bot en el <span class="gradient-fox">Grupo Oficial</span>
+        </h1>
+        <p class="box-desc" style="max-width: 560px; margin: 0 auto 28px; color: var(--text-body);">
+          Para garantizar una conexión más rápida, segura y sin interrupciones, la vinculación de Subbots se realiza directamente en nuestro <strong>Grupo Oficial de WhatsApp</strong> mediante comandos interactivos.
         </p>
 
-        <div style="display: flex; flex-direction: column; gap: 14px; max-width: 420px; margin: 0 auto 30px;">
+        <!-- Pasos interactivos -->
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-num">1</div>
+            <div class="step-title">Únete al Grupo</div>
+            <div class="step-desc">Accede a la comunidad oficial de Sweetie Fox con el enlace oficial.</div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">2</div>
+            <div class="step-title">Pide tu Código</div>
+            <div class="step-desc">Escribe el comando de vinculación en el grupo para recibir tu código.</div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">3</div>
+            <div class="step-title">Conecta en Segundos</div>
+            <div class="step-desc">Ingresa el código de 8 dígitos en WhatsApp y tu bot quedará activo.</div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 14px; max-width: 440px; margin: 0 auto 32px;">
           <a href="https://chat.whatsapp.com/HfK6bI56z48AvLPr8aRlZx?s=cl&p=a&mlu=4&ilr=4" target="_blank" rel="noopener" class="btn-primary-action" style="justify-content: center; width: 100%;">
-            <span>💬 Unirme al Grupo y Vincular Bot →</span>
+            <span>💬 Unirme al Grupo y Vincular Bot</span>
+            <div class="btn-icon-capsule">→</div>
           </a>
 
           <a href="/actividad.html" class="btn-secondary-action" style="justify-content: center; width: 100%;">
@@ -82,16 +153,16 @@
           </a>
         </div>
 
-        <div style="border-top: 1px solid var(--border-subtle); padding-top: 20px; font-size: 0.85rem; color: var(--text-muted); max-width: 500px; margin: 0 auto;">
+        <div style="border-top: 1px solid var(--border-subtle); padding-top: 22px; font-size: 0.88rem; color: var(--text-muted); max-width: 520px; margin: 0 auto;">
           <p>
-            Al entrar al grupo, simplemente escribe el comando de vinculación para recibir tu código de 8 dígitos al instante en tu chat.
+            Al entrar al grupo oficial, escribe el comando para recibir tu código seguro de 8 dígitos directamente en tu chat privado.
           </p>
         </div>
       </div>
     </div>
   </main>
 
-  <!-- Barra de Navegación Inferior Móvil -->
+  <!-- Barra de Navegación Inferior Móvil (Dock Flotante) -->
   <nav class="mobile-bottom-nav">
     <a href="/" class="bottom-nav-link">
       <span class="bottom-nav-icon">🏠</span>
@@ -114,6 +185,13 @@
       <span>Álbum</span>
     </a>
   </nav>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <p><strong>SWEETIE FOX</strong> • Vinculación Oficial de WhatsApp</p>
+    </div>
+  </footer>
 
   <script src="assets/js/config.js"></script>
 </body>
