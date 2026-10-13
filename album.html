@@ -10,37 +10,37 @@
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-  <meta name="theme-color" content="#09080d" />
+  <meta name="theme-color" content="#0F0A14" />
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts: Outfit (Display) + Plus Jakarta Sans + JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-  <!-- Estilos Globales -->
+  <!-- Estilos Globales Sweetie Fox -->
   <link rel="stylesheet" href="assets/css/sweetie-fox.css" />
 
   <style>
     /* ══════════════════════════════════════════════════════════════════════
-       DOCUMENTO DE IDENTIDAD / LICENCIA DE COLECCIONISTA VIP
+       DOCUMENTO DE IDENTIDAD / LICENCIA DE COLECCIONISTA VIP (FOX & GOLD)
        ══════════════════════════════════════════════════════════════════════ */
     .vip-id-card {
-      background: linear-gradient(135deg, rgba(24, 18, 36, 0.95) 0%, rgba(13, 9, 20, 0.98) 100%);
-      border: 1.5px solid rgba(251, 191, 36, 0.4);
+      background: linear-gradient(135deg, rgba(28, 20, 36, 0.95) 0%, rgba(15, 10, 20, 0.98) 100%);
+      border: 1.5px solid rgba(251, 191, 36, 0.45);
       border-radius: var(--radius-lg);
-      padding: 24px;
-      margin-bottom: 30px;
+      padding: 26px;
+      margin-bottom: 32px;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 30px rgba(225, 29, 72, 0.15);
-      backdrop-filter: blur(20px);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.65), 0 0 35px var(--fox-glow-soft);
+      backdrop-filter: blur(24px);
     }
     .vip-id-card::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 3px;
-      background: linear-gradient(90deg, #e11d48, #fbbf24, #a855f7, #e11d48);
+      background: linear-gradient(90deg, var(--fox-primary), #fbbf24, #f59e0b, var(--fox-primary));
       background-size: 200% 100%;
       animation: rainbowGlow 6s linear infinite;
     }
@@ -54,7 +54,7 @@
       left: -50%;
       width: 200%;
       height: 300%;
-      background: radial-gradient(circle at 75% 25%, rgba(251, 191, 36, 0.08) 0%, rgba(225, 29, 72, 0.06) 40%, transparent 70%);
+      background: radial-gradient(circle at 75% 25%, rgba(251, 191, 36, 0.08) 0%, rgba(255, 122, 47, 0.06) 40%, transparent 70%);
       pointer-events: none;
     }
 
@@ -63,9 +63,9 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding-bottom: 14px;
-      margin-bottom: 18px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 16px;
+      margin-bottom: 20px;
       position: relative;
       z-index: 1;
       gap: 12px;
@@ -76,10 +76,10 @@
       gap: 14px;
     }
     .vip-emv-chip {
-      width: 38px;
-      height: 28px;
+      width: 40px;
+      height: 30px;
       background: linear-gradient(135deg, #fef08a 0%, #ca8a04 50%, #854d0e 100%);
-      border-radius: 5px;
+      border-radius: 6px;
       position: relative;
       box-shadow: inset 0 1px 2px rgba(255,255,255,0.6), 0 2px 6px rgba(0,0,0,0.4);
       flex-shrink: 0;
@@ -108,26 +108,27 @@
       gap: 2px;
     }
     .vip-flag-badge {
-      font-size: 0.68rem;
+      font-size: 0.7rem;
       font-family: var(--font-mono);
       font-weight: 700;
-      color: var(--ruby-light);
+      color: var(--fox-light);
       letter-spacing: 1.5px;
     }
     .vip-doc-title {
-      font-size: 0.85rem;
+      font-family: var(--font-display);
+      font-size: 0.9rem;
       font-weight: 800;
-      letter-spacing: 0.8px;
-      color: #fff;
+      letter-spacing: 0.5px;
+      color: var(--text-pure);
       text-transform: uppercase;
     }
     .vip-id-serial {
       font-family: var(--font-mono);
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       color: var(--gold-vip);
-      background: rgba(251, 191, 36, 0.1);
-      border: 1px solid rgba(251, 191, 36, 0.25);
-      padding: 4px 10px;
+      background: rgba(251, 191, 36, 0.12);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      padding: 4px 12px;
       border-radius: var(--radius-sm);
       letter-spacing: 1px;
       white-space: nowrap;
@@ -137,7 +138,7 @@
     .vip-id-body {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 22px;
       position: relative;
       z-index: 1;
     }
@@ -145,7 +146,7 @@
       .vip-id-body {
         flex-direction: row;
         align-items: flex-start;
-        gap: 24px;
+        gap: 26px;
       }
     }
 
@@ -155,17 +156,17 @@
       flex-direction: column;
       align-items: center;
       flex-shrink: 0;
-      gap: 8px;
+      gap: 10px;
     }
     .vip-photo-frame {
-      width: 110px;
-      height: 125px;
-      border-radius: 12px;
-      border: 2px solid rgba(251, 191, 36, 0.6);
-      background: #151022;
+      width: 115px;
+      height: 130px;
+      border-radius: var(--radius-md);
+      border: 2px solid rgba(251, 191, 36, 0.65);
+      background: #151020;
       overflow: hidden;
       position: relative;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(251, 191, 36, 0.2);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 18px rgba(251, 191, 36, 0.25);
     }
     .vip-avatar-pic {
       width: 100%;
@@ -180,17 +181,17 @@
       align-items: center;
       justify-content: center;
       font-size: 3rem;
-      background: linear-gradient(135deg, var(--ruby-primary), #4a044e);
+      background: linear-gradient(135deg, var(--fox-primary), #6c2237);
     }
     .vip-stamp-overlay {
       position: absolute;
       bottom: 6px;
       left: 50%;
       transform: translateX(-50%) rotate(-4deg);
-      background: rgba(251, 191, 36, 0.88);
-      color: #000;
+      background: rgba(251, 191, 36, 0.92);
+      color: #0F0A14;
       font-family: var(--font-mono);
-      font-size: 0.62rem;
+      font-size: 0.65rem;
       font-weight: 800;
       padding: 2px 8px;
       border-radius: 3px;
@@ -201,19 +202,19 @@
     }
     .vip-rank-pill {
       font-family: var(--font-mono);
-      font-size: 0.72rem;
+      font-size: 0.74rem;
       font-weight: 800;
       letter-spacing: 0.8px;
-      padding: 4px 12px;
+      padding: 4px 14px;
       border-radius: var(--radius-full);
-      background: linear-gradient(135deg, rgba(225, 29, 72, 0.2), rgba(251, 191, 36, 0.2));
-      border: 1px solid rgba(251, 191, 36, 0.35);
+      background: linear-gradient(135deg, rgba(255, 122, 47, 0.2), rgba(251, 191, 36, 0.2));
+      border: 1px solid rgba(251, 191, 36, 0.4);
       color: var(--gold-vip);
       white-space: nowrap;
       text-align: center;
     }
     .vip-status-indicator {
-      font-size: 0.72rem;
+      font-size: 0.74rem;
       font-weight: 700;
       color: var(--text-muted);
       display: flex;
@@ -221,11 +222,11 @@
       gap: 6px;
     }
     .status-dot {
-      width: 7px;
-      height: 7px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: #22c55e;
-      box-shadow: 0 0 8px #22c55e;
+      box-shadow: 0 0 10px #22c55e;
       animation: pulseDot 2s infinite;
     }
     @keyframes pulseDot {
@@ -239,7 +240,7 @@
       min-width: 0;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
     }
     .vip-field-group {
       display: flex;
@@ -248,15 +249,17 @@
     }
     .vip-field-label {
       font-family: var(--font-mono);
-      font-size: 0.68rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
       letter-spacing: 1px;
       text-transform: uppercase;
+      font-weight: 700;
     }
     .vip-user-name {
-      font-size: 1.45rem;
+      font-family: var(--font-display);
+      font-size: 1.55rem;
       font-weight: 800;
-      color: #fff;
+      color: var(--text-pure);
       display: flex;
       align-items: center;
       gap: 8px;
@@ -282,10 +285,11 @@
 
     /* Barra Nivel & XP */
     .vip-level-section {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 241, 224, 0.035);
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
-      padding: 10px 14px;
+      padding: 12px 16px;
+      box-shadow: var(--inner-highlight);
     }
     .vip-level-row {
       display: flex;
@@ -293,35 +297,35 @@
       justify-content: space-between;
       margin-bottom: 6px;
       font-family: var(--font-mono);
-      font-size: 0.82rem;
+      font-size: 0.84rem;
       font-weight: 800;
     }
     .vip-level-tag {
       color: var(--gold-vip);
     }
     .vip-xp-tag {
-      color: var(--ruby-light);
+      color: var(--fox-light);
     }
     .vip-progress-bar-bg {
-      height: 7px;
-      background: rgba(255, 255, 255, 0.08);
+      height: 8px;
+      background: rgba(255, 241, 224, 0.08);
       border-radius: 999px;
       overflow: hidden;
       position: relative;
     }
     .vip-progress-bar-fill {
       height: 100%;
-      background: linear-gradient(90deg, var(--ruby-primary), var(--gold-vip));
+      background: linear-gradient(90deg, var(--fox-primary), var(--gold-vip));
       border-radius: 999px;
       box-shadow: 0 0 12px rgba(251, 191, 36, 0.6);
-      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: width 0.6s cubic-bezier(0.23, 1, 0.32, 1);
     }
 
     /* Grid de Atributos */
     .vip-stats-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
+      gap: 10px;
     }
     @media (min-width: 900px) {
       .vip-stats-grid {
@@ -329,17 +333,18 @@
       }
     }
     .vip-stat-box {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 241, 224, 0.03);
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius-sm);
-      padding: 8px 10px;
+      padding: 10px 12px;
       display: flex;
       align-items: center;
       gap: 10px;
       overflow: hidden;
+      box-shadow: var(--inner-highlight);
     }
     .stat-icon {
-      font-size: 1.25rem;
+      font-size: 1.35rem;
       flex-shrink: 0;
     }
     .stat-meta {
@@ -348,18 +353,19 @@
     }
     .stat-title {
       font-family: var(--font-mono);
-      font-size: 0.64rem;
+      font-size: 0.65rem;
       color: var(--text-muted);
       letter-spacing: 0.5px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      font-weight: 700;
     }
     .stat-value {
       font-family: var(--font-mono);
-      font-size: 0.95rem;
+      font-size: 1rem;
       font-weight: 800;
-      color: #fff;
+      color: var(--text-pure);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -367,15 +373,15 @@
     #vip-val-diamonds { color: #67e8f9; }
     #vip-val-money { color: #4ade80; }
     #vip-val-cards { color: var(--gold-vip); }
-    #vip-val-completion { color: #f472b6; }
+    #vip-val-completion { color: var(--fox-light); }
 
     /* Bio / Quote */
     .vip-bio-quote {
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       color: var(--text-body);
-      background: rgba(255, 255, 255, 0.02);
-      border-left: 2px solid var(--ruby-primary);
-      padding: 6px 12px;
+      background: rgba(255, 241, 224, 0.025);
+      border-left: 3px solid var(--fox-primary);
+      padding: 8px 14px;
       border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
       font-style: italic;
       overflow: hidden;
@@ -390,26 +396,26 @@
       gap: 6px;
     }
     .vip-pill-tag {
-      font-size: 0.72rem;
+      font-size: 0.74rem;
       font-weight: 700;
-      padding: 2px 8px;
+      padding: 3px 10px;
       border-radius: var(--radius-full);
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 241, 224, 0.05);
+      border: 1px solid var(--border-subtle);
       color: var(--text-body);
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
     }
 
     /* Footer / Barcode */
     .vip-id-footer {
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      padding-top: 16px;
-      margin-top: 18px;
+      gap: 16px;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 18px;
+      margin-top: 20px;
       position: relative;
       z-index: 1;
     }
@@ -429,13 +435,13 @@
       font-family: var(--font-mono);
       font-size: 0.95rem;
       letter-spacing: 2.5px;
-      color: rgba(255, 255, 255, 0.6);
+      color: rgba(255, 241, 224, 0.55);
       user-select: none;
       line-height: 1;
     }
     .vip-barcode-num {
       font-family: var(--font-mono);
-      font-size: 0.65rem;
+      font-size: 0.68rem;
       color: var(--text-muted);
       letter-spacing: 1px;
     }
@@ -445,55 +451,61 @@
       flex-wrap: wrap;
     }
     .btn-share-collection {
-      padding: 10px 18px;
-      font-size: 0.85rem;
+      padding: 10px 20px;
+      font-size: 0.88rem;
       font-weight: 700;
-      border-radius: var(--radius-md);
-      background: linear-gradient(135deg, var(--ruby-primary), #9f1239);
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, var(--fox-primary) 0%, var(--fox-dark) 100%);
+      color: #FFF1E0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
       transition: var(--transition-fast);
       text-decoration: none;
+      box-shadow: 0 4px 16px var(--fox-glow);
     }
     .btn-share-collection:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 16px var(--ruby-glow);
+      box-shadow: 0 8px 24px rgba(255, 122, 47, 0.6);
+    }
+    .btn-share-collection:active {
+      transform: scale(0.97);
     }
     .btn-secondary-id {
-      background: rgba(255, 255, 255, 0.06) !important;
-      border-color: rgba(255, 255, 255, 0.12) !important;
+      background: rgba(255, 241, 224, 0.05) !important;
+      border-color: var(--border-subtle) !important;
+      box-shadow: none !important;
     }
     .btn-secondary-id:hover {
-      background: rgba(255, 255, 255, 0.12) !important;
+      background: rgba(255, 241, 224, 0.1) !important;
+      border-color: var(--border-subtle-hover) !important;
     }
 
     @media (max-width: 480px) {
       .vip-id-card {
-        padding: 16px 14px;
+        padding: 18px 14px;
       }
       .vip-photo-frame {
-        width: 90px;
-        height: 105px;
+        width: 95px;
+        height: 110px;
       }
       .vip-user-name {
-        font-size: 1.25rem;
+        font-size: 1.3rem;
       }
       .vip-stats-grid {
         grid-template-columns: 1fr 1fr;
         gap: 6px;
       }
       .vip-stat-box {
-        padding: 6px 8px;
+        padding: 8px;
       }
       .stat-icon {
         font-size: 1.1rem;
       }
       .stat-value {
-        font-size: 0.85rem;
+        font-size: 0.88rem;
       }
       .vip-actions-btns {
         width: 100%;
@@ -509,7 +521,7 @@
       display: flex;
       flex-direction: column;
       gap: 14px;
-      margin-bottom: 24px;
+      margin-bottom: 26px;
     }
     @media (min-width: 768px) {
       .album-controls-bar {
@@ -523,23 +535,28 @@
       display: flex;
       gap: 10px;
       flex: 1;
-      max-width: 600px;
+      max-width: 620px;
     }
     .input-album-field {
       width: 100%;
-      height: 46px;
-      background: rgba(19, 14, 26, 0.8);
+      height: 48px;
+      background: var(--surface-card);
       border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 0 16px;
-      color: #fff;
-      font-size: 0.9rem;
+      border-radius: var(--radius-full);
+      padding: 0 20px;
+      color: var(--text-pure);
+      font-size: 0.92rem;
       outline: none;
+      backdrop-filter: blur(16px);
+      box-shadow: var(--inner-highlight);
       transition: var(--transition-fast);
     }
     .input-album-field:focus {
-      border-color: var(--border-ruby-focus);
-      box-shadow: 0 0 0 3px var(--ruby-glow);
+      border-color: var(--fox-primary);
+      box-shadow: 0 0 20px var(--fox-glow), var(--inner-highlight);
+    }
+    .input-album-field::placeholder {
+      color: var(--text-muted);
     }
 
     .filter-pills-row {
@@ -553,27 +570,30 @@
       display: none;
     }
     .filter-pill {
-      padding: 7px 14px;
+      padding: 8px 16px;
       border-radius: var(--radius-full);
       background: var(--surface-card);
       border: 1px solid var(--border-subtle);
       color: var(--text-muted);
-      font-size: 0.8rem;
+      font-size: 0.84rem;
       font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
       transition: var(--transition-fast);
+      box-shadow: var(--inner-highlight);
     }
     .filter-pill:hover,
     .filter-pill.active {
-      color: #fff;
-      border-color: var(--ruby-primary);
-      background: rgba(225, 29, 72, 0.15);
+      color: #FFF1E0;
+      border-color: var(--fox-primary);
+      background: rgba(255, 122, 47, 0.18);
+      box-shadow: 0 0 16px var(--fox-glow-soft);
     }
     .filter-pill.active.ssr {
       border-color: var(--gold-vip);
-      background: rgba(251, 191, 36, 0.18);
+      background: rgba(251, 191, 36, 0.2);
       color: var(--gold-vip);
+      box-shadow: 0 0 16px var(--gold-glow);
     }
 
     /* Grid de Cartas 3D */
@@ -604,7 +624,7 @@
     /* Carta 3D Holográfica */
     .card-3d-wrap {
       position: relative;
-      border-radius: 14px;
+      border-radius: 16px;
       perspective: 1000px;
       cursor: pointer;
       user-select: none;
@@ -616,15 +636,15 @@
 
     .card-3d-inner {
       position: relative;
-      border-radius: 14px;
+      border-radius: 16px;
       overflow: hidden;
-      background: #110e19;
+      background: #140E1B;
       border: 1.5px solid var(--border-subtle);
       display: flex;
       flex-direction: column;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.55), var(--inner-highlight);
       transform-style: preserve-3d;
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+      transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ease;
       will-change: transform;
     }
 
@@ -634,21 +654,21 @@
       box-shadow: 0 8px 24px rgba(251, 191, 36, 0.25);
     }
     .card-3d-wrap.rarity-SSR:hover .card-3d-inner {
-      box-shadow: 0 14px 32px rgba(251, 191, 36, 0.35);
+      box-shadow: 0 16px 36px rgba(251, 191, 36, 0.4);
     }
     .card-3d-wrap.rarity-SR .card-3d-inner {
-      border-color: rgba(225, 29, 72, 0.6);
-      box-shadow: 0 8px 24px rgba(225, 29, 72, 0.25);
+      border-color: var(--border-fox);
+      box-shadow: 0 8px 24px var(--fox-glow-soft);
     }
     .card-3d-wrap.rarity-SR:hover .card-3d-inner {
-      box-shadow: 0 14px 32px rgba(225, 29, 72, 0.35);
+      box-shadow: 0 16px 36px var(--fox-glow);
     }
     .card-3d-wrap.rarity-R .card-3d-inner {
       border-color: rgba(56, 189, 248, 0.4);
       box-shadow: 0 8px 24px rgba(56, 189, 248, 0.15);
     }
     .card-3d-wrap.rarity-R:hover .card-3d-inner {
-      box-shadow: 0 14px 32px rgba(56, 189, 248, 0.25);
+      box-shadow: 0 16px 36px rgba(56, 189, 248, 0.3);
     }
 
     /* Brillo Holográfico Foil */
@@ -660,7 +680,7 @@
       height: 100%;
       pointer-events: none;
       z-index: 3;
-      border-radius: 14px;
+      border-radius: 16px;
       opacity: 0;
       mix-blend-mode: color-dodge;
       transition: opacity 0.25s ease;
@@ -668,14 +688,14 @@
         115deg,
         transparent 20%,
         rgba(255, 255, 255, 0.4) 40%,
-        rgba(251, 191, 36, 0.3) 50%,
-        rgba(225, 29, 72, 0.4) 60%,
+        rgba(251, 191, 36, 0.35) 50%,
+        rgba(255, 122, 47, 0.4) 60%,
         transparent 80%
       );
       background-size: 200% 200%;
     }
     .card-3d-wrap:hover .card-holo-foil {
-      opacity: 0.8;
+      opacity: 0.85;
     }
 
     /* Imagen de la Carta */
@@ -683,7 +703,7 @@
       width: 100%;
       aspect-ratio: 3/4;
       position: relative;
-      background: #181324;
+      background: #181122;
       overflow: hidden;
     }
     .card-image-box img {
@@ -691,10 +711,10 @@
       height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
     }
     .card-3d-wrap:hover .card-image-box img {
-      transform: scale(1.04);
+      transform: scale(1.05);
     }
 
     /* Badge de Rareza Flotante */
@@ -702,7 +722,7 @@
       position: absolute;
       top: 8px;
       left: 8px;
-      font-size: 0.68rem;
+      font-size: 0.7rem;
       font-weight: 800;
       font-family: var(--font-mono);
       padding: 3px 8px;
@@ -714,11 +734,11 @@
     }
     .badge-ssr {
       background: linear-gradient(135deg, #d97706, #fbbf24);
-      color: #000;
+      color: #0F0A14;
     }
     .badge-sr {
-      background: linear-gradient(135deg, #be123c, #fb7185);
-      color: #fff;
+      background: linear-gradient(135deg, var(--fox-dark), var(--fox-primary));
+      color: #FFF1E0;
     }
     .badge-r {
       background: linear-gradient(135deg, #0284c7, #38bdf8);
@@ -730,27 +750,28 @@
       position: absolute;
       top: 8px;
       right: 8px;
-      font-size: 0.72rem;
+      font-size: 0.74rem;
       font-weight: 800;
       font-family: var(--font-mono);
       padding: 3px 8px;
       border-radius: 6px;
-      background: rgba(0, 0, 0, 0.75);
-      color: #fbbf24;
+      background: rgba(15, 10, 20, 0.8);
+      color: var(--gold-vip);
       border: 1px solid rgba(251, 191, 36, 0.4);
       z-index: 4;
     }
 
     /* Pie de la Carta / Estadísticas */
     .card-meta-foot {
-      padding: 10px 12px;
-      background: rgba(17, 14, 25, 0.95);
+      padding: 12px 14px;
+      background: rgba(18, 12, 24, 0.95);
       z-index: 2;
     }
     .card-char-name {
-      font-size: 0.88rem;
+      font-family: var(--font-display);
+      font-size: 0.92rem;
       font-weight: 700;
-      color: #fff;
+      color: var(--text-pure);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -760,7 +781,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.72rem;
+      font-size: 0.74rem;
       font-family: var(--font-mono);
       color: var(--text-muted);
     }
@@ -784,7 +805,7 @@
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(16px);
       z-index: 9999;
       display: none;
       align-items: center;
@@ -792,46 +813,47 @@
       padding: 20px;
     }
     .inspect-dialog {
-      background: #151020;
-      border: 1.5px solid var(--border-ruby);
+      background: #160F1E;
+      border: 1.5px solid var(--border-fox);
       border-radius: var(--radius-lg);
       max-width: 420px;
       width: 100%;
       overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-      animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 24px 65px rgba(0, 0, 0, 0.85), 0 0 30px var(--fox-glow-soft);
+      animation: modalPop 0.28s cubic-bezier(0.23, 1, 0.32, 1);
       position: relative;
     }
     @keyframes modalPop {
-      0% { transform: scale(0.9) translateY(20px); opacity: 0; }
+      0% { transform: scale(0.92) translateY(20px); opacity: 0; }
       100% { transform: scale(1) translateY(0); opacity: 1; }
     }
     .inspect-close-btn {
       position: absolute;
       top: 14px;
       right: 14px;
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(15, 10, 20, 0.75);
       border: 1px solid var(--border-subtle);
-      color: #fff;
+      color: var(--text-pure);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       cursor: pointer;
       z-index: 10;
       transition: var(--transition-fast);
     }
     .inspect-close-btn:hover {
-      background: var(--ruby-primary);
+      background: var(--fox-primary);
+      color: #FFF1E0;
     }
     .inspect-img-box {
       width: 100%;
       aspect-ratio: 3/4;
       position: relative;
-      background: #000;
+      background: #0F0A14;
     }
     .inspect-img-box img {
       width: 100%;
@@ -839,49 +861,52 @@
       object-fit: cover;
     }
     .inspect-info-pad {
-      padding: 20px;
+      padding: 22px;
     }
     .inspect-title {
-      font-size: 1.3rem;
+      font-family: var(--font-display);
+      font-size: 1.35rem;
       font-weight: 800;
-      color: #fff;
-      margin-bottom: 4px;
+      color: var(--text-pure);
+      margin-bottom: 6px;
     }
     .inspect-stats-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
-      margin: 14px 0;
+      margin: 16px 0;
     }
     .inspect-stat-card {
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 241, 224, 0.04);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-sm);
-      padding: 8px;
+      padding: 10px;
       text-align: center;
+      box-shadow: var(--inner-highlight);
     }
     .inspect-stat-val {
       font-family: var(--font-mono);
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 800;
     }
     .inspect-stat-label {
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       color: var(--text-muted);
       text-transform: uppercase;
-      margin-top: 2px;
+      margin-top: 3px;
+      font-weight: 700;
     }
   </style>
 </head>
 <body>
 
-  <!-- Luces Ambientales -->
+  <!-- Luces Ambientales Fox & Obsidian -->
   <div class="ambient-lighting">
     <div class="ambient-light-1"></div>
     <div class="ambient-light-2"></div>
   </div>
 
-  <!-- Header Superior -->
+  <!-- Header Superior (Isla de Cristal) -->
   <header class="top-header">
     <div class="container header-content">
       <a href="/" class="brand-link">
@@ -892,7 +917,7 @@
         </div>
       </a>
 
-      <!-- Navegación para PC -->
+      <!-- Navegación Desktop -->
       <nav class="desktop-nav">
         <a href="/" class="nav-item">Inicio</a>
         <a href="/actividad.html" class="nav-item">📡 Actividad en Vivo</a>
@@ -901,7 +926,7 @@
         <a href="/album.html" class="nav-item active">🃏 Álbum</a>
       </nav>
 
-      <!-- Enlaces WhatsApp -->
+      <!-- Enlaces WhatsApp Oficiales -->
       <div class="header-buttons">
         <a href="https://whatsapp.com/channel/0029VbDLXzm9MF8zqYNZc03Y" target="_blank" rel="noopener" class="btn-wa-channel">
           <span>📢 Canal</span>
@@ -914,7 +939,7 @@
   </header>
 
   <!-- Contenido Principal -->
-  <main class="container" style="padding-top: 26px;">
+  <main class="container" style="padding-top: 32px;">
 
     <!-- Documento de Identidad / Licencia VIP de Coleccionista -->
     <div class="vip-id-card" id="album-header-banner">
@@ -1046,7 +1071,7 @@
     <div class="album-controls-bar">
       <!-- Buscadores -->
       <div class="search-dual-inputs">
-        <input type="text" class="input-album-field" id="search-player-input" placeholder="🔍 Buscar jugador (ej: BrayanRK, Shadow...)" autocomplete="off" />
+        <input type="text" class="input-album-field" id="search-player-input" placeholder="🔍 Buscar jugador (ej: BrayanRK, Alexander...)" autocomplete="off" />
         <input type="text" class="input-album-field" id="search-card-input" placeholder="🃏 Filtrar carta (ej: Luffy, Sakura...)" autocomplete="off" />
       </div>
 
@@ -1076,9 +1101,9 @@
         <img id="inspect-img" src="" alt="Carta" />
       </div>
       <div class="inspect-info-pad">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
           <span class="card-rarity-badge" id="inspect-badge">SSR</span>
-          <span class="badge-pill-stat gold" id="inspect-qty">x1 poseída</span>
+          <span class="card-qty-badge" id="inspect-qty" style="position: static;">x1 poseída</span>
         </div>
         <div class="inspect-title" id="inspect-name">Nombre de Carta</div>
 
@@ -1097,14 +1122,14 @@
           </div>
         </div>
 
-        <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 10px;">
+        <div style="font-size: 0.78rem; color: var(--text-muted); text-align: center; margin-top: 12px;">
           Toca o mueve el cursor para admirar el acabado holográfico en WhatsApp Bot.
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Barra de Navegación Inferior Móvil -->
+  <!-- Barra de Navegación Inferior Móvil (Dock Flotante) -->
   <nav class="mobile-bottom-nav">
     <a href="/" class="bottom-nav-link">
       <span class="bottom-nav-icon">🏠</span>
