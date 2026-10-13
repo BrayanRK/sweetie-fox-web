@@ -581,7 +581,6 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 14px;
-      perspective: 1200px;
     }
     @media (min-width: 640px) {
       .cards-grid {
@@ -606,10 +605,10 @@
     .card-3d-wrap {
       position: relative;
       border-radius: 14px;
-      transform-style: preserve-3d;
-      transition: transform 0.15s ease-out, box-shadow 0.2s ease;
+      perspective: 1000px;
       cursor: pointer;
       user-select: none;
+      -webkit-user-select: none;
     }
     .card-3d-wrap:hover {
       z-index: 10;
@@ -624,6 +623,9 @@
       display: flex;
       flex-direction: column;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      transform-style: preserve-3d;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+      will-change: transform;
     }
 
     /* Rarity Glows */
@@ -631,13 +633,22 @@
       border-color: rgba(251, 191, 36, 0.6);
       box-shadow: 0 8px 24px rgba(251, 191, 36, 0.25);
     }
+    .card-3d-wrap.rarity-SSR:hover .card-3d-inner {
+      box-shadow: 0 14px 32px rgba(251, 191, 36, 0.35);
+    }
     .card-3d-wrap.rarity-SR .card-3d-inner {
       border-color: rgba(225, 29, 72, 0.6);
       box-shadow: 0 8px 24px rgba(225, 29, 72, 0.25);
     }
+    .card-3d-wrap.rarity-SR:hover .card-3d-inner {
+      box-shadow: 0 14px 32px rgba(225, 29, 72, 0.35);
+    }
     .card-3d-wrap.rarity-R .card-3d-inner {
       border-color: rgba(56, 189, 248, 0.4);
       box-shadow: 0 8px 24px rgba(56, 189, 248, 0.15);
+    }
+    .card-3d-wrap.rarity-R:hover .card-3d-inner {
+      box-shadow: 0 14px 32px rgba(56, 189, 248, 0.25);
     }
 
     /* Brillo Holográfico Foil */
@@ -680,10 +691,10 @@
       height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform 0.3s ease;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .card-3d-wrap:hover .card-image-box img {
-      transform: scale(1.05);
+      transform: scale(1.04);
     }
 
     /* Badge de Rareza Flotante */

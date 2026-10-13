@@ -103,47 +103,100 @@ document.addEventListener('DOMContentLoaded', () => {
         cardsGrid.appendChild(fragment);
     }
 
-    // ─── EFECTO HOLOGRÁFICO 3D TILT ─────────────────────────────────────────
+    // ─── EFECTO HOLOGRÁFICO 3D TILT SUAVE Y ELEGANTE ─────────────────────────
     function setup3dCardTilt(cardEl) {
+        const inner = cardEl.querySelector('.card-3d-inner');
         const foil = cardEl.querySelector('.card-holo-foil');
+        if (!inner) return;
+
+        let rect = null;
+        let rafId = null;
+        let targetRotX = 0;
+        let targetRotY = 0;
+        let currentRotX = 0;
+        let currentRotY = 0;
+        let isHovered = false;
+
+        function animateTilt() {
+            if (!isHovered && Math.abs(currentRotX) < 0.05 && Math.abs(currentRotY) < 0.05) {
+                inner.style.transform = '';
+                rafId = null;
+                return;
+            }
+
+            // Interpolación suave y amortiguada (lerp factor 0.12)
+            currentRotX += (targetRotX - currentRotX) * 0.12;
+            currentRotY += (targetRotY - currentRotY) * 0.12;
+
+            inner.style.transform = `rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg) scale3d(1.03, 1.03, 1.03)`;
+
+            rafId = requestAnimationFrame(animateTilt);
+        }
 
         function handleMove(clientX, clientY) {
-            const rect = cardEl.getBoundingClientRect();
+            if (!rect) rect = cardEl.getBoundingClientRect();
+            if (!rect.width || !rect.height) return;
+
             const x = (clientX - rect.left) / rect.width - 0.5;
             const y = (clientY - rect.top) / rect.height - 0.5;
 
-            const rotX = -y * 22;
-            const rotY = x * 22;
+            // Inclinación controlada y elegante (aprox. ±7 grados máx)
+            targetRotX = -y * 14;
+            targetRotY = x * 14;
 
-            cardEl.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.05, 1.05, 1.05)`;
             if (foil) {
-                foil.style.backgroundPosition = `${50 + x * 120}% ${50 + y * 120}%`;
-                foil.style.opacity = '0.9';
+                foil.style.backgroundPosition = `${50 + x * 80}% ${50 + y * 80}%`;
+                foil.style.opacity = '0.75';
+            }
+
+            if (!rafId) {
+                rafId = requestAnimationFrame(animateTilt);
             }
         }
+
+        cardEl.addEventListener('mouseenter', () => {
+            rect = cardEl.getBoundingClientRect();
+            isHovered = true;
+            inner.style.transition = 'none'; // Evitar conflicto entre transition CSS y requestAnimationFrame
+            if (!rafId) rafId = requestAnimationFrame(animateTilt);
+        });
 
         cardEl.addEventListener('mousemove', (e) => {
             handleMove(e.clientX, e.clientY);
         });
 
         cardEl.addEventListener('mouseleave', () => {
-            cardEl.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+            isHovered = false;
+            targetRotX = 0;
+            targetRotY = 0;
+            rect = null;
+
+            // Retorno suave a la posición neutra
+            inner.style.transition = 'transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)';
+            inner.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
             if (foil) {
+                foil.style.transition = 'opacity 0.3s ease';
                 foil.style.opacity = '0';
             }
         });
 
-        // Touch para móviles
-        cardEl.addEventListener('touchmove', (e) => {
-            if (e.touches.length > 0) {
-                handleMove(e.touches[0].clientX, e.touches[0].clientY);
-            }
+        // Respuesta táctil para móviles (feedback suave sin bloquear ni distorsionar el scroll)
+        cardEl.addEventListener('touchstart', () => {
+            inner.style.transition = 'transform 0.15s ease-out';
+            inner.style.transform = 'scale3d(0.98, 0.98, 0.98)';
         }, { passive: true });
 
         cardEl.addEventListener('touchend', () => {
-            cardEl.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+            inner.style.transition = 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+            inner.style.transform = 'scale3d(1, 1, 1)';
             if (foil) foil.style.opacity = '0';
-        });
+        }, { passive: true });
+
+        cardEl.addEventListener('touchcancel', () => {
+            inner.style.transition = 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+            inner.style.transform = 'scale3d(1, 1, 1)';
+            if (foil) foil.style.opacity = '0';
+        }, { passive: true });
     }
 
     // ─── MODAL DE INSPECCIÓN ────────────────────────────────────────────────
