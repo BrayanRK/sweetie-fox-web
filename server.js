@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const http = require('http');
 const https = require('https');
 const fs = require('fs');
 const { execSync } = require('child_process');
@@ -8,6 +9,10 @@ const app = express();
 
 // Pterodactyl usa SERVER_PORT o PORT asignado por el panel
 const PORT = Number(process.env.SERVER_PORT || process.env.PORT || 3000);
+
+// URL del backend del bot (VPS)
+// Si no se especifica en variables de entorno, apunta por defecto al VPS donde corre MITSURI-TS
+const BOT_API_URL = (process.env.BOT_API_URL || 'http://198.251.70.108:3000').replace(/\/+$/, '');
 
 // ─────────────────────────────────────────────────────────────────────────────
 // AUTO-SINCRONIZACIÓN GIT (Pterodactyl / Docker)
@@ -102,41 +107,61 @@ app.get(['/api/gacha/image/:id', '/assets/gacha/:id'], (req, res) => {
     }
 
     // Fallback: Si por alguna razón no está en disco local, solicitar al VPS
-    const targetUrl = new URL(`https://brayanrk.info/api/gacha/image/${cardId}`);
-    https.get(targetUrl, (proxyRes) => {
-        if (proxyRes.statusCode === 200) {
-            res.writeHead(200, {
-                'Content-Type': 'image/jpeg',
-                'Cache-Control': 'public, max-age=86400'
-            });
-            proxyRes.pipe(res);
-        } else {
+    try {
+        const targetUrl = new URL(`${BOT_API_URL}/api/gacha/image/${cardId}`);
+        const client = targetUrl.protocol === 'https:' ? https : http;
+        client.get(targetUrl, (proxyRes) => {
+            if (proxyRes.statusCode === 200) {
+                res.writeHead(200, {
+                    'Content-Type': 'image/jpeg',
+                    'Cache-Control': 'public, max-age=86400'
+                });
+                proxyRes.pipe(res);
+            } else {
+                res.status(404).sendFile(path.join(__dirname, 'favicon-32.png'));
+            }
+        }).on('error', () => {
             res.status(404).sendFile(path.join(__dirname, 'favicon-32.png'));
-        }
-    }).on('error', () => {
+        });
+    } catch (_) {
         res.status(404).sendFile(path.join(__dirname, 'favicon-32.png'));
-    });
+    }
 });
 
 // 2. PROXY TRANSPARENTE PARA EL RESTO DE LA API DEL BOT
 app.use('/api', (req, res) => {
-    const targetUrl = new URL(`https://brayanrk.info/api${req.url}`);
-    const headers = { ...req.headers, host: targetUrl.host };
+    try {
+        const targetUrl = new URL(`${BOT_API_URL}/api${req.url}`);
+        const client = targetUrl.protocol === 'https:' ? https : http;
+        const headers = { ...req.headers, host: targetUrl.host };
 
-    const proxyReq = https.request(targetUrl, {
-        method: req.method,
-        headers: headers
-    }, (proxyRes) => {
-        res.writeHead(proxyRes.statusCode, proxyRes.headers);
-        proxyRes.pipe(res);
-    });
+        const proxyReq = client.request(targetUrl, {
+            method: req.method,
+            headers: headers,
+            timeout: 15000
+        }, (proxyRes) => {
+            res.writeHead(proxyRes.statusCode, proxyRes.headers);
+            proxyRes.pipe(res);
+        });
 
-    proxyReq.on('error', (err) => {
-        console.error('Error en proxy /api:', err.message);
-        res.status(502).json({ ok: false, message: 'No se pudo conectar con el backend del bot' });
-    });
+        proxyReq.on('timeout', () => {
+            proxyReq.destroy(new Error('Timeout de conexión con la API del bot'));
+        });
 
-    req.pipe(proxyReq);
+        proxyReq.on('error', (err) => {
+            console.error('Error en proxy /api:', err.message);
+            if (!res.headersSent) {
+                res.status(502).json({ ok: false, message: 'No se pudo conectar con el backend del bot' });
+            }
+        });
+
+        req.pipe(proxyReq);
+    } catch (err) {
+        console.error('Error creando URL en proxy /api:', err.message);
+        if (!res.headersSent) {
+            res.status(500).json({ ok: false, message: 'URL de API del bot inválida' });
+        }
+    }
 });
 
 // Servir todos los archivos estáticos
@@ -173,5 +198,6 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🦊 [Sweetie Fox Web] Servidor web iniciado exitosamente en http://0.0.0.0:${PORT}`);
+    console.log(`🦊 [Sweetie Fox Web] Servidor web iniciado en http://0.0.0.0:${PORT}`);
+    console.log(`📡 [Sweetie Fox Web] Proxy API conectado a: ${BOT_API_URL}`);
 });
