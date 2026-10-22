@@ -11,8 +11,8 @@ const app = express();
 const PORT = Number(process.env.SERVER_PORT || process.env.PORT || 3000);
 
 // URL del backend del bot (VPS)
-// Si no se especifica en variables de entorno, apunta por defecto al VPS donde corre MITSURI-TS
-const BOT_API_URL = (process.env.BOT_API_URL || 'http://198.251.70.108:3000').replace(/\/+$/, '');
+// Si no se especifica en variables de entorno, apunta por defecto al subdominio con SSL
+const BOT_API_URL = (process.env.BOT_API_URL || 'https://bot.brayanrk.com').replace(/\/+$/, '');
 
 // ─────────────────────────────────────────────────────────────────────────────
 // AUTO-SINCRONIZACIÓN GIT (Pterodactyl / Docker)
