@@ -18,6 +18,30 @@ function gitCmd(cmd) {
     }
 }
 
+// Auto-sincronizacion Git al iniciar el servidor (Pterodactyl / Docker)
+try {
+    gitCmd('git config --global --add safe.directory /home/container');
+    gitCmd('git config --global --add safe.directory "*"');
+
+    const REPO = 'https://github.com/BrayanRK/sweetie-fox-web.git';
+
+    if (!fs.existsSync(path.join(__dirname, '.git'))) {
+        console.log('[Git] Conectando con GitHub...');
+        gitCmd('git init');
+        gitCmd(`git remote add origin ${REPO}`);
+        gitCmd('git fetch origin main');
+        gitCmd('git reset --hard origin/main');
+        console.log('[Git] Repositorio vinculado.');
+    } else {
+        console.log('[Git] Sincronizando con GitHub al iniciar...');
+        gitCmd('git fetch origin main');
+        gitCmd('git reset --hard origin/main');
+        console.log('[Git] Repositorio sincronizado.');
+    }
+} catch (e) {
+    console.error('[Git Sync Note]:', e.message);
+}
+
 // Endpoint de actualizacion remota bajo demanda
 app.get(['/api/actualizar', '/actualizar', '/update'], (req, res) => {
     try {
