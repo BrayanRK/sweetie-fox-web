@@ -419,6 +419,10 @@
         }
       }
 
+      function stripEmojis(str) {
+        return (str || '').replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, '').trim();
+      }
+
       function formatNum(n) {
         return Number(n || 0).toLocaleString();
       }
@@ -471,11 +475,11 @@
           }));
         } else if (currentCategory === 'economia') {
           items = (leaderboardData?.topEconomia || []).map(u => ({
-            nombre: u.nombre,
+            nombre: stripEmojis(u.nombre),
             jid: u.jid,
             avatarUrl: u.avatarUrl,
             scoreMain: `$${formatNum(u.total_dinero)}`,
-            scoreSub: `Nivel ${u.nivel} • ${formatNum(u.diamantes)} diamantes`
+            scoreSub: `Record en: ${stripEmojis(u.grupo_nombre || 'Clan')} • Nivel ${u.nivel} • ${formatNum(u.diamantes)} diamantes`
           }));
         } else if (currentCategory === 'diamantes') {
           items = (leaderboardData?.topDiamantes || []).map(u => ({
