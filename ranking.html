@@ -8,6 +8,96 @@
   <title>Ranking y Batallas — Sweetie Fox</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="/assets/css/main.css">
+  <style>
+    .battle-rewards-panel {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 24px;
+    }
+    @media (min-width: 768px) {
+      .battle-rewards-panel {
+        grid-template-columns: 280px 1fr;
+        align-items: stretch;
+      }
+    }
+    .battle-countdown-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+    }
+    .countdown-timer-display {
+      font-size: var(--text-2xl);
+      font-weight: 700;
+      font-family: var(--font-mono);
+      color: var(--fox-primary);
+      letter-spacing: 0.05em;
+      line-height: 1.2;
+      margin-top: 4px;
+    }
+    .countdown-caption {
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+    }
+    .podium-prizes-cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 640px) {
+      .podium-prizes-cards {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .prize-pill {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-dim);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: border-color var(--transition-fast);
+    }
+    .prize-pill:hover {
+      border-color: var(--border-strong);
+    }
+    .prize-rank-1 {
+      border-color: rgba(232, 116, 42, 0.4);
+      background: linear-gradient(180deg, rgba(232, 116, 42, 0.06) 0%, var(--bg-surface) 100%);
+    }
+    .prize-rank-2 {
+      border-color: rgba(160, 174, 192, 0.3);
+    }
+    .prize-rank-3 {
+      border-color: rgba(196, 136, 88, 0.3);
+    }
+    .prize-pill-rank {
+      font-size: var(--text-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .prize-rank-1 .prize-pill-rank { color: var(--fox-primary); }
+    .prize-rank-2 .prize-pill-rank { color: #A0AEC0; }
+    .prize-rank-3 .prize-pill-rank { color: #C48858; }
+    .prize-pill-amount {
+      font-size: var(--text-base);
+      font-weight: 700;
+      font-family: var(--font-mono);
+      color: var(--text-main);
+    }
+    .prize-pill-sub {
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+  </style>
 </head>
 <body>
 
@@ -100,6 +190,39 @@
             <button type="button" class="tab-btn" data-category="diamantes">Diamantes</button>
             <button type="button" class="tab-btn" data-category="nivel">Nivel y XP</button>
             <button type="button" class="tab-btn" data-category="coleccion">Coleccionistas</button>
+          </div>
+        </div>
+
+        <!-- Panel de Liquidacion y Premios del Podio -->
+        <div id="battle-rewards-panel" class="battle-rewards-panel">
+          <div class="battle-countdown-card">
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <span class="badge badge-online">Liquidacion Automatica</span>
+              <span class="badge badge-fox">4:00 PM COT</span>
+            </div>
+            <div class="countdown-timer-display" id="battle-timer-display">--h --m --s</div>
+            <div class="countdown-caption" id="battle-timer-caption">Cuenta regresiva hasta el cierre de temporada</div>
+          </div>
+
+          <div class="podium-prizes-cards">
+            <!-- 1º Lugar -->
+            <div class="prize-pill prize-rank-1">
+              <div class="prize-pill-rank">1º Puesto (60%)</div>
+              <div class="prize-pill-amount" id="prize-1-coins">--</div>
+              <div class="prize-pill-sub" id="prize-1-sub">--</div>
+            </div>
+            <!-- 2º Lugar -->
+            <div class="prize-pill prize-rank-2">
+              <div class="prize-pill-rank">2º Puesto (25%)</div>
+              <div class="prize-pill-amount" id="prize-2-coins">--</div>
+              <div class="prize-pill-sub" id="prize-2-sub">--</div>
+            </div>
+            <!-- 3º Lugar -->
+            <div class="prize-pill prize-rank-3">
+              <div class="prize-pill-rank">3º Puesto (15%)</div>
+              <div class="prize-pill-amount" id="prize-3-coins">--</div>
+              <div class="prize-pill-sub" id="prize-3-sub">--</div>
+            </div>
           </div>
         </div>
       </div>
@@ -211,6 +334,90 @@
       let currentCategory = 'batalla-dia';
       let battlesData = null;
       let leaderboardData = null;
+      let fetchTime = Date.now();
+
+      // Elementos del panel de premios y cuenta regresiva
+      const battleRewardsPanel = document.getElementById('battle-rewards-panel');
+      const timerDisplay = document.getElementById('battle-timer-display');
+      const timerCaption = document.getElementById('battle-timer-caption');
+      const elP1Coins = document.getElementById('prize-1-coins');
+      const elP1Sub = document.getElementById('prize-1-sub');
+      const elP2Coins = document.getElementById('prize-2-coins');
+      const elP2Sub = document.getElementById('prize-2-sub');
+      const elP3Coins = document.getElementById('prize-3-coins');
+      const elP3Sub = document.getElementById('prize-3-sub');
+
+      const POOLS = {
+        'batalla-dia': {
+          title: 'Batalla Diaria',
+          caption: 'Corte diario oficial a las 4:00 PM COT (UTC-5)',
+          shares: [
+            { coins: '+$60,000 Oro', sub: '+6 Diamantes • 3 Cartas (1 SSR MVP)' },
+            { coins: '+$25,000 Oro', sub: '+3 Diamantes • 2 Cartas (SR)' },
+            { coins: '+$15,000 Oro', sub: '+1 Diamante • 1 Carta (R)' }
+          ]
+        },
+        'batalla-semana': {
+          title: 'Guerra Semanal',
+          caption: 'Corte semanal cada domingo a las 4:00 PM COT',
+          shares: [
+            { coins: '+$300,000 Oro', sub: '+30 Diamantes • 8 Cartas (1 SSR MVP)' },
+            { coins: '+$125,000 Oro', sub: '+13 Diamantes • 5 Cartas (SR)' },
+            { coins: '+$75,000 Oro', sub: '+7 Diamantes • 3 Cartas (R)' }
+          ]
+        },
+        'batalla-mes': {
+          title: 'Copa Mensual',
+          caption: 'Corte mensual el ultimo dia del mes a las 4:00 PM COT',
+          shares: [
+            { coins: '+$1,200,000 Oro', sub: '+120 Diamantes • 24 Cartas (2 SSR MVP)' },
+            { coins: '+$500,000 Oro', sub: '+50 Diamantes • 14 Cartas (SR)' },
+            { coins: '+$300,000 Oro', sub: '+30 Diamantes • 7 Cartas (R)' }
+          ]
+        }
+      };
+
+      function updateCountdown() {
+        if (!currentCategory.startsWith('batalla')) {
+          if (battleRewardsPanel) battleRewardsPanel.style.display = 'none';
+          return;
+        }
+
+        if (battleRewardsPanel) battleRewardsPanel.style.display = 'grid';
+
+        const poolData = POOLS[currentCategory];
+        if (poolData) {
+          if (timerCaption) timerCaption.textContent = poolData.caption;
+          if (elP1Coins) elP1Coins.textContent = poolData.shares[0].coins;
+          if (elP1Sub) elP1Sub.textContent = poolData.shares[0].sub;
+          if (elP2Coins) elP2Coins.textContent = poolData.shares[1].coins;
+          if (elP2Sub) elP2Sub.textContent = poolData.shares[1].sub;
+          if (elP3Coins) elP3Coins.textContent = poolData.shares[2].coins;
+          if (elP3Sub) elP3Sub.textContent = poolData.shares[2].sub;
+        }
+
+        let endsIn = 0;
+        const elapsed = Math.floor((Date.now() - fetchTime) / 1000);
+        if (currentCategory === 'batalla-dia') {
+          endsIn = (battlesData?.daily?.ends_in_seconds || 0) - elapsed;
+        } else if (currentCategory === 'batalla-semana') {
+          endsIn = (battlesData?.weekly?.ends_in_seconds || 0) - elapsed;
+        } else if (currentCategory === 'batalla-mes') {
+          endsIn = (battlesData?.monthly?.ends_in_seconds || 0) - elapsed;
+        }
+
+        const sec = Math.max(0, endsIn);
+        const days = Math.floor(sec / 86400);
+        const hours = Math.floor((sec % 86400) / 3600);
+        const mins = Math.floor((sec % 3600) / 60);
+        const s = sec % 60;
+
+        if (currentCategory === 'batalla-dia') {
+          if (timerDisplay) timerDisplay.textContent = `${String(hours).padStart(2, '0')}h ${String(mins).padStart(2, '0')}m ${String(s).padStart(2, '0')}s`;
+        } else {
+          if (timerDisplay) timerDisplay.textContent = `${days}d ${String(hours).padStart(2, '0')}h ${String(mins).padStart(2, '0')}m ${String(s).padStart(2, '0')}s`;
+        }
+      }
 
       function formatNum(n) {
         return Number(n || 0).toLocaleString();
@@ -313,6 +520,8 @@
 
         const showPodium = !q && filtered.length >= 3;
 
+        updateCountdown();
+
         // Podio (Top 3) solo cuando no hay busqueda activa
         if (showPodium) {
           const first = filtered[0];
@@ -401,6 +610,7 @@
             leaderboardData = await resLb.value.json();
           }
 
+          fetchTime = Date.now();
           statusBadge.textContent = 'Actualizado en tiempo real';
           render();
         } catch (_) {
@@ -420,6 +630,7 @@
       searchField?.addEventListener('input', render);
       fetchData();
       setInterval(fetchData, 20000);
+      setInterval(updateCountdown, 1000);
     });
   </script>
 </body>
