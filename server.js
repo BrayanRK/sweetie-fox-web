@@ -180,7 +180,8 @@ app.get(['/actividad', '/actividad.html', '/logs', '/logs.html'], (req, res) => 
 });
 
 app.get(['/cartas', '/cartas.html', '/album', '/album.html'], (req, res) => {
-    res.sendFile(path.join(__dirname, 'album.html'));
+    const targetFile = fs.existsSync(path.join(__dirname, 'cartas.html')) ? 'cartas.html' : 'album.html';
+    res.sendFile(path.join(__dirname, targetFile));
 });
 
 // Fallback a index.html
