@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#1C1917">
-  <meta name="description" content="Catalogo oficial de 248 cartas anime coleccionables de Sweetie Fox. Consulta estadisticas de combate, atributos y rarezas.">
+  <meta name="description" content="Catalogo oficial de 1,861 cartas anime coleccionables de Sweetie Fox. Consulta estadisticas de combate, atributos y rarezas.">
   <title>Catalogo de Cartas Anime — Sweetie Fox</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="/assets/css/main.css">
@@ -17,7 +17,12 @@
     }
     @media (min-width: 640px) {
       .cards-stats-strip {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (min-width: 1024px) {
+      .cards-stats-strip {
+        grid-template-columns: repeat(6, 1fr);
       }
     }
     .cards-stat-card {
@@ -119,6 +124,14 @@
       border-color: var(--fox-primary);
       transform: translateY(-2px);
     }
+    .gacha-card-item.rarity-ur {
+      border-color: rgba(251, 191, 36, 0.6);
+      box-shadow: 0 0 15px rgba(251, 191, 36, 0.15);
+    }
+    .gacha-card-item.rarity-ur:hover {
+      border-color: #FBBF24;
+      box-shadow: 0 4px 20px rgba(251, 191, 36, 0.3);
+    }
     .gacha-card-item.rarity-ssr {
       border-color: rgba(232, 116, 42, 0.4);
     }
@@ -128,6 +141,10 @@
     }
     .gacha-card-item.rarity-sr {
       border-color: rgba(138, 127, 116, 0.4);
+    }
+    .gacha-card-item.rarity-n {
+      border-color: var(--border-dim);
+      opacity: 0.9;
     }
 
     .gacha-img-wrap {
@@ -157,6 +174,12 @@
       color: var(--text-main);
       backdrop-filter: blur(4px);
     }
+    .gacha-badge-overlay.badge-ur {
+      background: linear-gradient(135deg, rgba(234, 88, 12, 0.95), rgba(168, 85, 247, 0.95));
+      border-color: #FBBF24;
+      color: #FFFFFF;
+      box-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
+    }
     .gacha-badge-overlay.badge-ssr {
       background-color: rgba(201, 90, 20, 0.9);
       border-color: var(--fox-primary);
@@ -166,6 +189,11 @@
       background-color: rgba(70, 65, 60, 0.9);
       border-color: var(--border-strong);
       color: var(--fox-cream);
+    }
+    .gacha-badge-overlay.badge-n {
+      background-color: rgba(45, 40, 36, 0.85);
+      border-color: var(--border-dim);
+      color: var(--text-muted);
     }
 
     .gacha-qty-overlay {
@@ -314,6 +342,10 @@
             <span class="stat-label">Total Disponibles</span>
           </div>
           <div class="cards-stat-card">
+            <span class="stat-value" id="stat-ur-cards" style="color: #FBBF24;">--</span>
+            <span class="stat-label">Rareza UR (Deidad)</span>
+          </div>
+          <div class="cards-stat-card">
             <span class="stat-value" id="stat-ssr-cards" style="color: var(--fox-primary);">--</span>
             <span class="stat-label">Rareza SSR</span>
           </div>
@@ -324,6 +356,10 @@
           <div class="cards-stat-card">
             <span class="stat-value" id="stat-r-cards">--</span>
             <span class="stat-label">Rareza R</span>
+          </div>
+          <div class="cards-stat-card">
+            <span class="stat-value" id="stat-n-cards" style="color: var(--text-muted);">--</span>
+            <span class="stat-label">Rareza N (Común)</span>
           </div>
         </div>
 
@@ -361,6 +397,10 @@
                 <span>Todas</span>
                 <span class="tab-badge" id="tab-badge-all">--</span>
               </button>
+              <button type="button" class="tab-btn" data-rarity="UR">
+                <span>UR</span>
+                <span class="tab-badge" id="tab-badge-ur">--</span>
+              </button>
               <button type="button" class="tab-btn" data-rarity="SSR">
                 <span>SSR</span>
                 <span class="tab-badge" id="tab-badge-ssr">--</span>
@@ -372,6 +412,10 @@
               <button type="button" class="tab-btn" data-rarity="R">
                 <span>R</span>
                 <span class="tab-badge" id="tab-badge-r">--</span>
+              </button>
+              <button type="button" class="tab-btn" data-rarity="N">
+                <span>N</span>
+                <span class="tab-badge" id="tab-badge-n">--</span>
               </button>
             </div>
           </div>
@@ -499,14 +543,18 @@
 
       // Badges y metricas
       const elStatTotal = document.getElementById('stat-total-cards');
+      const elStatUR = document.getElementById('stat-ur-cards');
       const elStatSSR = document.getElementById('stat-ssr-cards');
       const elStatSR = document.getElementById('stat-sr-cards');
       const elStatR = document.getElementById('stat-r-cards');
+      const elStatN = document.getElementById('stat-n-cards');
 
       const elTabAll = document.getElementById('tab-badge-all');
+      const elTabUR = document.getElementById('tab-badge-ur');
       const elTabSSR = document.getElementById('tab-badge-ssr');
       const elTabSR = document.getElementById('tab-badge-sr');
       const elTabR = document.getElementById('tab-badge-r');
+      const elTabN = document.getElementById('tab-badge-n');
 
       // Modal
       const modal = document.getElementById('inspect-dialog');
@@ -529,23 +577,29 @@
 
       function updateCounts(cards) {
         const total = cards.length;
-        let ssr = 0, sr = 0, r = 0;
+        let ur = 0, ssr = 0, sr = 0, r = 0, n = 0;
         cards.forEach(c => {
           const rar = (c.rarity || 'R').toUpperCase();
-          if (rar === 'SSR') ssr++;
+          if (rar === 'UR') ur++;
+          else if (rar === 'SSR') ssr++;
           else if (rar === 'SR') sr++;
-          else r++;
+          else if (rar === 'R') r++;
+          else n++;
         });
 
         if (elStatTotal) elStatTotal.textContent = total;
+        if (elStatUR) elStatUR.textContent = ur;
         if (elStatSSR) elStatSSR.textContent = ssr;
         if (elStatSR) elStatSR.textContent = sr;
         if (elStatR) elStatR.textContent = r;
+        if (elStatN) elStatN.textContent = n;
 
         if (elTabAll) elTabAll.textContent = total;
+        if (elTabUR) elTabUR.textContent = ur;
         if (elTabSSR) elTabSSR.textContent = ssr;
         if (elTabSR) elTabSR.textContent = sr;
         if (elTabR) elTabR.textContent = r;
+        if (elTabN) elTabN.textContent = n;
       }
 
       function render() {
@@ -568,8 +622,8 @@
         grid.innerHTML = filtered.map(c => {
           const safeName = stripEmojis(c.name || 'Personaje');
           const rar = (c.rarity || 'R').toUpperCase();
-          const rarClass = rar === 'SSR' ? 'rarity-ssr' : (rar === 'SR' ? 'rarity-sr' : '');
-          const badgeClass = rar === 'SSR' ? 'badge-ssr' : (rar === 'SR' ? 'badge-sr' : '');
+          const rarClass = rar === 'UR' ? 'rarity-ur' : (rar === 'SSR' ? 'rarity-ssr' : (rar === 'SR' ? 'rarity-sr' : (rar === 'N' ? 'rarity-n' : '')));
+          const badgeClass = rar === 'UR' ? 'badge-ur' : (rar === 'SSR' ? 'badge-ssr' : (rar === 'SR' ? 'badge-sr' : (rar === 'N' ? 'badge-n' : '')));
           const cardImg = `/api/gacha/image/${c.id}`;
 
           return `
