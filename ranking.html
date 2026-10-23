@@ -277,7 +277,8 @@
           }));
         }
 
-        const filtered = items.filter(it => it.nombre.toLowerCase().includes(q));
+        const itemsWithRank = items.map((it, i) => ({ ...it, rank: i + 1 }));
+        const filtered = itemsWithRank.filter(it => it.nombre.toLowerCase().includes(q));
 
         if (filtered.length === 0) {
           podiumGrid.innerHTML = '';
@@ -291,8 +292,10 @@
           return;
         }
 
+        const showPodium = !q && filtered.length >= 3;
+
         // Podio (Top 3) solo cuando no hay busqueda activa
-        if (!q && filtered.length >= 3) {
+        if (showPodium) {
           const first = filtered[0];
           const second = filtered[1];
           const third = filtered[2];
@@ -329,11 +332,25 @@
           podiumGrid.innerHTML = '';
         }
 
+        // El listado inferior omite el Top 3 cuando el podio esta visible y arranca desde el puesto 4
+        const tableItems = showPodium ? filtered.slice(3) : filtered;
+
+        if (tableItems.length === 0) {
+          tableBody.innerHTML = `
+            <tr>
+              <td colspan="4" style="text-align: center; padding: 36px; color: var(--text-muted);">
+                Los participantes destacados de esta categoria se encuentran en el podio superior.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
         // Render Filas de Tabla
-        tableBody.innerHTML = filtered.map((it, idx) => `
+        tableBody.innerHTML = tableItems.map(it => `
           <tr>
-            <td style="font-family: var(--font-mono); font-weight: 600; color: ${idx === 0 ? 'var(--fox-primary)' : 'var(--text-muted)'};">
-              #${idx + 1}
+            <td style="font-family: var(--font-mono); font-weight: 600; color: var(--text-muted);">
+              #${it.rank}
             </td>
             <td>
               <div style="display: flex; align-items: center; gap: 10px;">
