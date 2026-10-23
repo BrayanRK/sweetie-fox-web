@@ -7,16 +7,9 @@ const { execSync } = require('child_process');
 
 const app = express();
 
-// Pterodactyl usa SERVER_PORT o PORT asignado por el panel
 const PORT = Number(process.env.SERVER_PORT || process.env.PORT || 3000);
-
-// URL del backend del bot (VPS)
-// Si no se especifica en variables de entorno, apunta por defecto al subdominio con SSL
 const BOT_API_URL = (process.env.BOT_API_URL || 'https://bot.brayanrk.com').replace(/\/+$/, '');
 
-// ─────────────────────────────────────────────────────────────────────────────
-// AUTO-SINCRONIZACIÓN GIT (Pterodactyl / Docker)
-// ─────────────────────────────────────────────────────────────────────────────
 function gitCmd(cmd) {
     try {
         return execSync(cmd, { stdio: 'pipe', encoding: 'utf8' });
@@ -25,67 +18,42 @@ function gitCmd(cmd) {
     }
 }
 
-try {
-    gitCmd('git config --global --add safe.directory /home/container');
-    gitCmd('git config --global --add safe.directory "*"');
-
-    const REPO = 'https://github.com/BrayanRK/sweetie-fox-web.git';
-
-    if (!fs.existsSync(path.join(__dirname, '.git'))) {
-        console.log('📦 Conectando con GitHub...');
-        gitCmd('git init');
-        gitCmd(`git remote add origin ${REPO}`);
-        gitCmd('git fetch origin main');
-        gitCmd('git reset --hard origin/main');
-        console.log('✅ Vinculado con éxito.');
-    } else {
-        console.log('🔄 Sincronizando con GitHub al iniciar...');
-        gitCmd('git fetch origin main');
-        gitCmd('git reset --hard origin/main');
-        console.log('✅ Sincronizado.');
-    }
-} catch (e) {
-    console.error('⚠️ [Git Sync Note]:', e.message);
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// ENDPOINT: ACTUALIZAR EL SERVIDOR AL INSTANTE (Sin entrar al panel)
-// ─────────────────────────────────────────────────────────────────────────────
+// Endpoint de actualizacion remota bajo demanda
 app.get(['/api/actualizar', '/actualizar', '/update'], (req, res) => {
     try {
-        console.log('🔄 Ejecutando actualización forzada desde GitHub...');
+        console.log('[Git] Ejecutando actualizacion desde origin/main...');
         gitCmd('git config --global --add safe.directory /home/container');
         gitCmd('git config --global --add safe.directory "*"');
         gitCmd('git fetch origin main');
-        const out = gitCmd('git reset --hard origin/main') || 'Actualizado exitosamente.';
+        const out = gitCmd('git reset --hard origin/main') || 'Actualizado correctamente.';
 
         res.send(`
             <!DOCTYPE html>
             <html lang="es">
             <head>
                 <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
                 <title>Servidor Actualizado</title>
                 <style>
-                    body { background: #0F0A14; color: #FFF1E0; font-family: sans-serif; padding: 40px 20px; text-align: center; }
-                    .box { background: #1B1222; border: 1px solid rgba(255,122,47,0.35); border-radius: 18px; max-width: 600px; margin: 0 auto; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-                    h1 { color: #FF9959; margin-bottom: 10px; font-size: 1.5rem; }
-                    pre { background: #0E0914; border: 1px solid rgba(255,241,224,0.08); padding: 15px; border-radius: 12px; text-align: left; color: #4ade80; font-size: 0.85rem; overflow-x: auto; }
-                    a { display: inline-block; margin-top: 20px; color: #FFF1E0; background: linear-gradient(135deg, #FF7A2F, #C65211); text-decoration: none; padding: 12px 24px; border-radius: 9999px; font-weight: bold; box-shadow: 0 4px 15px rgba(255,122,47,0.4); }
+                    body { background: #1C1917; color: #FAF3E8; font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif; padding: 40px 20px; text-align: center; }
+                    .box { background: #24201D; border: 1px solid #3A342F; border-radius: 8px; max-width: 560px; margin: 0 auto; padding: 32px 24px; text-align: left; }
+                    h1 { color: #FAF3E8; font-size: 1.25rem; font-weight: 600; margin: 0 0 12px 0; }
+                    p { color: #A89F95; font-size: 0.9375rem; line-height: 1.5; margin: 0 0 20px 0; }
+                    pre { background: #1C1917; border: 1px solid #3A342F; padding: 14px; border-radius: 6px; color: #E8742A; font-family: monospace; font-size: 0.8125rem; overflow-x: auto; }
+                    a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; margin-top: 24px; color: #FFFFFF; background: #E8742A; text-decoration: none; padding: 0 20px; border-radius: 8px; font-weight: 500; font-size: 0.875rem; }
                 </style>
             </head>
             <body>
                 <div class="box">
-                    <h1>🦊 Sweetie Fox Actualizado</h1>
-                    <p>El servidor descargó la última versión de GitHub y se está reiniciando...</p>
+                    <h1>Sweetie Fox Actualizado</h1>
+                    <p>El servidor descargo la version mas reciente y se reiniciara de inmediato.</p>
                     <pre>${out}</pre>
-                    <a href="/">← Volver al Inicio</a>
+                    <a href="/">Volver al inicio</a>
                 </div>
             </body>
             </html>
         `);
 
-        // Reiniciar el proceso para que Pterodactyl recargue con los nuevos archivos
         setTimeout(() => {
             process.exit(0);
         }, 1200);
@@ -94,7 +62,7 @@ app.get(['/api/actualizar', '/actualizar', '/update'], (req, res) => {
     }
 });
 
-// 1. SERVIR IMÁGENES DE CARTAS GACHA DIRECTAMENTE (Sin lag ni sobrecarga)
+// Servir imagenes gacha locales o fallback a VPS
 app.get(['/api/gacha/image/:id', '/assets/gacha/:id'], (req, res) => {
     const rawId = req.params.id || '';
     const cardId = rawId.replace(/\.jpg$/i, '').replace(/^gacha-/i, '').trim().toLowerCase();
@@ -106,7 +74,6 @@ app.get(['/api/gacha/image/:id', '/assets/gacha/:id'], (req, res) => {
         return res.sendFile(localImg);
     }
 
-    // Fallback: Si por alguna razón no está en disco local, solicitar al VPS
     try {
         const targetUrl = new URL(`${BOT_API_URL}/api/gacha/image/${cardId}`);
         const client = targetUrl.protocol === 'https:' ? https : http;
@@ -118,17 +85,17 @@ app.get(['/api/gacha/image/:id', '/assets/gacha/:id'], (req, res) => {
                 });
                 proxyRes.pipe(res);
             } else {
-                res.status(404).sendFile(path.join(__dirname, 'favicon-32.png'));
+                res.status(404).end();
             }
         }).on('error', () => {
-            res.status(404).sendFile(path.join(__dirname, 'favicon-32.png'));
+            res.status(404).end();
         });
     } catch (_) {
-        res.status(404).sendFile(path.join(__dirname, 'favicon-32.png'));
+        res.status(404).end();
     }
 });
 
-// 2. PROXY TRANSPARENTE PARA EL RESTO DE LA API DEL BOT
+// Proxy transparente para endpoints API
 app.use('/api', (req, res) => {
     try {
         const targetUrl = new URL(`${BOT_API_URL}/api${req.url}`);
@@ -145,11 +112,11 @@ app.use('/api', (req, res) => {
         });
 
         proxyReq.on('timeout', () => {
-            proxyReq.destroy(new Error('Timeout de conexión con la API del bot'));
+            proxyReq.destroy(new Error('Timeout de conexion con backend'));
         });
 
         proxyReq.on('error', (err) => {
-            console.error('Error en proxy /api:', err.message);
+            console.error('[Proxy Error]:', err.message);
             if (!res.headersSent) {
                 res.status(502).json({ ok: false, message: 'No se pudo conectar con el backend del bot' });
             }
@@ -157,47 +124,47 @@ app.use('/api', (req, res) => {
 
         req.pipe(proxyReq);
     } catch (err) {
-        console.error('Error creando URL en proxy /api:', err.message);
+        console.error('[Proxy URL Error]:', err.message);
         if (!res.headersSent) {
-            res.status(500).json({ ok: false, message: 'URL de API del bot inválida' });
+            res.status(500).json({ ok: false, message: 'URL de API invalida' });
         }
     }
 });
 
-// Servir todos los archivos estáticos
+// Servir archivos estaticos
 app.use(express.static(__dirname));
 
-// Rutas amigables limpias para móvil y navegador
+// Rutas amigables limpias
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-app.get(['/actividad', '/actividad.html', '/logs', '/logs.html'], (req, res) => {
-    res.sendFile(path.join(__dirname, 'actividad.html'));
-});
-
-app.get(['/vincular', '/vincular.html'], (req, res) => {
-    res.sendFile(path.join(__dirname, 'vincular.html'));
 });
 
 app.get(['/comandos', '/comandos.html'], (req, res) => {
     res.sendFile(path.join(__dirname, 'comandos.html'));
 });
 
+app.get(['/vincular', '/vincular.html'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'vincular.html'));
+});
+
 app.get(['/ranking', '/ranking.html'], (req, res) => {
     res.sendFile(path.join(__dirname, 'ranking.html'));
+});
+
+app.get(['/actividad', '/actividad.html', '/logs', '/logs.html'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'actividad.html'));
 });
 
 app.get(['/album', '/album.html'], (req, res) => {
     res.sendFile(path.join(__dirname, 'album.html'));
 });
 
-// Fallback por defecto a index.html
+// Fallback a index.html
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🦊 [Sweetie Fox Web] Servidor web iniciado en http://0.0.0.0:${PORT}`);
-    console.log(`📡 [Sweetie Fox Web] Proxy API conectado a: ${BOT_API_URL}`);
+    console.log(`[Sweetie Fox Web] Servidor web iniciado en http://0.0.0.0:${PORT}`);
+    console.log(`[Sweetie Fox Web] Backend proxy conectado a: ${BOT_API_URL}`);
 });
