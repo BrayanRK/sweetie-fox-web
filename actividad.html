@@ -231,8 +231,15 @@
 
         feedContainer.innerHTML = filtered.map(it => {
           const isMain = Boolean(it.bot?.isMain);
-          const rawBotName = it.bot?.name || (isMain ? 'Sweetie Fox Principal' : 'Subbot');
-          const botName = escapeHtml(stripEmojis(rawBotName)) || 'Subbot';
+          const defaultName = window.CONFIG?.BOT_NAME || 'Sweetie Fox';
+          let rawBotName = it.bot?.name || defaultName;
+
+          // Si no tiene nombre asignado o es el formato generico con numero, usar el de default
+          if (!rawBotName || /^Subbot\s+(\d|\u2022|\•|\*)/i.test(rawBotName) || rawBotName === 'Subbot') {
+            rawBotName = defaultName;
+          }
+
+          const botName = escapeHtml(stripEmojis(rawBotName)) || defaultName;
           const botTypeLabel = isMain ? 'Principal' : 'Subbot';
 
           const cmdName = escapeHtml(stripEmojis(it.command || 'comando'));
