@@ -218,7 +218,17 @@
 
       function getAvatar(item) {
         if (item.avatarUrl) return item.avatarUrl;
-        return `/api/avatar/${encodeURIComponent(item.nombre || item.group_name || 'user')}`;
+        if (item.isGroup || item.jid?.endsWith('@g.us')) {
+          return `/api/avatar/${encodeURIComponent(item.jid)}`;
+        }
+        return `/api/avatar/${encodeURIComponent(item.nombre || item.jid || 'user')}`;
+      }
+
+      function getFallbackAvatar(item) {
+        if (item.isGroup || item.jid?.endsWith('@g.us')) {
+          return '/assets/img/sweetie-fox-group.jpg';
+        }
+        return '/assets/img/default-avatar.svg';
       }
 
       function render() {
@@ -229,6 +239,8 @@
           items = (battlesData?.daily?.leaderboard || []).map(b => ({
             nombre: b.group_name || 'Grupo',
             jid: b.group_jid,
+            isGroup: true,
+            avatarUrl: b.avatarUrl || `/api/avatar/${encodeURIComponent(b.group_jid)}`,
             scoreMain: `${formatNum(b.total_points)} BP`,
             scoreSub: `${b.active_members || 0} miembros activos • MVP: ${b.mvp?.name || 'Anon'} (${b.mvp?.share_percentage || 0}%)`
           }));
@@ -236,6 +248,8 @@
           items = (battlesData?.weekly?.leaderboard || []).map(b => ({
             nombre: b.group_name || 'Grupo',
             jid: b.group_jid,
+            isGroup: true,
+            avatarUrl: b.avatarUrl || `/api/avatar/${encodeURIComponent(b.group_jid)}`,
             scoreMain: `${formatNum(b.total_points)} BP`,
             scoreSub: `${b.active_members || 0} miembros activos • MVP: ${b.mvp?.name || 'Anon'} (${b.mvp?.share_percentage || 0}%)`
           }));
@@ -243,6 +257,8 @@
           items = (battlesData?.monthly?.leaderboard || []).map(b => ({
             nombre: b.group_name || 'Grupo',
             jid: b.group_jid,
+            isGroup: true,
+            avatarUrl: b.avatarUrl || `/api/avatar/${encodeURIComponent(b.group_jid)}`,
             scoreMain: `${formatNum(b.total_points)} BP`,
             scoreSub: `${b.active_members || 0} miembros activos • MVP: ${b.mvp?.name || 'Anon'} (${b.mvp?.share_percentage || 0}%)`
           }));
@@ -307,7 +323,7 @@
             <!-- Segundo Lugar -->
             <div class="podium-box rank-2">
               <span class="podium-rank-tag">2</span>
-              <img src="${getAvatar(second)}" class="podium-avatar" alt="${second.nombre}" onerror="this.src='/assets/img/default-avatar.svg'">
+              <img src="${getAvatar(second)}" class="podium-avatar" alt="${second.nombre}" onerror="this.onerror=null; this.src='${getFallbackAvatar(second)}';">
               <div class="podium-name">${second.nombre}</div>
               <div class="podium-score">${second.scoreMain}</div>
               <div class="podium-sub">${second.scoreSub}</div>
@@ -316,7 +332,7 @@
             <!-- Primer Lugar -->
             <div class="podium-box rank-1">
               <span class="podium-rank-tag">1</span>
-              <img src="${getAvatar(first)}" class="podium-avatar" alt="${first.nombre}" onerror="this.src='/assets/img/default-avatar.svg'">
+              <img src="${getAvatar(first)}" class="podium-avatar" alt="${first.nombre}" onerror="this.onerror=null; this.src='${getFallbackAvatar(first)}';">
               <div class="podium-name">${first.nombre}</div>
               <div class="podium-score">${first.scoreMain}</div>
               <div class="podium-sub">${first.scoreSub}</div>
@@ -325,7 +341,7 @@
             <!-- Tercer Lugar -->
             <div class="podium-box rank-3">
               <span class="podium-rank-tag">3</span>
-              <img src="${getAvatar(third)}" class="podium-avatar" alt="${third.nombre}" onerror="this.src='/assets/img/default-avatar.svg'">
+              <img src="${getAvatar(third)}" class="podium-avatar" alt="${third.nombre}" onerror="this.onerror=null; this.src='${getFallbackAvatar(third)}';">
               <div class="podium-name">${third.nombre}</div>
               <div class="podium-score">${third.scoreMain}</div>
               <div class="podium-sub">${third.scoreSub}</div>
@@ -357,7 +373,7 @@
             </td>
             <td>
               <div style="display: flex; align-items: center; gap: 10px;">
-                <img src="${getAvatar(it)}" style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border-dim);" alt="${it.nombre}" onerror="this.src='/assets/img/default-avatar.svg'">
+                <img src="${getAvatar(it)}" style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border-dim); object-fit: cover;" alt="${it.nombre}" onerror="this.onerror=null; this.src='${getFallbackAvatar(it)}';">
                 <span style="font-weight: 600;">${it.nombre}</span>
               </div>
             </td>
