@@ -72,7 +72,7 @@
         <div class="section-title-wrap">
           <div class="section-label">Telemetria de Red</div>
           <h1 class="section-headline">Actividad en Tiempo Real</h1>
-          <p class="section-desc">Eventos de ejecucion, respuestas de comandos y solicitudes recibidas a traves de los bots conectados.</p>
+          <p class="section-desc">Instancias de bot activas y comandos procesados en tiempo real por el sistema.</p>
         </div>
 
         <!-- Toolbar -->
@@ -81,20 +81,21 @@
             <span class="search-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             </span>
-            <input type="text" id="feed-search-field" class="input-field search-input-with-icon" placeholder="Filtrar por comando, usuario o grupo..." autocomplete="off">
+            <input type="text" id="feed-search-field" class="input-field search-input-with-icon" placeholder="Filtrar por bot, comando o chat..." autocomplete="off">
           </div>
           <div>
             <span id="feed-live-indicator" class="badge badge-fox">Monitor conectado</span>
           </div>
         </div>
 
-        <!-- Filtros de Tipo de Chat -->
+        <!-- Filtros -->
         <div class="category-tabs-scroll">
           <div class="category-tabs">
             <button type="button" class="tab-btn active" data-filter="all">Todos los Eventos</button>
+            <button type="button" class="tab-btn" data-filter="subbots">Subbots</button>
+            <button type="button" class="tab-btn" data-filter="main">Bot Principal</button>
             <button type="button" class="tab-btn" data-filter="groups">Grupos</button>
             <button type="button" class="tab-btn" data-filter="private">Mensajes Privados</button>
-            <button type="button" class="tab-btn" data-filter="owner">Administracion</button>
           </div>
         </div>
       </div>
@@ -192,19 +193,28 @@
           .replace(/'/g, '&#039;');
       }
 
+      function stripEmojis(str) {
+        return String(str || '')
+          .replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, '')
+          .replace(/[\u2713\u2714\u2605\u2606\u2715\u2716\u2717\u2794\u279c\u279d]/gu, '')
+          .trim();
+      }
+
       function renderFeed() {
         const q = (searchField?.value || '').trim().toLowerCase();
 
         const filtered = activities.filter(it => {
           let matchesFilter = true;
+          if (currentFilter === 'subbots') matchesFilter = !it.bot?.isMain;
+          if (currentFilter === 'main') matchesFilter = !!it.bot?.isMain;
           if (currentFilter === 'groups') matchesFilter = !!it.chat?.isGroup;
           if (currentFilter === 'private') matchesFilter = !it.chat?.isGroup;
-          if (currentFilter === 'owner') matchesFilter = it.user?.role === 'owner_global' || it.user?.role === 'sub_owner';
 
-          const userStr = (it.user?.name || it.user?.pushName || '').toLowerCase();
+          const botStr = (it.bot?.name || '').toLowerCase();
           const cmdStr = (it.command || '').toLowerCase();
+          const argsStr = (it.args || '').toLowerCase();
           const chatStr = (it.chat?.name || '').toLowerCase();
-          const matchesQuery = !q || userStr.includes(q) || cmdStr.includes(q) || chatStr.includes(q);
+          const matchesQuery = !q || botStr.includes(q) || cmdStr.includes(q) || argsStr.includes(q) || chatStr.includes(q);
 
           return matchesFilter && matchesQuery;
         });
@@ -220,28 +230,36 @@
         }
 
         feedContainer.innerHTML = filtered.map(it => {
-          const rawName = it.user?.name || it.user?.pushName || 'Usuario';
-          const safeName = escapeHtml(window.maskPhone(rawName));
-          const avatarUrl = it.user?.avatarUrl || `/api/avatar/${encodeURIComponent(rawName)}`;
-          const timeText = window.formatRelativeTime(it.timestamp);
-          const cmdName = escapeHtml(it.command || 'info');
-          const args = escapeHtml(it.args || '');
-          const chatName = escapeHtml(it.chat?.name || (it.chat?.isGroup ? 'Grupo' : 'Mensaje Directo'));
-          const duration = it.durationMs ? `${it.durationMs}ms` : '35ms';
+          const isMain = Boolean(it.bot?.isMain);
+          const rawBotName = it.bot?.name || (isMain ? 'Sweetie Fox Principal' : 'Subbot');
+          const botName = escapeHtml(stripEmojis(rawBotName)) || 'Subbot';
+          const botTypeLabel = isMain ? 'Principal' : 'Subbot';
 
-          let roleLabel = 'Usuario';
-          if (it.user?.role === 'owner_global') roleLabel = 'Owner Global';
-          else if (it.user?.role === 'sub_owner') roleLabel = 'Sub-Owner';
-          else if (it.user?.role === 'admin') roleLabel = 'Admin';
-          else if (it.user?.registeredName) roleLabel = 'Registrado';
+          const cmdName = escapeHtml(stripEmojis(it.command || 'comando'));
+          const rawArgs = stripEmojis(it.args || '');
+          const args = escapeHtml(rawArgs);
+
+          const rawChat = stripEmojis(it.chat?.name || '');
+          const chatName = escapeHtml(rawChat) || (it.chat?.isGroup ? 'Grupo' : 'Mensaje Directo');
+
+          const timeText = window.formatRelativeTime(it.timestamp);
+          const duration = it.durationMs ? `${it.durationMs}ms` : '35ms';
 
           return `
             <div class="feed-item">
-              <div class="feed-user-col">
-                <img src="${avatarUrl}" class="feed-avatar" alt="${safeName}" onerror="this.src='/assets/img/default-avatar.svg'">
+              <div class="feed-bot-col">
+                <div class="feed-bot-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="10" rx="2"/>
+                    <circle cx="12" cy="5" r="2"/>
+                    <path d="M12 7v4"/>
+                    <line x1="8" y1="16" x2="8" y2="16"/>
+                    <line x1="16" y1="16" x2="16" y2="16"/>
+                  </svg>
+                </div>
                 <div>
-                  <div class="feed-user-name">${safeName}</div>
-                  <span class="feed-role-tag">${roleLabel}</span>
+                  <div class="feed-bot-name">${botName}</div>
+                  <span class="feed-bot-tag">${botTypeLabel}</span>
                 </div>
               </div>
 
@@ -268,8 +286,8 @@
           const data = await res.json();
           if (!data || !data.ok) return;
 
-          activities = data.activity || data.logs || data.items || [];
-          indicator.textContent = `${activities.length} eventos monitorizados`;
+          activities = data.activities || data.activity || data.logs || data.items || [];
+          indicator.textContent = `${activities.length} eventos en vivo`;
           renderFeed();
         } catch (_) {
           indicator.textContent = 'Reconectando monitor...';
@@ -287,7 +305,7 @@
 
       searchField?.addEventListener('input', renderFeed);
       fetchActivity();
-      setInterval(fetchActivity, 4000);
+      setInterval(fetchActivity, 3500);
     });
   </script>
 </body>
