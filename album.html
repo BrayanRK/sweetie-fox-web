@@ -4,28 +4,82 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#1C1917">
-  <meta name="description" content="Album de cartas coleccionables y gacha anime de Sweetie Fox.">
-  <title>Album de Cartas — Sweetie Fox</title>
+  <meta name="description" content="Catalogo oficial de 248 cartas anime coleccionables de Sweetie Fox. Consulta estadisticas de combate, atributos y rarezas.">
+  <title>Catalogo de Cartas Anime — Sweetie Fox</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="/assets/css/main.css">
   <style>
-    .album-profile-strip {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-dim);
-      border-radius: var(--radius-md);
-      padding: 20px;
+    .cards-stats-strip {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
       margin-bottom: 24px;
     }
     @media (min-width: 640px) {
-      .album-profile-strip {
+      .cards-stats-strip {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    .cards-stat-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-dim);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .cards-stat-card .stat-value {
+      font-size: var(--text-2xl);
+      font-weight: 700;
+      font-family: var(--font-mono);
+      color: var(--text-main);
+      line-height: 1.1;
+    }
+    .cards-stat-card .stat-label {
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 500;
+    }
+
+    .player-lookup-box {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-dim);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    @media (min-width: 768px) {
+      .player-lookup-box {
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
       }
     }
+    .player-lookup-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .player-lookup-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-dim);
+      object-fit: cover;
+      background-color: var(--bg-subtle);
+    }
+    .player-lookup-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
     .cards-album-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -34,13 +88,22 @@
     @media (min-width: 640px) {
       .cards-album-grid {
         grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
       }
     }
     @media (min-width: 1024px) {
       .cards-album-grid {
         grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
       }
     }
+    @media (min-width: 1280px) {
+      .cards-album-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 18px;
+      }
+    }
+
     .gacha-card-item {
       background-color: var(--bg-surface);
       border: 1px solid var(--border-dim);
@@ -50,11 +113,23 @@
       flex-direction: column;
       transition: border-color var(--transition-fast), transform var(--transition-fast);
       cursor: pointer;
+      position: relative;
     }
     .gacha-card-item:hover {
-      border-color: var(--border-strong);
+      border-color: var(--fox-primary);
       transform: translateY(-2px);
     }
+    .gacha-card-item.rarity-ssr {
+      border-color: rgba(232, 116, 42, 0.4);
+    }
+    .gacha-card-item.rarity-ssr:hover {
+      border-color: var(--fox-primary);
+      box-shadow: 0 4px 16px rgba(232, 116, 42, 0.15);
+    }
+    .gacha-card-item.rarity-sr {
+      border-color: rgba(138, 127, 116, 0.4);
+    }
+
     .gacha-img-wrap {
       width: 100%;
       aspect-ratio: 3 / 4;
@@ -66,6 +141,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: block;
     }
     .gacha-badge-overlay {
       position: absolute;
@@ -74,11 +150,24 @@
       font-size: 0.6875rem;
       font-family: var(--font-mono);
       font-weight: 700;
-      padding: 2px 6px;
+      padding: 3px 7px;
       border-radius: var(--radius-sm);
-      background-color: rgba(28, 25, 23, 0.85);
+      background-color: rgba(28, 25, 23, 0.9);
       border: 1px solid var(--border-strong);
+      color: var(--text-main);
+      backdrop-filter: blur(4px);
     }
+    .gacha-badge-overlay.badge-ssr {
+      background-color: rgba(201, 90, 20, 0.9);
+      border-color: var(--fox-primary);
+      color: #FFFFFF;
+    }
+    .gacha-badge-overlay.badge-sr {
+      background-color: rgba(70, 65, 60, 0.9);
+      border-color: var(--border-strong);
+      color: var(--fox-cream);
+    }
+
     .gacha-qty-overlay {
       position: absolute;
       top: 8px;
@@ -86,13 +175,17 @@
       font-size: 0.6875rem;
       font-family: var(--font-mono);
       font-weight: 700;
-      padding: 2px 6px;
+      padding: 3px 7px;
       border-radius: var(--radius-sm);
       background-color: var(--fox-primary);
       color: #FFFFFF;
     }
+
     .gacha-meta {
       padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
     .gacha-name {
       font-size: var(--text-sm);
@@ -108,15 +201,24 @@
       font-size: 0.72rem;
       font-family: var(--font-mono);
       color: var(--text-muted);
-      margin-top: 6px;
       padding-top: 6px;
       border-top: 1px solid var(--border-dim);
     }
+    .gacha-stat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .gacha-stat-val {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
     .inspect-dialog {
       position: fixed;
       inset: 0;
       z-index: 100;
-      background-color: rgba(0, 0, 0, 0.75);
+      background-color: rgba(0, 0, 0, 0.8);
       display: none;
       align-items: center;
       justify-content: center;
@@ -166,6 +268,7 @@
           <a href="/vincular" class="nav-link">Vincular</a>
           <a href="/ranking" class="nav-link">Ranking</a>
           <a href="/actividad" class="nav-link">Actividad</a>
+          <a href="/cartas" class="nav-link active">Cartas</a>
         </nav>
 
         <div class="nav-actions">
@@ -190,6 +293,7 @@
         <li><a href="/vincular" class="mobile-nav-link">Vincular Subbot</a></li>
         <li><a href="/ranking" class="mobile-nav-link">Ranking y Batallas</a></li>
         <li><a href="/actividad" class="mobile-nav-link">Actividad en Vivo</a></li>
+        <li><a href="/cartas" class="mobile-nav-link active">Cartas Anime</a></li>
       </ul>
     </div>
   </header>
@@ -198,30 +302,51 @@
     <section class="section" style="padding-bottom: 1.5rem;">
       <div class="container">
         <div class="section-title-wrap">
-          <div class="section-label">Gacha & Coleccionismo</div>
-          <h1 id="album-page-title" class="section-headline">Album de Cartas Anime</h1>
-          <p id="album-page-desc" class="section-desc">Inspecciona el inventario de cartas obtenidas mediante el comando de gacha.</p>
+          <div class="section-label">Gacha & Cartas Coleccionables</div>
+          <h1 id="album-page-title" class="section-headline">Catalogo de Cartas Anime</h1>
+          <p id="album-page-desc" class="section-desc">Explora la coleccion oficial de cartas anime disponibles en Sweetie Fox, sus estadisticas de combate y rarezas.</p>
         </div>
 
-        <!-- Perfil del Jugador -->
-        <div class="album-profile-strip">
-          <div style="display: flex; align-items: center; gap: 14px;">
-            <img id="player-avatar-img" src="/assets/img/default-avatar.svg" style="width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border-dim);" alt="Avatar">
+        <!-- Metricas Globales de Cartas -->
+        <div class="cards-stats-strip">
+          <div class="cards-stat-card">
+            <span class="stat-value" id="stat-total-cards">--</span>
+            <span class="stat-label">Total Disponibles</span>
+          </div>
+          <div class="cards-stat-card">
+            <span class="stat-value" id="stat-ssr-cards" style="color: var(--fox-primary);">--</span>
+            <span class="stat-label">Rareza SSR</span>
+          </div>
+          <div class="cards-stat-card">
+            <span class="stat-value" id="stat-sr-cards">--</span>
+            <span class="stat-label">Rareza SR</span>
+          </div>
+          <div class="cards-stat-card">
+            <span class="stat-value" id="stat-r-cards">--</span>
+            <span class="stat-label">Rareza R</span>
+          </div>
+        </div>
+
+        <!-- Barra de Consulta Opcional de Jugador -->
+        <div class="player-lookup-box">
+          <div class="player-lookup-info">
+            <img id="player-avatar-img" class="player-lookup-avatar" src="/favicon.svg" alt="Avatar">
             <div>
-              <div id="player-name-display" style="font-weight: 600; font-size: var(--text-md);">Catalogo Maestro</div>
-              <div id="player-status-line" style="font-size: var(--text-xs); color: var(--text-muted);">Coleccion global de cartas disponibles</div>
+              <div id="player-name-display" style="font-weight: 600; font-size: var(--text-sm); color: var(--text-main);">Catalogo Maestro Global</div>
+              <div id="player-status-line" style="font-size: var(--text-xs); color: var(--text-muted);">Mostrando todas las cartas registradas</div>
             </div>
           </div>
 
-          <div style="display: flex; gap: 8px;">
+          <div class="player-lookup-controls">
             <div class="search-box" style="max-width: 240px;">
-              <input type="text" id="album-user-search" class="input-field" style="min-height: 38px; font-size: 14px;" placeholder="Buscar usuario..." autocomplete="off">
+              <input type="text" id="album-user-search" class="input-field" style="font-size: 14px; padding: 0 12px;" placeholder="Numero o usuario..." autocomplete="off">
             </div>
-            <button type="button" id="btn-load-user" class="btn btn-secondary btn-sm">Cargar</button>
+            <button type="button" id="btn-load-user" class="btn btn-secondary btn-sm">Consultar Jugador</button>
+            <button type="button" id="btn-reset-catalog" class="btn btn-tertiary btn-sm" style="display: none;">Ver Todas</button>
           </div>
         </div>
 
-        <!-- Toolbar Filtro -->
+        <!-- Toolbar Filtro y Busqueda -->
         <div class="catalog-toolbar">
           <div class="search-box">
             <span class="search-icon">
@@ -230,11 +355,25 @@
             <input type="text" id="card-search-field" class="input-field search-input-with-icon" placeholder="Filtrar por nombre de personaje..." autocomplete="off">
           </div>
 
-          <div class="category-tabs">
-            <button type="button" class="tab-btn active" data-rarity="ALL">Todas</button>
-            <button type="button" class="tab-btn" data-rarity="SSR">SSR</button>
-            <button type="button" class="tab-btn" data-rarity="SR">SR</button>
-            <button type="button" class="tab-btn" data-rarity="R">R</button>
+          <div class="category-tabs-scroll">
+            <div class="category-tabs">
+              <button type="button" class="tab-btn active" data-rarity="ALL">
+                <span>Todas</span>
+                <span class="tab-badge" id="tab-badge-all">--</span>
+              </button>
+              <button type="button" class="tab-btn" data-rarity="SSR">
+                <span>SSR</span>
+                <span class="tab-badge" id="tab-badge-ssr">--</span>
+              </button>
+              <button type="button" class="tab-btn" data-rarity="SR">
+                <span>SR</span>
+                <span class="tab-badge" id="tab-badge-sr">--</span>
+              </button>
+              <button type="button" class="tab-btn" data-rarity="R">
+                <span>R</span>
+                <span class="tab-badge" id="tab-badge-r">--</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -245,7 +384,7 @@
       <div class="container">
         <div id="album-cards-grid" class="cards-album-grid">
           <div style="grid-column: 1 / -1; padding: 48px; text-align: center; color: var(--text-muted);">
-            Cargando coleccion...
+            Cargando coleccion de cartas...
           </div>
         </div>
       </div>
@@ -260,22 +399,22 @@
         <button type="button" id="btn-close-modal" class="btn btn-tertiary btn-sm" aria-label="Cerrar ventana">Cerrar</button>
       </div>
 
-      <img id="modal-card-img" src="" alt="Carta" style="width: 100%; border-radius: var(--radius-md); aspect-ratio: 3/4; object-fit: cover; margin-bottom: 14px;">
+      <img id="modal-card-img" src="/favicon.svg" alt="Carta" style="width: 100%; border-radius: var(--radius-md); aspect-ratio: 3/4; object-fit: cover; margin-bottom: 14px;">
 
       <h2 id="modal-card-name" style="font-size: var(--text-lg); font-weight: 600; margin-bottom: 8px;">Personaje</h2>
 
       <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border-dim); font-family: var(--font-mono); font-size: var(--text-xs);">
-        <div style="background-color: var(--bg-elevated); padding: 8px; border-radius: var(--radius-sm);">
-          <div style="color: var(--text-faint);">ATK</div>
-          <div id="modal-atk" style="font-weight: 700; margin-top: 4px;">--</div>
+        <div style="background-color: var(--bg-elevated); padding: 10px 8px; border-radius: var(--radius-sm);">
+          <div style="color: var(--text-muted); font-size: 0.6875rem;">ATK</div>
+          <div id="modal-atk" style="font-weight: 700; margin-top: 4px; font-size: var(--text-base);">--</div>
         </div>
-        <div style="background-color: var(--bg-elevated); padding: 8px; border-radius: var(--radius-sm);">
-          <div style="color: var(--text-faint);">DEF</div>
-          <div id="modal-def" style="font-weight: 700; margin-top: 4px;">--</div>
+        <div style="background-color: var(--bg-elevated); padding: 10px 8px; border-radius: var(--radius-sm);">
+          <div style="color: var(--text-muted); font-size: 0.6875rem;">DEF</div>
+          <div id="modal-def" style="font-weight: 700; margin-top: 4px; font-size: var(--text-base);">--</div>
         </div>
-        <div style="background-color: var(--bg-elevated); padding: 8px; border-radius: var(--radius-sm);">
-          <div style="color: var(--text-faint);">HP</div>
-          <div id="modal-hp" style="font-weight: 700; margin-top: 4px;">--</div>
+        <div style="background-color: var(--bg-elevated); padding: 10px 8px; border-radius: var(--radius-sm);">
+          <div style="color: var(--text-muted); font-size: 0.6875rem;">HP</div>
+          <div id="modal-hp" style="font-weight: 700; margin-top: 4px; font-size: var(--text-base);">--</div>
         </div>
       </div>
     </div>
@@ -313,6 +452,7 @@
             <li><a href="/vincular" class="footer-link">Vincular Subbot</a></li>
             <li><a href="/ranking" class="footer-link">Ranking y Batallas</a></li>
             <li><a href="/actividad" class="footer-link">Actividad en Vivo</a></li>
+            <li><a href="/cartas" class="footer-link">Catalogo de Cartas</a></li>
           </ul>
         </div>
 
@@ -354,7 +494,19 @@
       const statusLine = document.getElementById('player-status-line');
       const userSearchInput = document.getElementById('album-user-search');
       const loadUserBtn = document.getElementById('btn-load-user');
+      const resetCatalogBtn = document.getElementById('btn-reset-catalog');
       const avatarImg = document.getElementById('player-avatar-img');
+
+      // Badges y metricas
+      const elStatTotal = document.getElementById('stat-total-cards');
+      const elStatSSR = document.getElementById('stat-ssr-cards');
+      const elStatSR = document.getElementById('stat-sr-cards');
+      const elStatR = document.getElementById('stat-r-cards');
+
+      const elTabAll = document.getElementById('tab-badge-all');
+      const elTabSSR = document.getElementById('tab-badge-ssr');
+      const elTabSR = document.getElementById('tab-badge-sr');
+      const elTabR = document.getElementById('tab-badge-r');
 
       // Modal
       const modal = document.getElementById('inspect-dialog');
@@ -367,42 +519,77 @@
       const modalHp = document.getElementById('modal-hp');
 
       let currentCards = [];
+      let masterCards = [];
       let selectedRarity = 'ALL';
+      let isUserMode = false;
+
+      function stripEmojis(str) {
+        return (str || '').replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, '').trim();
+      }
+
+      function updateCounts(cards) {
+        const total = cards.length;
+        let ssr = 0, sr = 0, r = 0;
+        cards.forEach(c => {
+          const rar = (c.rarity || 'R').toUpperCase();
+          if (rar === 'SSR') ssr++;
+          else if (rar === 'SR') sr++;
+          else r++;
+        });
+
+        if (elStatTotal) elStatTotal.textContent = total;
+        if (elStatSSR) elStatSSR.textContent = ssr;
+        if (elStatSR) elStatSR.textContent = sr;
+        if (elStatR) elStatR.textContent = r;
+
+        if (elTabAll) elTabAll.textContent = total;
+        if (elTabSSR) elTabSSR.textContent = ssr;
+        if (elTabSR) elTabSR.textContent = sr;
+        if (elTabR) elTabR.textContent = r;
+      }
 
       function render() {
         const q = (searchCardField?.value || '').trim().toLowerCase();
         const filtered = currentCards.filter(c => {
-          const matchRarity = (selectedRarity === 'ALL') || (c.rarity?.toUpperCase() === selectedRarity);
-          const matchQ = !q || c.name.toLowerCase().includes(q);
+          const matchRarity = (selectedRarity === 'ALL') || ((c.rarity || 'R').toUpperCase() === selectedRarity);
+          const matchQ = !q || (c.name && c.name.toLowerCase().includes(q));
           return matchRarity && matchQ;
         });
 
         if (filtered.length === 0) {
           grid.innerHTML = `
             <div style="grid-column: 1 / -1; padding: 48px; text-align: center; color: var(--text-muted);">
-              No se encontraron cartas que coincidan con los filtros.
+              No se encontraron cartas que coincidan con los filtros seleccionados.
             </div>
           `;
           return;
         }
 
-        grid.innerHTML = filtered.map(c => `
-          <div class="gacha-card-item" data-id="${c.id}">
-            <div class="gacha-img-wrap">
-              <span class="gacha-badge-overlay">${c.rarity || 'R'}</span>
-              ${c.quantity ? `<span class="gacha-qty-overlay">x${c.quantity}</span>` : ''}
-              <img src="${c.imageUrl || `/assets/gacha/${c.id}.jpg`}" alt="${c.name}" class="gacha-img" loading="lazy" onerror="this.src='/favicon.svg'">
-            </div>
-            <div class="gacha-meta">
-              <div class="gacha-name">${c.name}</div>
-              <div class="gacha-stats">
-                <span>ATK ${c.attack || 50}</span>
-                <span>DEF ${c.defense || 50}</span>
-                <span>HP ${c.health || 50}</span>
+        grid.innerHTML = filtered.map(c => {
+          const safeName = stripEmojis(c.name || 'Personaje');
+          const rar = (c.rarity || 'R').toUpperCase();
+          const rarClass = rar === 'SSR' ? 'rarity-ssr' : (rar === 'SR' ? 'rarity-sr' : '');
+          const badgeClass = rar === 'SSR' ? 'badge-ssr' : (rar === 'SR' ? 'badge-sr' : '');
+          const cardImg = `/api/gacha/image/${c.id}`;
+
+          return `
+            <div class="gacha-card-item ${rarClass}" data-id="${c.id}">
+              <div class="gacha-img-wrap">
+                <span class="gacha-badge-overlay ${badgeClass}">${rar}</span>
+                ${c.quantity ? `<span class="gacha-qty-overlay">x${c.quantity}</span>` : ''}
+                <img src="${cardImg}" alt="${safeName}" class="gacha-img" loading="lazy" onerror="this.onerror=null; this.src='${c.imageUrl || '/favicon.svg'}';">
+              </div>
+              <div class="gacha-meta">
+                <div class="gacha-name" title="${safeName}">${safeName}</div>
+                <div class="gacha-stats">
+                  <span class="gacha-stat-badge">ATK <span class="gacha-stat-val">${c.attack || 50}</span></span>
+                  <span class="gacha-stat-badge">DEF <span class="gacha-stat-val">${c.defense || 50}</span></span>
+                  <span class="gacha-stat-badge">HP <span class="gacha-stat-val">${c.health || 50}</span></span>
+                </div>
               </div>
             </div>
-          </div>
-        `).join('');
+          `;
+        }).join('');
 
         grid.querySelectorAll('.gacha-card-item').forEach(el => {
           el.addEventListener('click', () => {
@@ -410,9 +597,16 @@
             const card = currentCards.find(c => String(c.id) === String(id));
             if (!card) return;
 
-            modalImg.src = card.imageUrl || `/assets/gacha/${card.id}.jpg`;
-            modalName.textContent = card.name;
-            modalRarity.textContent = card.rarity || 'R';
+            const safeName = stripEmojis(card.name || 'Personaje');
+            const rar = (card.rarity || 'R').toUpperCase();
+
+            modalImg.src = `/api/gacha/image/${card.id}`;
+            modalImg.onerror = function() {
+              this.onerror = null;
+              this.src = card.imageUrl || '/favicon.svg';
+            };
+            modalName.textContent = safeName;
+            modalRarity.textContent = rar;
             modalAtk.textContent = card.attack || 50;
             modalDef.textContent = card.defense || 50;
             modalHp.textContent = card.health || 50;
@@ -421,50 +615,80 @@
         });
       }
 
-      closeModalBtn?.addEventListener('click', () => {
-        modal.classList.remove('open');
-      });
+      function closeModal() {
+        modal?.classList.remove('open');
+      }
 
+      closeModalBtn?.addEventListener('click', closeModal);
       modal?.addEventListener('click', (e) => {
-        if (e.target === modal) modal.classList.remove('open');
+        if (e.target === modal) closeModal();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal?.classList.contains('open')) closeModal();
       });
 
       async function loadUser(username) {
-        if (!username) {
+        const cleanUser = stripEmojis(username);
+        if (!cleanUser) {
           loadMaster();
           return;
         }
         try {
-          nameDisplay.textContent = username;
-          statusLine.textContent = 'Cargando inventario de usuario...';
-          avatarImg.src = `/api/avatar/${encodeURIComponent(username)}`;
+          isUserMode = true;
+          nameDisplay.textContent = `Inventario: ${cleanUser}`;
+          statusLine.textContent = 'Cargando cartas del jugador...';
+          avatarImg.src = `/api/avatar/${encodeURIComponent(cleanUser)}`;
+          avatarImg.onerror = function() {
+            this.onerror = null;
+            this.src = '/favicon.svg';
+          };
+          if (resetCatalogBtn) resetCatalogBtn.style.display = 'inline-flex';
 
-          const res = await fetch(`/api/gacha/user/${encodeURIComponent(username)}`);
+          const res = await fetch(`/api/gacha/user/${encodeURIComponent(cleanUser)}`);
           const data = await res.json();
-          if (!data || !data.ok || !data.cards) {
-            statusLine.textContent = 'Usuario sin inventario o no registrado';
-            grid.innerHTML = '<div style="grid-column: 1 / -1; padding: 48px; text-align: center; color: var(--text-muted);">El usuario no tiene cartas registradas.</div>';
+          if (!data || !data.ok || !data.cards || data.cards.length === 0) {
+            statusLine.textContent = 'Usuario sin cartas registradas o no encontrado';
+            currentCards = [];
+            updateCounts([]);
+            grid.innerHTML = '<div style="grid-column: 1 / -1; padding: 48px; text-align: center; color: var(--text-muted);">El usuario consultado no posee cartas registradas.</div>';
             return;
           }
 
           currentCards = data.cards;
-          statusLine.textContent = `${currentCards.length} cartas en coleccion`;
+          statusLine.textContent = `${currentCards.length} cartas en coleccion personal`;
+          updateCounts(currentCards);
           render();
         } catch (_) {
-          statusLine.textContent = 'Error al cargar inventario';
+          statusLine.textContent = 'Error al consultar inventario del jugador';
         }
       }
 
       async function loadMaster() {
         try {
-          nameDisplay.textContent = 'Catalogo Maestro';
-          statusLine.textContent = 'Coleccion global de cartas disponibles';
+          isUserMode = false;
+          nameDisplay.textContent = 'Catalogo Maestro Global';
+          statusLine.textContent = 'Mostrando todas las cartas registradas en Sweetie Fox';
+          avatarImg.src = '/favicon.svg';
+          if (userSearchInput) userSearchInput.value = '';
+          if (resetCatalogBtn) resetCatalogBtn.style.display = 'none';
+
+          if (masterCards.length > 0) {
+            currentCards = masterCards;
+            updateCounts(currentCards);
+            render();
+            return;
+          }
+
           const res = await fetch('/api/gacha/cards');
           const data = await res.json();
           if (data && data.cards) {
+            masterCards = data.cards;
             currentCards = data.cards;
             statusLine.textContent = `${currentCards.length} cartas disponibles en el juego`;
+            updateCounts(currentCards);
             render();
+          } else {
+            statusLine.textContent = 'No se pudieron recuperar las cartas del servidor';
           }
         } catch (_) {
           statusLine.textContent = 'Sin conexion al backend de cartas';
@@ -483,12 +707,23 @@
       searchCardField?.addEventListener('input', render);
 
       loadUserBtn?.addEventListener('click', () => {
-        const u = userSearchInput.value.trim();
+        const u = (userSearchInput?.value || '').trim();
         loadUser(u);
       });
 
+      userSearchInput?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const u = (userSearchInput?.value || '').trim();
+          loadUser(u);
+        }
+      });
+
+      resetCatalogBtn?.addEventListener('click', () => {
+        loadMaster();
+      });
+
       if (initialUser) {
-        userSearchInput.value = initialUser;
+        if (userSearchInput) userSearchInput.value = initialUser;
         loadUser(initialUser);
       } else {
         loadMaster();

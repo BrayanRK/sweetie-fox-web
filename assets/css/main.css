@@ -386,8 +386,8 @@ ul, ol {
 }
 
 .btn-sm {
-  min-height: 36px;
-  padding: 0 12px;
+  min-height: var(--touch-target);
+  padding: 0 14px;
   font-size: var(--text-xs);
 }
 
@@ -772,7 +772,7 @@ ul, ol {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  min-height: 38px;
+  min-height: var(--touch-target);
   padding: 0 14px;
   font-size: var(--text-xs);
   font-weight: 500;

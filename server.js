@@ -179,7 +179,7 @@ app.get(['/actividad', '/actividad.html', '/logs', '/logs.html'], (req, res) => 
     res.sendFile(path.join(__dirname, 'actividad.html'));
 });
 
-app.get(['/album', '/album.html'], (req, res) => {
+app.get(['/cartas', '/cartas.html', '/album', '/album.html'], (req, res) => {
     res.sendFile(path.join(__dirname, 'album.html'));
 });
 
