@@ -102,6 +102,9 @@ setInterval(() => {
 }, 2 * 60 * 1000).unref();
 
 function getClientIp(req) {
+    if (req.headers['cf-connecting-ip']) {
+        return req.headers['cf-connecting-ip'].trim();
+    }
     const forwarded = req.headers['x-forwarded-for'];
     if (forwarded) {
         return forwarded.split(',')[0].trim();
@@ -168,15 +171,15 @@ function isAllowedReferer(req) {
 const crypto = require('crypto');
 const IMAGE_SECRET = process.env.IMAGE_SECRET || 'sweetie-fox-img-secret-key-2026';
 
-function generateImgToken(ip, exp) {
-    return crypto.createHmac('sha256', IMAGE_SECRET).update(`${ip}:${exp}`).digest('hex').substring(0, 16);
+function generateImgToken(exp) {
+    return crypto.createHmac('sha256', IMAGE_SECRET).update(String(exp)).digest('hex').substring(0, 16);
 }
 
-function verifyImgToken(ip, token, exp) {
+function verifyImgToken(token, exp) {
     if (!token || !exp) return false;
     const expNum = Number(exp);
     if (isNaN(expNum) || Date.now() > expNum) return false;
-    const expected = generateImgToken(ip, expNum);
+    const expected = generateImgToken(expNum);
     return token === expected;
 }
 
@@ -185,9 +188,8 @@ app.get('/api/gacha/session', (req, res) => {
     if (!isAllowedReferer(req)) {
         return res.status(403).json({ ok: false, error: 'Forbidden' });
     }
-    const ip = getClientIp(req);
     const exp = Date.now() + 10 * 60 * 1000; // 10 minutos
-    const token = generateImgToken(ip, exp);
+    const token = generateImgToken(exp);
     res.json({
         ok: true,
         token,
@@ -218,8 +220,7 @@ app.get(['/api/gacha/image/:id', '/assets/gacha/:id'], (req, res) => {
 
     // 3. Verificación de URL Firmada
     const { token, exp } = req.query;
-    const clientIp = getClientIp(req);
-    if (!verifyImgToken(clientIp, token, exp)) {
+    if (!verifyImgToken(token, exp)) {
         return res.status(403).json({
             ok: false,
             error: 'Forbidden',
