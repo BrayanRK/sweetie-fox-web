@@ -164,6 +164,37 @@ function isAllowedReferer(req) {
     return true;
 }
 
+// ─── SEGURIDAD: URLs FIRMADAS (SIGNED URLS CON EXPIRACIÓN) ───────
+const crypto = require('crypto');
+const IMAGE_SECRET = process.env.IMAGE_SECRET || 'sweetie-fox-img-secret-key-2026';
+
+function generateImgToken(ip, exp) {
+    return crypto.createHmac('sha256', IMAGE_SECRET).update(`${ip}:${exp}`).digest('hex').substring(0, 16);
+}
+
+function verifyImgToken(ip, token, exp) {
+    if (!token || !exp) return false;
+    const expNum = Number(exp);
+    if (isNaN(expNum) || Date.now() > expNum) return false;
+    const expected = generateImgToken(ip, expNum);
+    return token === expected;
+}
+
+// Endpoint para que la web obtenga una firma de sesion efímera (duración: 10 minutos)
+app.get('/api/gacha/session', (req, res) => {
+    if (!isAllowedReferer(req)) {
+        return res.status(403).json({ ok: false, error: 'Forbidden' });
+    }
+    const ip = getClientIp(req);
+    const exp = Date.now() + 10 * 60 * 1000; // 10 minutos
+    const token = generateImgToken(ip, exp);
+    res.json({
+        ok: true,
+        token,
+        exp
+    });
+});
+
 // Servir imagenes gacha locales o fallback a VPS con seguridad por capas
 app.get(['/api/gacha/image/:id', '/assets/gacha/:id'], (req, res) => {
     // 1. Anti-Hotlinking
@@ -182,6 +213,17 @@ app.get(['/api/gacha/image/:id', '/assets/gacha/:id'], (req, res) => {
             ok: false,
             error: 'Too Many Requests',
             message: 'Descarga masiva detectada. Acceso temporalmente restringido.'
+        });
+    }
+
+    // 3. Verificación de URL Firmada
+    const { token, exp } = req.query;
+    const clientIp = getClientIp(req);
+    if (!verifyImgToken(clientIp, token, exp)) {
+        return res.status(403).json({
+            ok: false,
+            error: 'Forbidden',
+            message: 'Enlace expirado o no autorizado. Se requiere firma efimera.'
         });
     }
 

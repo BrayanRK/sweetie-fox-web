@@ -634,6 +634,43 @@
         if (elTabN) elTabN.textContent = n;
       }
 
+      // ─── GESTOR DE FIRMAS EFÍMERAS (SIGNED URLS) ────────────────────
+      let imgSession = null;
+
+      async function getImgSession() {
+        if (imgSession && Date.now() < (imgSession.exp - 60000)) {
+          return imgSession;
+        }
+        try {
+          const res = await fetch('/api/gacha/session');
+          const data = await res.json();
+          if (data && data.ok) {
+            imgSession = data;
+            return imgSession;
+          }
+        } catch (_) {}
+        return imgSession;
+      }
+
+      function getSignedCardUrl(cardId) {
+        if (imgSession && imgSession.token && imgSession.exp) {
+          return `/api/gacha/image/${cardId}?token=${imgSession.token}&exp=${imgSession.exp}`;
+        }
+        return `/api/gacha/image/${cardId}`;
+      }
+
+      window.reloadCardImgWithNewToken = async function(imgEl, cardId) {
+        imgSession = null;
+        const sess = await getImgSession();
+        if (sess) {
+          imgEl.src = `/api/gacha/image/${cardId}?token=${sess.token}&exp=${sess.exp}&_t=${Date.now()}`;
+        }
+      };
+
+      setInterval(() => {
+        getImgSession();
+      }, 7 * 60 * 1000);
+
       function render() {
         const q = (searchCardField?.value || '').trim().toLowerCase();
         const filtered = currentCards.filter(c => {
@@ -656,14 +693,14 @@
           const rar = (c.rarity || 'R').toUpperCase();
           const rarClass = rar === 'UR' ? 'rarity-ur' : (rar === 'SSR' ? 'rarity-ssr' : (rar === 'SR' ? 'rarity-sr' : (rar === 'N' ? 'rarity-n' : '')));
           const badgeClass = rar === 'UR' ? 'badge-ur' : (rar === 'SSR' ? 'badge-ssr' : (rar === 'SR' ? 'badge-sr' : (rar === 'N' ? 'badge-n' : '')));
-          const cardImg = `/api/gacha/image/${c.id}`;
+          const cardImg = getSignedCardUrl(c.id);
 
           return `
             <div class="gacha-card-item ${rarClass}" data-id="${c.id}">
               <div class="gacha-img-wrap">
                 <span class="gacha-badge-overlay ${badgeClass}">${rar}</span>
                 ${c.quantity ? `<span class="gacha-qty-overlay">x${c.quantity}</span>` : ''}
-                <img src="${cardImg}" alt="${safeName}" class="gacha-img" loading="lazy" draggable="false" onerror="this.onerror=null; this.src='${c.imageUrl || '/favicon.svg'}';">
+                <img src="${cardImg}" alt="${safeName}" class="gacha-img" loading="lazy" draggable="false" onerror="if(!this.dataset.retried){this.dataset.retried='1'; reloadCardImgWithNewToken(this, '${c.id}');} else {this.onerror=null; this.src='${c.imageUrl || '/favicon.svg'}';}">
                 <div class="gacha-img-shield" oncontextmenu="return false;"></div>
                 <span class="gacha-brand-tag">Sweetie Fox</span>
               </div>
@@ -688,7 +725,7 @@
             const safeName = stripEmojis(card.name || 'Personaje');
             const rar = (card.rarity || 'R').toUpperCase();
 
-            modalImg.src = `/api/gacha/image/${card.id}`;
+            modalImg.src = getSignedCardUrl(card.id);
             modalImg.onerror = function() {
               this.onerror = null;
               this.src = card.imageUrl || '/favicon.svg';
@@ -716,6 +753,7 @@
       });
 
       async function loadUser(username) {
+        await getImgSession();
         const cleanUser = stripEmojis(username);
         if (!cleanUser) {
           loadMaster();
@@ -757,6 +795,7 @@
 
       async function loadMaster() {
         try {
+          await getImgSession();
           isUserMode = false;
           nameDisplay.textContent = 'Catalogo Maestro Global';
           statusLine.textContent = 'Mostrando todas las cartas registradas en Sweetie Fox';
