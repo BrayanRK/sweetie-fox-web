@@ -159,6 +159,34 @@
       height: 100%;
       object-fit: cover;
       display: block;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-user-drag: none;
+    }
+    .gacha-img-shield {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      background: transparent;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+    .gacha-brand-tag {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      font-size: 0.5625rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: rgba(255, 255, 255, 0.4);
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95);
+      pointer-events: none;
+      z-index: 5;
+      user-select: none;
     }
     .gacha-badge-overlay {
       position: absolute;
@@ -443,7 +471,11 @@
         <button type="button" id="btn-close-modal" class="btn btn-tertiary btn-sm" aria-label="Cerrar ventana">Cerrar</button>
       </div>
 
-      <img id="modal-card-img" src="/favicon.svg" alt="Carta" style="width: 100%; border-radius: var(--radius-md); aspect-ratio: 3/4; object-fit: cover; margin-bottom: 14px;">
+      <div style="position: relative; width: 100%; aspect-ratio: 3/4; margin-bottom: 14px; border-radius: var(--radius-md); overflow: hidden; background-color: var(--bg-subtle);">
+        <img id="modal-card-img" src="/favicon.svg" alt="Carta" draggable="false" style="width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none;">
+        <div class="gacha-img-shield" oncontextmenu="return false;"></div>
+        <span class="gacha-brand-tag" style="bottom: 10px; right: 12px; font-size: 0.6875rem; color: rgba(255, 255, 255, 0.55);">Sweetie Fox • fox.brayanrk.com</span>
+      </div>
 
       <h2 id="modal-card-name" style="font-size: var(--text-lg); font-weight: 600; margin-bottom: 8px;">Personaje</h2>
 
@@ -631,7 +663,9 @@
               <div class="gacha-img-wrap">
                 <span class="gacha-badge-overlay ${badgeClass}">${rar}</span>
                 ${c.quantity ? `<span class="gacha-qty-overlay">x${c.quantity}</span>` : ''}
-                <img src="${cardImg}" alt="${safeName}" class="gacha-img" loading="lazy" onerror="this.onerror=null; this.src='${c.imageUrl || '/favicon.svg'}';">
+                <img src="${cardImg}" alt="${safeName}" class="gacha-img" loading="lazy" draggable="false" onerror="this.onerror=null; this.src='${c.imageUrl || '/favicon.svg'}';">
+                <div class="gacha-img-shield" oncontextmenu="return false;"></div>
+                <span class="gacha-brand-tag">Sweetie Fox</span>
               </div>
               <div class="gacha-meta">
                 <div class="gacha-name" title="${safeName}">${safeName}</div>
@@ -788,6 +822,27 @@
       } else {
         loadMaster();
       }
+
+      // ─── SEGURIDAD FRONTEND: ANTI-CLIC DERECHO, ARRASTRAR Y GUARDADO ────
+      document.addEventListener('contextmenu', (e) => {
+        if (e.target.closest('.gacha-img-wrap') || e.target.closest('.inspect-modal-box') || e.target.tagName === 'IMG') {
+          e.preventDefault();
+          return false;
+        }
+      }, false);
+
+      document.addEventListener('dragstart', (e) => {
+        if (e.target.tagName === 'IMG' || e.target.closest('.gacha-img-wrap') || e.target.closest('.inspect-modal-box')) {
+          e.preventDefault();
+          return false;
+        }
+      }, false);
+
+      document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S')) {
+          e.preventDefault();
+        }
+      });
     });
   </script>
 </body>

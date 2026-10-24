@@ -86,8 +86,105 @@ app.get(['/api/actualizar', '/actualizar', '/update'], (req, res) => {
     }
 });
 
-// Servir imagenes gacha locales o fallback a VPS
+// ─── SEGURIDAD: RATE LIMITING & ANTI-SCRAPING ───────────────────
+const imageRateLimitMap = new Map();
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minuto
+const RATE_LIMIT_MAX_REQUESTS = 120; // Maximo 120 imagenes/min por IP
+
+// Limpieza periodica de memoria cada 2 minutos
+setInterval(() => {
+    const now = Date.now();
+    for (const [ip, data] of imageRateLimitMap.entries()) {
+        if (now > data.resetTime) {
+            imageRateLimitMap.delete(ip);
+        }
+    }
+}, 2 * 60 * 1000).unref();
+
+function getClientIp(req) {
+    const forwarded = req.headers['x-forwarded-for'];
+    if (forwarded) {
+        return forwarded.split(',')[0].trim();
+    }
+    return req.socket.remoteAddress || '127.0.0.1';
+}
+
+function checkRateLimit(req) {
+    const ip = getClientIp(req);
+    if (ip === '127.0.0.1' || ip === '::1') return true;
+    const now = Date.now();
+    let entry = imageRateLimitMap.get(ip);
+    if (!entry || now > entry.resetTime) {
+        entry = { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS };
+        imageRateLimitMap.set(ip, entry);
+        return true;
+    }
+    entry.count++;
+    return entry.count <= RATE_LIMIT_MAX_REQUESTS;
+}
+
+function isAllowedReferer(req) {
+    const referer = (req.headers['referer'] || req.headers['referrer'] || '').toLowerCase();
+    const origin = (req.headers['origin'] || '').toLowerCase();
+    const secFetchSite = (req.headers['sec-fetch-site'] || '').toLowerCase();
+
+    // Bloquear si el navegador indica solicitud cruzada no autorizada
+    if (secFetchSite === 'cross-site') {
+        return false;
+    }
+
+    const allowedDomains = [
+        'fox.brayanrk.com',
+        'bot.brayanrk.com',
+        'brayanrk.com',
+        'localhost',
+        '127.0.0.1'
+    ];
+
+    if (referer) {
+        try {
+            const refHost = new URL(referer).hostname.toLowerCase();
+            const allowed = allowedDomains.some(d => refHost === d || refHost.endsWith('.' + d));
+            if (!allowed) return false;
+        } catch (_) {
+            return false;
+        }
+    }
+
+    if (origin) {
+        try {
+            const origHost = new URL(origin).hostname.toLowerCase();
+            const allowed = allowedDomains.some(d => origHost === d || origHost.endsWith('.' + d));
+            if (!allowed) return false;
+        } catch (_) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// Servir imagenes gacha locales o fallback a VPS con seguridad por capas
 app.get(['/api/gacha/image/:id', '/assets/gacha/:id'], (req, res) => {
+    // 1. Anti-Hotlinking
+    if (!isAllowedReferer(req)) {
+        return res.status(403).json({
+            ok: false,
+            error: 'Forbidden',
+            message: 'Hotlinking no permitido. Imagen protegida por Sweetie Fox.'
+        });
+    }
+
+    // 2. Anti-Scraping / Rate Limit
+    if (!checkRateLimit(req)) {
+        res.setHeader('Retry-After', '60');
+        return res.status(429).json({
+            ok: false,
+            error: 'Too Many Requests',
+            message: 'Descarga masiva detectada. Acceso temporalmente restringido.'
+        });
+    }
+
     const rawId = req.params.id || '';
     const cardId = rawId.replace(/\.(jpg|jpeg|png|webp)$/i, '').replace(/^gacha-/i, '').trim().toLowerCase();
     
@@ -109,6 +206,8 @@ app.get(['/api/gacha/image/:id', '/assets/gacha/:id'], (req, res) => {
             const mime = ext === '.png' ? 'image/png' : (ext === '.webp' ? 'image/webp' : 'image/jpeg');
             res.setHeader('Content-Type', mime);
             res.setHeader('Cache-Control', 'public, max-age=86400');
+            res.setHeader('X-Content-Type-Options', 'nosniff');
+            res.setHeader('Cross-Origin-Resource-Policy', 'same-origin');
             return res.sendFile(localImg);
         }
     }
@@ -120,7 +219,9 @@ app.get(['/api/gacha/image/:id', '/assets/gacha/:id'], (req, res) => {
             if (proxyRes.statusCode === 200) {
                 res.writeHead(200, {
                     'Content-Type': proxyRes.headers['content-type'] || 'image/jpeg',
-                    'Cache-Control': 'public, max-age=86400'
+                    'Cache-Control': 'public, max-age=86400',
+                    'X-Content-Type-Options': 'nosniff',
+                    'Cross-Origin-Resource-Policy': 'same-origin'
                 });
                 proxyRes.pipe(res);
             } else {
