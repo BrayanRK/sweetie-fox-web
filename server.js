@@ -89,13 +89,28 @@ app.get(['/api/actualizar', '/actualizar', '/update'], (req, res) => {
 // Servir imagenes gacha locales o fallback a VPS
 app.get(['/api/gacha/image/:id', '/assets/gacha/:id'], (req, res) => {
     const rawId = req.params.id || '';
-    const cardId = rawId.replace(/\.jpg$/i, '').replace(/^gacha-/i, '').trim().toLowerCase();
-    const localImg = path.join(__dirname, 'assets', 'gacha', `gacha-${cardId}.jpg`);
+    const cardId = rawId.replace(/\.(jpg|jpeg|png|webp)$/i, '').replace(/^gacha-/i, '').trim().toLowerCase();
+    
+    const candidates = [
+        `gacha-${cardId}.png`,
+        `gacha-${cardId}.jpg`,
+        `gacha-${cardId}.jpeg`,
+        `gacha-${cardId}.webp`,
+        `${cardId}.png`,
+        `${cardId}.jpg`,
+        `${cardId}.jpeg`,
+        `${cardId}.webp`
+    ];
 
-    if (fs.existsSync(localImg)) {
-        res.setHeader('Content-Type', 'image/jpeg');
-        res.setHeader('Cache-Control', 'public, max-age=86400');
-        return res.sendFile(localImg);
+    for (const name of candidates) {
+        const localImg = path.join(__dirname, 'assets', 'gacha', name);
+        if (fs.existsSync(localImg)) {
+            const ext = path.extname(name).toLowerCase();
+            const mime = ext === '.png' ? 'image/png' : (ext === '.webp' ? 'image/webp' : 'image/jpeg');
+            res.setHeader('Content-Type', mime);
+            res.setHeader('Cache-Control', 'public, max-age=86400');
+            return res.sendFile(localImg);
+        }
     }
 
     try {
@@ -104,7 +119,7 @@ app.get(['/api/gacha/image/:id', '/assets/gacha/:id'], (req, res) => {
         client.get(targetUrl, (proxyRes) => {
             if (proxyRes.statusCode === 200) {
                 res.writeHead(200, {
-                    'Content-Type': 'image/jpeg',
+                    'Content-Type': proxyRes.headers['content-type'] || 'image/jpeg',
                     'Cache-Control': 'public, max-age=86400'
                 });
                 proxyRes.pipe(res);
