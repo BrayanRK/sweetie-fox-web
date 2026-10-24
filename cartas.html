@@ -339,7 +339,7 @@
         <div class="cards-stats-strip">
           <div class="cards-stat-card">
             <span class="stat-value" id="stat-total-cards">--</span>
-            <span class="stat-label">Total Disponibles</span>
+            <span class="stat-label" id="stat-total-label">Total Disponibles</span>
           </div>
           <div class="cards-stat-card">
             <span class="stat-value" id="stat-ur-cards" style="color: #FBBF24;">--</span>
@@ -709,7 +709,11 @@
           }
 
           currentCards = data.cards;
-          statusLine.textContent = `${currentCards.length} cartas en coleccion personal`;
+          const totalMaster = masterCards.length || 1861;
+          const pct = ((currentCards.length / totalMaster) * 100).toFixed(1);
+          statusLine.textContent = `${currentCards.length} de ${totalMaster} cartas coleccionadas (${pct}%)`;
+          const lbl = document.getElementById('stat-total-label');
+          if (lbl) lbl.textContent = 'En su Colección';
           updateCounts(currentCards);
           render();
         } catch (_) {
@@ -725,6 +729,8 @@
           avatarImg.src = '/favicon.svg';
           if (userSearchInput) userSearchInput.value = '';
           if (resetCatalogBtn) resetCatalogBtn.style.display = 'none';
+          const lbl = document.getElementById('stat-total-label');
+          if (lbl) lbl.textContent = 'Total Disponibles';
 
           if (masterCards.length > 0) {
             currentCards = masterCards;
