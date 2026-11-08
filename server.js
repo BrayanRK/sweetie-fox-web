@@ -7,6 +7,17 @@ const { execSync } = require('child_process');
 
 const app = express();
 
+// ─── 0. PROTECCIÓN CONTRA CARACTERES / RUTAS MALFORMADAS (ANTI-CRASH) ───
+app.use((req, res, next) => {
+    try {
+        decodeURI(req.url);
+        decodeURIComponent(req.path);
+        next();
+    } catch (_) {
+        return res.status(400).send('Bad Request');
+    }
+});
+
 const PORT = Number(process.env.SERVER_PORT || process.env.PORT || 3000);
 const BOT_API_URL = (process.env.BOT_API_URL || 'https://bot.brayanrk.com').replace(/\/+$/, '');
 
@@ -31,11 +42,15 @@ try {
         gitCmd(`git remote add origin ${REPO}`);
         gitCmd('git fetch origin main');
         gitCmd('git reset --hard origin/main');
+        gitCmd('git branch -M main');
+        gitCmd('git branch --set-upstream-to=origin/main main');
         console.log('[Git] Repositorio vinculado.');
     } else {
         console.log('[Git] Sincronizando con GitHub al iniciar...');
         gitCmd('git fetch origin main');
         gitCmd('git reset --hard origin/main');
+        gitCmd('git branch -M main');
+        gitCmd('git branch --set-upstream-to=origin/main main');
         console.log('[Git] Repositorio sincronizado.');
     }
 } catch (e) {
@@ -284,11 +299,15 @@ app.use('/api', (req, res) => {
         const targetUrl = new URL(`${BOT_API_URL}/api${req.url}`);
         const client = targetUrl.protocol === 'https:' ? https : http;
         const headers = { ...req.headers, host: targetUrl.host };
+        const hasBody = Boolean(req.method !== 'GET' && req.method !== 'HEAD');
+        if (!hasBody) {
+            delete headers['content-length'];
+        }
 
         const proxyReq = client.request(targetUrl, {
             method: req.method,
             headers: headers,
-            timeout: 15000
+            timeout: 10000
         }, (proxyRes) => {
             res.writeHead(proxyRes.statusCode, proxyRes.headers);
             proxyRes.pipe(res);
@@ -305,7 +324,11 @@ app.use('/api', (req, res) => {
             }
         });
 
-        req.pipe(proxyReq);
+        if (hasBody) {
+            req.pipe(proxyReq);
+        } else {
+            proxyReq.end();
+        }
     } catch (err) {
         console.error('[Proxy URL Error]:', err.message);
         if (!res.headersSent) {
@@ -346,6 +369,17 @@ app.get(['/cartas', '/cartas.html', '/album', '/album.html'], (req, res) => {
 // Fallback a index.html
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Manejador global de errores (captura URIError y evita stack traces en consola)
+app.use((err, req, res, next) => {
+    if (err instanceof URIError) {
+        return res.status(400).send('Bad Request');
+    }
+    console.error('[Sweetie Fox Web Error]:', err?.message || err);
+    if (!res.headersSent) {
+        res.status(500).send('Internal Server Error');
+    }
 });
 
 app.listen(PORT, '0.0.0.0', () => {
