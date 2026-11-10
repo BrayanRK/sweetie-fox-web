@@ -77,6 +77,26 @@
           <p class="section-desc">Conecta tu numero personal o secundario como bot independiente con el protocolo oficial de dispositivos vinculados.</p>
         </div>
 
+        <!-- Stepper Cyber-Fox 4 Pasos -->
+        <div class="stepper-progress">
+          <div class="stepper-progress-step active" id="step-node-1">
+            <b>1</b>
+            <span><strong>Ingresar Número</strong><small>Código de país + dígitos</small></span>
+          </div>
+          <div class="stepper-progress-step" id="step-node-2">
+            <b>2</b>
+            <span><strong>Verificación</strong><small>Generar clave de 8 dígitos</small></span>
+          </div>
+          <div class="stepper-progress-step" id="step-node-3">
+            <b>3</b>
+            <span><strong>Dispositivos Vinculados</strong><small>Ingresar en WhatsApp</small></span>
+          </div>
+          <div class="stepper-progress-step" id="step-node-4">
+            <b>4</b>
+            <span><strong>Subbot Online</strong><small>Sesión conectada</small></span>
+          </div>
+        </div>
+
         <div class="pair-flow-grid">
           <!-- Formulario de Solicitud -->
           <div class="pair-card">
@@ -348,6 +368,7 @@
             radarDot.classList.add('connected');
             radarText.textContent = `Subbot conectado correctamente (${data.name || 'WhatsApp'})`;
             showFeedback(`Tu sesion (${data.name || targetNumber}) se ha vinculado exitosamente como Subbot.`, false);
+            document.getElementById('step-node-4')?.classList.add('active');
             return;
           }
 
@@ -394,6 +415,8 @@
           codeText.textContent = formatted;
           codePanel.classList.add('active');
           radarText.textContent = 'Esperando ingreso de codigo en tu aplicacion...';
+          document.getElementById('step-node-2')?.classList.add('active');
+          document.getElementById('step-node-3')?.classList.add('active');
 
           pollTimer = setInterval(() => pollStatus(fullNumber), window.CONFIG?.POLL_INTERVAL_MS || 3000);
           pollStatus(fullNumber);

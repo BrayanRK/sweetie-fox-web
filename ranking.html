@@ -17,28 +17,39 @@
     }
     @media (min-width: 768px) {
       .battle-rewards-panel {
-        grid-template-columns: 280px 1fr;
+        grid-template-columns: 290px 1fr;
         align-items: stretch;
       }
     }
     .battle-countdown-card {
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-strong);
+      background: linear-gradient(145deg, rgba(16, 20, 30, 0.9), rgba(8, 10, 16, 0.95));
+      border: 1px solid rgba(255, 92, 0, 0.35);
       border-radius: var(--radius-md);
-      padding: 18px 20px;
+      padding: 20px 22px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 6px;
+      gap: 8px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 0 30px rgba(255, 92, 0, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+    .battle-countdown-card::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, #FF5C00, transparent);
     }
     .countdown-timer-display {
       font-size: var(--text-2xl);
-      font-weight: 700;
+      font-weight: 800;
       font-family: var(--font-mono);
-      color: var(--fox-primary);
-      letter-spacing: 0.05em;
+      color: #FFA770;
+      letter-spacing: 0.08em;
       line-height: 1.2;
       margin-top: 4px;
+      text-shadow: 0 0 20px rgba(255, 92, 0, 0.5);
     }
     .countdown-caption {
       font-size: var(--text-xs);
@@ -47,7 +58,7 @@
     .podium-prizes-cards {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 12px;
+      gap: 14px;
     }
     @media (min-width: 640px) {
       .podium-prizes-cards {
@@ -55,42 +66,49 @@
       }
     }
     .prize-pill {
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-dim);
+      background: linear-gradient(145deg, rgba(16, 20, 30, 0.85), rgba(9, 11, 16, 0.94));
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: var(--radius-md);
-      padding: 14px 16px;
+      padding: 16px 18px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      transition: border-color var(--transition-fast);
+      gap: 6px;
+      backdrop-filter: blur(16px);
+      transition: all var(--transition-fast);
     }
     .prize-pill:hover {
-      border-color: var(--border-strong);
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.2);
     }
     .prize-rank-1 {
-      border-color: rgba(232, 116, 42, 0.4);
-      background: linear-gradient(180deg, rgba(232, 116, 42, 0.06) 0%, var(--bg-surface) 100%);
+      border-color: rgba(255, 215, 0, 0.5);
+      background: linear-gradient(180deg, rgba(255, 215, 0, 0.12), rgba(16, 20, 32, 0.95));
+      box-shadow: 0 0 25px rgba(255, 215, 0, 0.18);
     }
     .prize-rank-2 {
-      border-color: rgba(160, 174, 192, 0.3);
+      border-color: rgba(200, 214, 229, 0.4);
+      background: linear-gradient(180deg, rgba(200, 214, 229, 0.08), rgba(16, 20, 32, 0.95));
+      box-shadow: 0 0 20px rgba(200, 214, 229, 0.12);
     }
     .prize-rank-3 {
-      border-color: rgba(196, 136, 88, 0.3);
+      border-color: rgba(205, 127, 50, 0.4);
+      background: linear-gradient(180deg, rgba(205, 127, 50, 0.08), rgba(16, 20, 32, 0.95));
+      box-shadow: 0 0 20px rgba(205, 127, 50, 0.12);
     }
     .prize-pill-rank {
       font-size: var(--text-xs);
-      font-weight: 700;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.08em;
     }
-    .prize-rank-1 .prize-pill-rank { color: var(--fox-primary); }
-    .prize-rank-2 .prize-pill-rank { color: #A0AEC0; }
-    .prize-rank-3 .prize-pill-rank { color: #C48858; }
+    .prize-rank-1 .prize-pill-rank { color: #FFD700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+    .prize-rank-2 .prize-pill-rank { color: #E0E6ED; text-shadow: 0 0 10px rgba(224, 230, 237, 0.5); }
+    .prize-rank-3 .prize-pill-rank { color: #CD7F32; text-shadow: 0 0 10px rgba(205, 127, 50, 0.5); }
     .prize-pill-amount {
       font-size: var(--text-base);
-      font-weight: 700;
+      font-weight: 800;
       font-family: var(--font-mono);
-      color: var(--text-main);
+      color: #FFFFFF;
     }
     .prize-pill-sub {
       font-size: var(--text-xs);
